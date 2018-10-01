@@ -1,5 +1,5 @@
 from flask import Flask
-from flask import Flask, flash, redirect, render_template, request, session, abort
+from flask import Flask, flash, redirect, render_template, request, session, abort, g
 import os
 from sqlalchemy.orm import sessionmaker
 from tabledef import *
@@ -24,10 +24,10 @@ client = mqtt.Client()
 engine = create_engine('sqlite:///tutorial.db', echo=True)
 
 # MySQL VRIABLWS############################################
-host = "172.20.129.227"
+host = "localhost"
 port = 3306
 topic = "tagsLive" 
-user = "admin1"
+user = "root"
 passwd="Sportapassword12"
 db="Sportadb"
 conn = MySQLdb.connect(host,
@@ -120,6 +120,14 @@ def home():
     else:
         return render_template('home.html')
 
+@app.route("/tabledisplay")
+def point1():
+    mycursor = conn.cursor()
+    mycursor.execute("SELECT * FROM matchs")
+    rows = mycursor.fetchall()
+    print(str(row) for row in rows)
+
+    return '<br>'.join(str(row) for row in rows)
 
 
 @app.route('/match')
