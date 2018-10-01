@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import Flask, flash, redirect, render_template, request, session, abort, g
 import os
+from hashlib import md5
 from sqlalchemy.orm import sessionmaker
 from tabledef import *
 # import sqlite3
@@ -23,13 +24,13 @@ client = mqtt.Client()
 
 
 # conn = sqlite3.connect("C:\Users\L31304\Desktop\MQTT\MQTT\db\mqtt1.db")
-engine = create_engine('sqlite:///tutorial.db', echo=True)
+# engine = create_engine('sqlite:///tutorial.db', echo=True)
 
 # MySQL VRIABLWS############################################
-host = "172.20.129.227"
+host = "localhost"
 port = 3306
 topic = "tagsLive" 
-user = "admin1"
+user = "root"
 passwd="Sportapassword12"
 db="Sportadb"
 conn = MySQLdb.connect(host,
@@ -37,7 +38,7 @@ conn = MySQLdb.connect(host,
                   passwd,
                   db)
 # MySQL VRIABLWS END#######################################
-
+class ServerError(Exception):pass
 # client = mqtt.Client(transport="websockets")
 # hostMQTT = "mqtt.cloud.pozyxlabs.com"
 # portMQTT = 443
@@ -120,10 +121,12 @@ def home():
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
-        return render_template('home.html')
+        #add in table
+        return displayTable()
+    #    / return render_template('home.html')
 
-@app.route("/tabledisplay")
-def point1():
+#@app.route("/tabledisplay")
+def displayTable():
     mycursor = conn.cursor()
     mycursor.execute("SELECT * FROM matches")
     rows = mycursor.fetchall()
@@ -143,23 +146,44 @@ def point():
 ## User login
 @app.route('/login', methods=['POST'])
 def do_admin_login():
- 
-    POST_USERNAME = str(request.form['username'])
-    POST_PASSWORD = str(request.form['password'])
- 
-    Session = sessionmaker(bind=engine)
-    s = Session()
-    query = s.query(User).filter(User.username.in_([POST_USERNAME]), User.password.in_([POST_PASSWORD]) )
-    result = query.first()
-    if result:
-        print(result)
-        session['logged_in'] = True
-    else:
-        flash('Invalid Username/Password')
-        return redirect ('/')
+    cur = conn.cursor()
+    if 'username' in session:
+        return redirect(home)
+    
+    error = None
+    try:
+        if request.method == 'POST':
+            username_form  = request.form['username']
+           
+            usr = (username_form,)
+            sql1="SELECT COUNT(1) FROM users WHERE username = %s"
+            cur.execute(sql1, usr)
+    
+
+            if not cur.fetchone()[0]:
+                print("Invalid username")
+                raise ServerError('Invalid username')
+
+            print("Valid username")
+            password_form  = request.form['password']
+            psd = (password_form,)
+            sql2="SELECT password FROM users WHERE password = %s"
+            cur.execute(sql2,psd)
+
+            for row in cur.fetchall():
+                if password_form == row[0]:
+                    session['username'] = request.form['username']
+                    print("Valid password")
+                    session['logged_in'] = True
+                    return home()
+
+            print("invalid password")
+            raise ServerError('Invalid password')
+    except ServerError as e:
+        error = str(e)
 
     return home()
- 
+
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
