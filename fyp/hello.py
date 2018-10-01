@@ -10,7 +10,9 @@ import ssl
 import json
 import ctypes  # An included library with Python install.
 import MySQLdb
-   
+import datetime
+
+  
 # MQTT variables############################################
 hostMQTT = "localhost"
 portMQTT = 1883
@@ -123,10 +125,10 @@ def home():
 @app.route("/tabledisplay")
 def point1():
     mycursor = conn.cursor()
-    mycursor.execute("SELECT * FROM matchs")
+    mycursor.execute("SELECT * FROM matches")
     rows = mycursor.fetchall()
     print(str(row) for row in rows)
-
+    
     return '<br>'.join(str(row) for row in rows)
 
 
@@ -134,6 +136,9 @@ def point1():
 def point():
     if session.get('logged_in'):
         return render_template('point1.html')
+
+
+
 
 ## User login
 @app.route('/login', methods=['POST'])
@@ -165,7 +170,26 @@ def create():
     if session.get('logged_in'):
         return render_template('create.html')
 
-
+@app.route('/createMatch', methods=['POST'])
+def create_matches():
+    # data from form
+    POST_matchname = str(request.form['matchname'])
+    POST_matchdate = str(request.form['matchdate'])
+    POST_administrator = str(request.form['administrator'])
+    POST_matchnotes = str(request.form['matchnotes'])
+    # create match data# 
+    matchData = (POST_matchname, POST_matchdate, POST_administrator, POST_matchnotes)
+    #SQL statement
+    sql = ''' INSERT INTO matches(matchname, matchdate, administrator, matchnotes)
+              VALUES(%s,%s,%s,%s) '''
+              
+    cur = conn.cursor()
+    cur.execute(sql, matchData)
+    try:
+        conn.commit()
+    except Exception as e: 
+        print(e)
+    return home()
 
 
 ###### MQTT start here ###############
@@ -281,6 +305,8 @@ def create_point(point):
     cur.execute(sql, point)
     conn.commit()
     return cur.lastrowid
+
+
 
 if __name__ == "__main__":
     app.secret_key = os.urandom(12)

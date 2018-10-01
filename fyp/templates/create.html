@@ -18,28 +18,28 @@
 <link rel="stylesheet" href="/static/style.css" type="text/css">
 <body>
 
-
 <div class="login">
 <div class="login-screen">
         <div class="app-title">
 				<h2>Create Match</h2>
 			</div>
-<form>
+<form action="/createMatch" method="POST">
   Match Name:<br>
-  <input type="text" value=" ">
+  <input type="text" value=" " name="matchname">
   <br>
   Match Date:<br>
-  <input type="date" name="date" value="date">
+  <input type="date"  value="date" name="matchdate">
   <br><br>
   Administrator:<br>
-  <input type="text" name="text" value="">
+  <input type="text" value="" name="administrator">
   <br><br>
   Match Detail:<br>
-  <input type="text" name="textbox" style="height:100px;"> 
+  <input type="text" style="height:100px;" name="matchnotes"> 
   <br>
   <br>
-</form> 
-<a href="/" class="button" >Submit </a>
+ 
+<input type="submit" value="Create Match" class="btn btn-primary btn-large btn-block" >
+</form>
 </div>
 </div>
 
