@@ -163,7 +163,7 @@ def create():
 ###### MQTT start here ###############
 @app.route("/start")
 def startMQTT():
-    print("Start recording!")
+    print("Start recording!avc")
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_subscribe = on_subscribe
