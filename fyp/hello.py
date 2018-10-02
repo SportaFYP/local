@@ -27,7 +27,7 @@ client = mqtt.Client()
 # conn = sqlite3.connect("C:\Users\L31304\Desktop\MQTT\MQTT\db\mqtt1.db")
 # engine = create_engine('sqlite:///tutorial.db', echo=True)
 
-# MySQL VRIABLWS############################################
+# MySQL VRIABLES############################################
 host = "localhost"
 port = 3306
 topic = "tagsLive" 
@@ -113,6 +113,17 @@ def main():
    else:
         print("Error! cannot create the database connection.")
 
+def selectMatch(db, cursor):
+    sql="SELECT * FROM matches"
+    cursor.execute(sql)
+    #fetch the result
+    match=cursor.fetchall()
+    return match
+
+
+
+
+
 if __name__ == '__main__':
     main()
 
@@ -129,6 +140,9 @@ def home():
         #add in table
         # return displayTable()
         return render_template('home.html', username=session['username'])
+
+
+
 
 @app.route("/tabledisplay")
 def displayTable():
@@ -210,7 +224,7 @@ def create_matches():
     # data from form
     POST_matchname = str(request.form['matchname'])
     POST_matchdate = str(request.form['matchdate'])
-    POST_administrator = str(request.form['administrator'])
+    POST_administrator = session['username']
     POST_matchnotes = str(request.form['matchnotes'])
     # create match data# 
     matchData = (POST_matchname, POST_matchdate, POST_administrator, POST_matchnotes)
