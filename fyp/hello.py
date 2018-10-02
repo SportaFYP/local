@@ -12,6 +12,7 @@ import json
 import ctypes  # An included library with Python install.
 import MySQLdb
 import datetime
+import time
 
   
 # MQTT variables############################################
@@ -33,6 +34,7 @@ topic = "tagsLive"
 user = "root"
 passwd="Sportapassword12"
 db="Sportadb"
+RID=0L
 conn = MySQLdb.connect(host,
                   user,
                   passwd,
@@ -118,14 +120,17 @@ app = Flask(__name__)
  
 @app.route('/')
 def home():
+    if not session.get('currentRecordingID'):
+        print("currentRecordingID:")
+        # print("currentRecordingID:" + session.get('currentRecordingID'))
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
         #add in table
-        return displayTable()
-    #    / return render_template('home.html')
+        # return displayTable()
+        return render_template('home.html', username=session['username'])
 
-#@app.route("/tabledisplay")
+@app.route("/tabledisplay")
 def displayTable():
     mycursor = conn.cursor()
     mycursor.execute("SELECT * FROM matches")
@@ -148,7 +153,9 @@ def point():
 def do_admin_login():
     cur = conn.cursor()
     if 'username' in session:
-        return redirect(home)
+        print("username still valid")
+        print(session['username'])
+        return home()
     
     error = None
     try:
@@ -162,6 +169,7 @@ def do_admin_login():
 
             if not cur.fetchone()[0]:
                 print("Invalid username")
+                flash("invalid username/password")
                 raise ServerError('Invalid username')
 
             print("Valid username")
@@ -178,6 +186,7 @@ def do_admin_login():
                     return home()
 
             print("invalid password")
+            flash("invalid username/password")
             raise ServerError('Invalid password')
     except ServerError as e:
         error = str(e)
@@ -187,6 +196,8 @@ def do_admin_login():
 @app.route("/logout")
 def logout():
     session['logged_in'] = False
+    session['username'] = None
+    session.clear()
     return home()
 
 @app.route("/create")
@@ -215,10 +226,32 @@ def create_matches():
         print(e)
     return home()
 
-
 ###### MQTT start here ###############
 @app.route("/start")
-def startMQTT():
+def startMQTT():  
+    # POST_matchdate = str(request.form['matchdate'])
+    # POST_matchID = str(request.form['matchID'])
+    # matchDaata = (POST_matchdate, POST_matchID)
+
+    # 1) startTime
+    # 2) endTime
+    # 3) RID
+    # 4) MID
+    now = datetime.datetime.now()
+    sql = '''INSERT INTO recordings (Match_ID, startTime) VALUES(%s,%s)'''
+    recordingData = (1, now)
+    cur = conn.cursor()
+    cur.execute(sql, recordingData)
+    
+    
+    try:
+        conn.commit()
+        
+        global RID
+        RID = cur.lastrowid
+        print("currentRecordingID after commit: " + str(RID))
+    except Exception as e: 
+        print(e)
     print("Start recording!avc")
     client.on_connect = on_connect
     client.on_message = on_message
@@ -238,6 +271,9 @@ def startMQTT():
 def stopMQTT():
     print("Stop recording")
     client.loop_stop()
+    # update endTime in the recording
+    # 1) where is the RID stored? in the global variable called RID
+    # 2) Take that RID, and do an update statement: update endTime = now where RecordingID = RID that was store
     return home()
 
 
@@ -308,9 +344,12 @@ def on_message(client, userdata, msg):
 
  print '"pitch":', result['data']['orientation']['pitch']
  pitch = result['data']['orientation']['pitch']
-
+ print("before point data creating")
 #  create the point in database
- point = (version, tagId, success, timestamp, magnetic_x, magnetic_y, magnetic_z, coordinates_x, coordinates_y, coordinates_z, acceleration_x, acceleration_y, acceleration_z, yaw, roll, pitch)
+
+ print("before point data creating - RID:"+str(RID))
+ point = (version, tagId, RID, success, timestamp, magnetic_x, magnetic_y, magnetic_z, coordinates_x, coordinates_y, coordinates_z, acceleration_x, acceleration_y, acceleration_z, yaw, roll, pitch)
+ print("After point data creating")
  create_point(point)
 
  return
@@ -322,12 +361,16 @@ def create_point(point):
     :param point:
     :return:
     """
- 
-    sql = ''' INSERT INTO projects(version, tagId, success, timestamp, magnetic_x, magnetic_y, magnetic_z, coordinates_x, coordinates_y, coordinates_z, acceleration_x, acceleration_y, acceleration_z, yaw, roll, pitch)
-              VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) '''
+    sql = ''' INSERT INTO projects(version, tagId, RecordingID, success, timestamp, magnetic_x, magnetic_y, magnetic_z, coordinates_x, coordinates_y, coordinates_z, acceleration_x, acceleration_y, acceleration_z, yaw, roll, pitch)
+              VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) '''
     cur = conn.cursor()
-    cur.execute(sql, point)
-    conn.commit()
+    try:
+        print("insert Point")
+        cur.execute(sql, point)
+        conn.commit()
+    except Exception as e: 
+        print(e)
+    
     return cur.lastrowid
 
 
