@@ -11,7 +11,8 @@ function preload() {
 } 
 
 function setup() {
-    createCanvas(650, 400);
+    var canvas = createCanvas(650, 400);
+    canvas.parent('sports-court');
     //particle = new Particle(300, 300);   
    
 }
