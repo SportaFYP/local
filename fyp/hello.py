@@ -13,6 +13,10 @@ import ctypes  # An included library with Python install.
 import MySQLdb
 import datetime
 import time
+import pymysql
+import re
+
+
 
   
 # MQTT variables############################################
@@ -28,10 +32,10 @@ client = mqtt.Client()
 # engine = create_engine('sqlite:///tutorial.db', echo=True)
 
 # MySQL VRIABLES############################################
-host = "localhost"
+host = "172.20.129.227"
 port = 3306
 topic = "tagsLive" 
-user = "root"
+user = "admin1"
 passwd="Sportapassword12"
 db="Sportadb"
 RID=0L
@@ -149,9 +153,14 @@ def displayTable():
     mycursor = conn.cursor()
     mycursor.execute("SELECT * FROM matches")
     rows = mycursor.fetchall()
-    print(str(row) for row in rows)
-    
-    return '<br>'.join(str(row) for row in rows)
+    # for row in rows:
+    #     MatchID=row[0]
+    #     matchname=row[1]
+    #     matchdate=row[2]
+    #     administrator=row[3]
+    #     matchnotes=row[4]
+
+    return render_template('homepage.html',rows=rows)
 
 
 @app.route('/match')
