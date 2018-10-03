@@ -3,7 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session, abo
 import os
 from hashlib import md5
 from sqlalchemy.orm import sessionmaker
-from tabledef import *
+# from tabledef import *
 # import sqlite3
 # from sqlite3 import Error
 import paho.mqtt.client as mqtt
@@ -287,17 +287,32 @@ def startMQTT():
     #works blocking, other, non-blocking, clients are available too.
     client.loop_start()
     print("after client!")
-    return home()
+    return point()
 
 ###### MQTT stop here ###############
 @app.route("/stop")
 def stopMQTT():
     print("Stop recording")
     client.loop_stop()
+    global RID
+    # if statement
+
+    
     # update endTime in the recording
     # 1) where is the RID stored? in the global variable called RID
     # 2) Take that RID, and do an update statement: update endTime = now where RecordingID = RID that was store
-    return home()
+    now1 = datetime.datetime.now()
+    sql = '''UPDATE recordings SET endTime = %s WHERE RecordingID = %s'''
+    print("RID before stop=")
+    print (RID)
+    recordingData = (now1, RID)
+    cur = conn.cursor()
+    cur.execute(sql, recordingData)
+    conn.commit()
+    # clear RID and now1
+    now1=None
+    RID = 0L
+    return point()
 
 
 def on_subscribe(client, userdata, mid, granted_qos):
