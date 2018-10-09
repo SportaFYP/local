@@ -32,14 +32,14 @@ client = mqtt.Client()
 # engine = create_engine('sqlite:///tutorial.db', echo=True)
 
 # MySQL VRIABLES############################################
-host = "localhost"
+host = "172.20.129.227"
 port = 3306
 topic = "tagsLive" 
-user = "root"
+user = "admin1"
 passwd="Sportapassword12"
 db="Sportadb"
 RID=0L
-matchid=1
+matchID=0
 conn = MySQLdb.connect(host,
                   user,
                   passwd,
@@ -163,18 +163,26 @@ def displayTable():
 
     return render_template('homepage.html',rows=rows)
 
+@app.route('/fetch/MatchID')
+def fetch(MatchID):
+    MatchID = (matchID,)
+    print(matchID)
+    return render_template('point1.html')
 
 @app.route('/match')
 def point():
     if session.get('logged_in'):
+        global matchID
+        matchID1=(matchID,)
         mycursor = conn.cursor()
-        mycursor.execute("SELECT * FROM recordings")
+        fetch1 = ("SELECT * FROM recordings WHERE MatchID = %s")
+        mycursor.execute(fetch1, matchID1)
         rowss = mycursor.fetchall()
         # sql5 = ("SELECT (Match_ID, startTime, endTime) FROM recordings WHERE Match_ID = %s"),[matchid]
         # # sql5 = ("SELECT (startTime, endTime) FROM recordings WHERE Match_ID = %s")
         # mycursor.execute(sql5, matchid)
         # rowss = mycursor.fetchall()
-
+    
     return render_template('point1.html', rowss=rowss)
 
 

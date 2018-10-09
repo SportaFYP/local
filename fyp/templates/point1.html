@@ -42,7 +42,12 @@
 
          
           </style>
-     
+     <!-- DataTables CSS -->
+    <link href="{{ url_for('static', filename = 'dataTables.bootstrap.css') }}" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="{{ url_for('static', filename = 'dataTables.responsive.css') }}" rel="stylesheet">
+
       <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script>
 
     <script type = "text/javascript" 
@@ -73,6 +78,10 @@
       
 
       <table width="100%"  id="dataTables-example">
+
+
+        
+
         <thead>
             <tr>
                 <th>Start Time</th>
