@@ -55,7 +55,11 @@
     <script type = "text/javascript" 
     src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
 
-
+    <script>
+        function myFunction() {
+            confirm("Start Recording?");
+        }
+        </script>
 
 
   <body>
@@ -63,9 +67,31 @@
       <div id="sports-court">
         <!-- Our sketch will go here! -->
       </div>
-      <p><a href="/start" class="button2">Start</a>
+      <!-- <button onclick="myFunction()" href="/start" class="button2">Start</button> -->
+      <p><a onclick="myFunction()" href="/start" class="button2">Start</a>
       <a href="/stop" class="button1">Stop</a></p>
       
+
+      <table width="100%"  id="dataTables-example">
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>MatchID</th>
+                <th>View</th>          
+            </tr>
+        </thead>
+        <tbody>
+                {% for item in rowss %}
+                <tr>
+                    <td>{{item[2]}}</td>
+                    <td>{{item[3]}}</td>
+                    <td>{{item[1]}}</td>
+                    <td><a href="/recordingview/{{item[0]}}" class="button">View</a></td>
+                </tr>
+                {% endfor %}
+        </tbody>
+    </table>
 
   </body>
   
