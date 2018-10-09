@@ -32,13 +32,14 @@ client = mqtt.Client()
 # engine = create_engine('sqlite:///tutorial.db', echo=True)
 
 # MySQL VRIABLES############################################
-host = "172.20.129.227"
+host = "localhost"
 port = 3306
 topic = "tagsLive" 
-user = "admin1"
+user = "root"
 passwd="Sportapassword12"
 db="Sportadb"
 RID=0L
+matchid=1
 conn = MySQLdb.connect(host,
                   user,
                   passwd,
@@ -166,10 +167,40 @@ def displayTable():
 @app.route('/match')
 def point():
     if session.get('logged_in'):
-        return render_template('point1.html')
+        mycursor = conn.cursor()
+        mycursor.execute("SELECT * FROM recordings")
+        rowss = mycursor.fetchall()
+        # sql5 = ("SELECT (Match_ID, startTime, endTime) FROM recordings WHERE Match_ID = %s"),[matchid]
+        # # sql5 = ("SELECT (startTime, endTime) FROM recordings WHERE Match_ID = %s")
+        # mycursor.execute(sql5, matchid)
+        # rowss = mycursor.fetchall()
+
+    return render_template('point1.html', rowss=rowss)
 
 
-
+@app.route('/recordingview/<RID>')
+def viewRecordings(RID):
+        # mycursor = conn.cursor()
+        # RID = ("SELECT * FROM recordings WHERE (Match_ID, RecordingID) = (%s, %s)")
+        # RID1 = (2, RID)
+        # sql5 = ("SELECT * FROM projects WHERE (RecordingID, success)= (%s, %s)")
+        # ro = (RID1, 1)
+        # mycursor.execute(sql5, ro)
+        # print(mycursor)
+        # RID = 0L
+        # return point()
+        print("RID:")
+        print(RID)
+        RID1 = (RID,)
+        # with RID.... can u finally get the points?
+        mycursor = conn.cursor()
+        # hello =("SELECT * FROM projects WHERE RecordingID = %s")
+        hello =("SELECT tagId,timestamp,coordinates_x,coordinates_y FROM projects WHERE RecordingID = %s")
+        mycursor.execute(hello, RID1)
+        results = mycursor.fetchall()
+        # results = result.fetchall()
+        print(results)
+        return point()
 
 ## User login
 @app.route('/login', methods=['POST'])
@@ -265,8 +296,8 @@ def startMQTT():
     recordingData = (1, now)
     cur = conn.cursor()
     cur.execute(sql, recordingData)
-    
-    
+            
+
     try:
         conn.commit()
         
@@ -296,8 +327,9 @@ def stopMQTT():
     client.loop_stop()
     global RID
     # if statement
-
-    
+    if RID == 0L:
+        print("stopped")
+        return point()
     # update endTime in the recording
     # 1) where is the RID stored? in the global variable called RID
     # 2) Take that RID, and do an update statement: update endTime = now where RecordingID = RID that was store
@@ -333,27 +365,27 @@ def on_connect(client, userdata, flags, rc):
 def on_message(client, userdata, msg):
  print("Positioning update:", msg.payload.decode())
  #return;
-
- result = json.loads(msg.payload)  # result is now a dict
- print '"version":', result['version']
- version = result['version']
  
+ result = json.loads(msg.payload)  # result is now a dict
+#  print '"version":', result['version']
+ version = result['version']
+ print("{")
  print '"tagId":', result['tagId']
  tagId = result['tagId']
 
- print '"success":', result['success']
+#  print '"success":', result['success']
  success = result['success']
 
  print '"timestamp":', result['timestamp']
  timestamp = result['timestamp']
 
- print '"magnetic_x":', result['data']['tagData']['magnetic']['x']
+#  print '"magnetic_x":', result['data']['tagData']['magnetic']['x']
  magnetic_x = result['data']['tagData']['magnetic']['x']
 
- print '"magnetic_y":', result['data']['tagData']['magnetic']['y']
+#  print '"magnetic_y":', result['data']['tagData']['magnetic']['y']
  magnetic_y = result['data']['tagData']['magnetic']['y']
 
- print '"magnetic_z":', result['data']['tagData']['magnetic']['z']
+#  print '"magnetic_z":', result['data']['tagData']['magnetic']['z']
  magnetic_z = result['data']['tagData']['magnetic']['z']
 
  print '"coordinates_x":', result['data']['coordinates']['x']
@@ -362,25 +394,35 @@ def on_message(client, userdata, msg):
  print '"coordinates_y":', result['data']['coordinates']['y']
  coordinates_y = result['data']['coordinates']['y']
 
- print '"coordinates_z":', result['data']['coordinates']['z']
+ print("},")
+ 
+#  file = open("points.txt","a") 
+#  file.write(tagId +",") 
+#  print("54321")
+#  file.write("\n" + timestamp +",") 
+#  file.write(coordinates_x +",") 
+#  file.write(coordinates_y +"")
+#  file.close()
+
+#  print '"coordinates_z":', result['data']['coordinates']['z']
  coordinates_z = result['data']['coordinates']['z']
 
- print '"acceleration_x":', result['data']['acceleration']['x']
+#  print '"acceleration_x":', result['data']['acceleration']['x']
  acceleration_x = result['data']['acceleration']['x']
 
- print '"acceleration_y":', result['data']['acceleration']['y']
+#  print '"acceleration_y":', result['data']['acceleration']['y']
  acceleration_y = result['data']['acceleration']['y']
 
- print '"acceleration_z":', result['data']['acceleration']['z']
+#  print '"acceleration_z":', result['data']['acceleration']['z']
  acceleration_z = result['data']['acceleration']['z']
 
- print '"yaw":', result['data']['orientation']['yaw']
+#  print '"yaw":', result['data']['orientation']['yaw']
  yaw = result['data']['orientation']['yaw']
 
- print '"roll":', result['data']['orientation']['roll']
+#  print '"roll":', result['data']['orientation']['roll']
  roll = result['data']['orientation']['roll']
 
- print '"pitch":', result['data']['orientation']['pitch']
+#  print '"pitch":', result['data']['orientation']['pitch']
  pitch = result['data']['orientation']['pitch']
  print("before point data creating")
 #  create the point in database
