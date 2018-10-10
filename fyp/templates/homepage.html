@@ -80,29 +80,23 @@
                 <div class="navbar-default sidebar" role="navigation">
                     <div class="sidebar-nav navbar-collapse">
                         <ul class="nav" id="side-menu">
-                            
+                            <li>
+                                <a href="/"><i class="fa fa-bar-chart-o fa-fw"></i> Home</span></a>
+                            </li>
+
                             <li>
                                 <a href="/create"><i class="fa fa-edit fa-fw"></i> Create Match</a>
                             </li>
-                            <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li>
-                                        <a href="#">Flot Charts</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Morris.js Charts</a>
-                                    </li>
-                                </ul>
+                          
                                 <!-- /.nav-second-level -->
-                            </li>
+                            <!-- </li>
                             <li>
                                 <a href="#"><i class="fa fa-table fa-fw"></i> Tables</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-dashboard fa-fw"></i> Forms</a>
-                            </li>
-                            <li>
+                            </li> -->
+                            <!-- <li>
                                 <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
@@ -124,9 +118,9 @@
                                         <a href="#">Grid</a>
                                     </li>
                                 </ul>
-                                <!-- /.nav-second-level -->
-                            </li>
-                            <li>
+                                
+                            </li> -->
+                            <!-- <li>
                                 <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
@@ -151,12 +145,12 @@
                                                 <a href="#">Third Level Item</a>
                                             </li>
                                         </ul>
-                                        <!-- /.nav-third-level -->
+                                        
                                     </li>
                                 </ul>
-                                <!-- /.nav-second-level -->
-                            </li>
-                            <li>
+                               
+                            </li> -->
+                            <!-- <li>
                                 <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
@@ -166,8 +160,8 @@
                                         <a href="#">Login Page</a>
                                     </li>
                                 </ul>
-                                <!-- /.nav-second-level -->
-                            </li>
+                                
+                            </li> -->
                         </ul>
                     </div>
                     <!-- /.sidebar-collapse -->
@@ -197,7 +191,7 @@
                                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 340px;">Match Name</th>
                                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 313px;">Match Date</th>
                                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 249px;">Recorded By</th>
-                                                        <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 190px;">Match Notes</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 190px;">View</th>
                                         </tr>
                                         <!-- <th>Match ID</th>
                                         <th>Match Name</th>
@@ -212,7 +206,7 @@
                                                 <td>{{item[1]}}</td>
                                                 <td>{{item[2]}}</td>
                                                 <td>{{item[3]}}</td>
-                                                <td><a href="/fetch/{{item[0]}}" class="button">View</a></td>
+                                                <td><a href="/match/{{item[0]}}" class="button">View</a></td>
                                                
                                             </tr>
                                         {% endfor %}
