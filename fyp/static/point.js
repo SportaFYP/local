@@ -20,10 +20,10 @@ function Particle(x, y, tag) {
         //    this.yspeed *= -0.9;
         //}
         
-        for (var i = 0; i < this.history.length; i++){
-            this.history[i].x += random(-2, 2);
-            this.history[i].y += random(-2, 2);
-        }
+        // for (var i = 0; i < this.history.length; i++){
+        //     this.history[i].x += random(-2, 2);
+        //     this.history[i].y += random(-2, 2);
+        // }
 
 
         var v = createVector(this.x, this.y);
