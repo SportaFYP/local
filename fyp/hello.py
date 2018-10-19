@@ -32,10 +32,10 @@ client = mqtt.Client()
 # engine = create_engine('sqlite:///tutorial.db', echo=True)
 
 # MySQL VRIABLES############################################
-host = "172.20.129.227"
+host = "localhost"
 port = 3306
 topic = "tagsLive" 
-user = "admin1"
+user = "root"
 passwd="Sportapassword12"
 db="Sportadb"
 RID=0L
