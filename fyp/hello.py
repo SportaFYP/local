@@ -170,6 +170,25 @@ def displayTable():
 
         return render_template('homepage.html',rows=rows)
 
+@app.route("/name")
+def displayTablebyname():
+    mycursor = conn.cursor()
+    administrator_form  = session['username']
+           
+    admin = (administrator_form,)
+    sql1 = ("SELECT * FROM matches WHERE administrator = %s")
+    mycursor.execute(sql1, admin)
+    rows = mycursor.fetchall()
+
+    if not session.get('currentRecordingID'):
+        print("currentRecordingID:")
+        # print("currentRecordingID:" + session.get('currentRecordingID'))
+    if not session.get('logged_in'):
+        return render_template('login.html')
+    else:
+
+        return render_template('homepage.html', rows=rows)
+
 # @app.route('/match/<matchID>')
 # def viewMatch(matchID):
 #     print ('view match')
@@ -226,7 +245,7 @@ def viewRecordings(RID):
         results = mycursor.fetchall()
         # print("results[0][0]")
         # print(results[0][0])
-        print(results)
+        # print(results)
         # results = result.fetchall()
         print(results)
         return viewMatch(matchID)
@@ -288,6 +307,43 @@ def create():
     if session.get('logged_in'):
         return render_template('create.html')
 
+@app.route("/tag")
+def tagpage():
+    if session.get('logged_in'):
+        return render_template('tag.html')
+
+@app.route("/record")
+def recordpage():
+    if session.get('logged_in'):
+
+        return render_template('record.html')
+
+@app.route('/displayData', methods=['POST'])
+def disply_data():
+    mycursor = conn.cursor()
+    show = "SELECT * FROM tags"
+    mycursor.execute(show)
+    display = mycursor.fetchall()
+    return display
+
+
+@app.route('/updateTag', methods=['POST'])
+def update_tag():
+    POST_tag1 = str(request.form['tag1'])
+    POST_tag2 = str(request.form['tag2'])
+    POST_tag3 = str(request.form['tag3'])
+    POST_tag4 = str(request.form['tag4'])
+    POST_tag5 = str(request.form['tag5'])
+    updatetag = (POST_tag1, POST_tag2, POST_tag3, POST_tag4, POST_tag5)
+    tag = "UPDATE tags SET tag1 =%s, tag2=%s, tag3=%s, tag4= %s, tag5=%s"
+    mycursor = conn.cursor()
+    mycursor.execute(tag, updatetag)
+    try:
+        conn.commit()
+    except Exception as e: 
+        print(e)
+    return tagpage()
+
 @app.route('/createMatch', methods=['POST'])
 def create_matches():
     # data from form
@@ -311,7 +367,7 @@ def create_matches():
 
 ###### MQTT start here ###############
 @app.route("/start")
-def startMQTT():  
+def startMQTT(matchID):  
     # POST_matchdate = str(request.form['matchdate'])
     # POST_matchID = str(request.form['matchID'])
     # matchDaata = (POST_matchdate, POST_matchID)
@@ -320,9 +376,10 @@ def startMQTT():
     # 2) endTime
     # 3) RID
     # 4) MID
+    MID = (matchID,)
     now = datetime.datetime.now()
     sql = '''INSERT INTO recordings (Match_ID, startTime) VALUES(%s,%s)'''
-    recordingData = (1, now)
+    recordingData = (MID, now)
     cur = conn.cursor()
     cur.execute(sql, recordingData)
             
@@ -347,7 +404,7 @@ def startMQTT():
     #works blocking, other, non-blocking, clients are available too.
     client.loop_start()
     print("after client!")
-    return viewMatch(matchID)
+    return "recordpage()"
 
 ###### MQTT stop here ###############
 @app.route("/stop")
@@ -358,7 +415,7 @@ def stopMQTT():
     # if statement
     if RID == 0L:
         print("stopped")
-        return viewMatch(matchID)
+        return recordpage()
     # update endTime in the recording
     # 1) where is the RID stored? in the global variable called RID
     # 2) Take that RID, and do an update statement: update endTime = now where RecordingID = RID that was store
@@ -373,8 +430,16 @@ def stopMQTT():
     # clear RID and now1
     now1=None
     RID = 0L
-    return viewMatch(matchID)
+    return recordpage()
 
+@app.route('/saveVideo', methods=['GET', 'POST'])
+def saveVideo():
+    if request.method == 'POST':
+        fileName = request.get_data()
+        print("file name from ajax: "+fileName)
+        if filename == "exited":
+            stopMQTT()
+    return render_template('index.html')
 
 def on_subscribe(client, userdata, mid, granted_qos):
     print("Subscribed to topic!")

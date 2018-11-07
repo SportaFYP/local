@@ -1,0 +1,330 @@
+ <!-- ######################################### -->
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        input[type=text], select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        
+        label {
+            padding: 12px 12px 12px 0;
+            display: inline-block;
+        }
+        
+        input[type=submit] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            float: right;
+        }
+        
+        input[type=submit]:hover {
+            background-color: #45a049;
+        }
+        
+        .container {
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            padding: 20px;
+        }
+        
+        .col-25 {
+            float: left;
+            width: 25%;
+            margin-top: 6px;
+        }
+        
+        .col-75 {
+            float: left;
+            width: 75%;
+            margin-top: 6px;
+        }
+        
+        /* Clear floats after the columns */
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        
+        /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
+        @media screen and (max-width: 600px) {
+            .col-25, .col-75, input[type=submit] {
+                width: 100%;
+                margin-top: 0;
+            }
+        }
+        </style>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SPORTA - Sports Positioning on Real Time Analytics
+    </title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{{ url_for('static', filename = 'bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="{{ url_for('static', filename = 'metisMenu.min.css') }}" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="{{ url_for('static', filename = 'dataTables.bootstrap.css') }}" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="{{ url_for('static', filename = 'dataTables.responsive.css') }}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename = 'sb-admin-2.css') }}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="{{ url_for('static', filename = 'font-awesome.min.css') }}" rel="stylesheet" type="text/css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+        <div id="wrapper">
+    
+            <!-- Navigation -->
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">SPORTA</a>
+                </div>
+                <!-- /.navbar-header -->
+    
+                <ul class="nav navbar-top-links navbar-right">
+                    <!-- /.dropdown -->
+                    
+                    <!-- /.dropdown -->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            
+                            <li class="divider"></li>
+                            <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            </li>
+                        </ul>
+                        <!-- /.dropdown-user -->
+                    </li>
+                    <!-- /.dropdown -->
+                </ul>
+                <!-- /.navbar-top-links -->
+    
+                <div class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            <li>
+                                <a href="/"><i class="fa fa-bar-chart-o fa-fw"></i> Home</span></a>
+                            </li>
+
+                            <li>
+                                <a href="/tag"><i class="fa fa-edit fa-fw"></i> Tag</a>
+                            </li>
+                          
+                                <!-- /.nav-second-level -->
+                            <!-- </li>
+                            <li>
+                                <a href="#"><i class="fa fa-table fa-fw"></i> Tables</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-dashboard fa-fw"></i> Forms</a>
+                            </li> -->
+                            <!-- <li>
+                                <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#">Panels and Wells</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Buttons</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Notifications</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Typography</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> Icons</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Grid</a>
+                                    </li>
+                                </ul>
+                                
+                            </li> -->
+                            <!-- <li>
+                                <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#">Second Level Item</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Second Level Item</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Third Level <span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="#">Third Level Item</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Third Level Item</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Third Level Item</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Third Level Item</a>
+                                            </li>
+                                        </ul>
+                                        
+                                    </li>
+                                </ul>
+                               
+                            </li> -->
+                            <!-- <li>
+                                <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#">Blank Page</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Login Page</a>
+                                    </li>
+                                </ul>
+                                
+                            </li> -->
+                        </ul>
+                    </div>
+                    <!-- /.sidebar-collapse -->
+                </div>
+                <!-- /.navbar-static-side -->
+            </nav>
+    
+            <div id="page-wrapper" style="min-height: 908px;">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">TagID</h1>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Team 1
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        
+                                            
+                                            <form action="/updateTag" method="POST" >
+                                                Tag1:
+                                                <input type="text" value=" " name="tag1" style="
+                                                width: 155px;">
+                                                <br>
+                                                Tag2:
+                                                <input type="text" value=" " name="tag2" style="
+                                                width: 155px;">
+                                                <br>
+                                                Tag3:
+                                                <input type="text" value=" " name="tag3" style="
+                                                width: 155px;">
+                                                <br>
+                                                Tag4:
+                                                <input type="text" value=" " name="tag4" style="
+                                                width: 155px;">
+                                                <br>
+                                                Tag5:
+                                                <input type="text" value=" " name="tag5" style="
+                                                width: 155px;">
+                                                <br>
+                                               
+                                              <input type="submit" value="Update Tag" class="btn btn-primary btn-large btn-block" style="
+                                              width: 171px;" >
+                                              </form>
+                                              
+
+                                        
+                                    </div>
+                                    <!-- /.col-lg-6 (nested) -->
+                                    
+                                    <!-- /.col-lg-6 (nested) -->
+                                </div>
+                                <!-- /.row (nested) -->
+                            </div>
+                            <!-- /.panel-body -->
+                        </div>
+                        <!-- /.panel -->
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+                <!-- /.row -->
+            </div>
+        <!-- /#wrapper -->
+    
+        <!-- jQuery -->
+        <script src="{{ url_for('static', filename = 'jquery.min.js') }}"></script>
+    
+        <!-- Bootstrap Core JavaScript -->
+        <script src="{{ url_for('static', filename = 'bootstrap.min.js') }}"></script>
+    
+        <!-- Metis Menu Plugin JavaScript -->
+        <script src="{{ url_for('static', filename = 'metisMenu.min.js') }}"></script>
+    
+        <!-- DataTables JavaScript -->
+        <script src="{{ url_for('static', filename = 'jquery.dataTables.min.js') }}"></script>
+        <script src="{{ url_for('static', filename = 'dataTables.bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename = 'dataTables.responsive.js') }}"></script>
+    
+        <!-- Custom Theme JavaScript -->
+        <script src="{{ url_for('static', filename = 'sb-admin-2.js') }}"></script>
+    
+        <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+        <script>
+        $(document).ready(function() {
+            $('#dataTables-example').DataTable({
+                responsive: true
+            });
+        });
+        </script>
+    
+    </body>
+
+</html>
+
