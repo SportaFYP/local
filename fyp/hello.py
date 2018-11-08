@@ -376,7 +376,7 @@ def startMQTT():
     # 2) endTime
     # 3) RID
     # 4) MID
-    
+   
     now = datetime.datetime.now()
     sql = '''INSERT INTO recordings (Match_ID, startTime) VALUES(%s,%s)'''
     recordingData = (1, now)
@@ -437,7 +437,16 @@ def saveVideo():
     if request.method == 'POST':
         fileName = request.get_data()
         print("file name from ajax: "+fileName)
-        if fileName == "exited":
+        global RID
+        sql = '''UPDATE recordings SET saveFile = %s WHERE RecordingID = %s'''
+        print("Savefile = ")
+        print(RID)
+        print(fileName)
+        recordingData = (fileName, RID)
+        cur = conn.cursor()
+        cur.execute(sql, recordingData)
+        conn.commit()
+        if filename == "exited":
             stopMQTT()
     return render_template('index.html')
 
