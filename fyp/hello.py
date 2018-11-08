@@ -32,10 +32,10 @@ client = mqtt.Client()
 # engine = create_engine('sqlite:///tutorial.db', echo=True)
 
 # MySQL VRIABLES############################################
-host = "localhost"
+host = "172.20.129.227"
 port = 3306
 topic = "tagsLive" 
-user = "root"
+user = "admin1"
 passwd="Sportapassword12"
 db="Sportadb"
 RID=0L
@@ -367,7 +367,7 @@ def create_matches():
 
 ###### MQTT start here ###############
 @app.route("/start")
-def startMQTT(matchID):  
+def startMQTT():  
     # POST_matchdate = str(request.form['matchdate'])
     # POST_matchID = str(request.form['matchID'])
     # matchDaata = (POST_matchdate, POST_matchID)
@@ -376,10 +376,10 @@ def startMQTT(matchID):
     # 2) endTime
     # 3) RID
     # 4) MID
-    MID = (matchID,)
+    
     now = datetime.datetime.now()
     sql = '''INSERT INTO recordings (Match_ID, startTime) VALUES(%s,%s)'''
-    recordingData = (MID, now)
+    recordingData = (1, now)
     cur = conn.cursor()
     cur.execute(sql, recordingData)
             
@@ -437,7 +437,7 @@ def saveVideo():
     if request.method == 'POST':
         fileName = request.get_data()
         print("file name from ajax: "+fileName)
-        if filename == "exited":
+        if fileName == "exited":
             stopMQTT()
     return render_template('index.html')
 

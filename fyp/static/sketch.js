@@ -50,16 +50,36 @@ function draw() {
 }
 //data creation method
 function transformData(){
-	var pointDataX = -6699;
-  var pointDataY = 4683;
-  var startTime = 1540105543000;//original timestamp to miliseconds)
-	dataset	= [];
+  console.log("dataset:" + a);
+  console.log("source: "+ source);
+	var pointDataX = source[0][2];
+  var pointDataY = source[0][3];
+  console.log(source.length);
+  console.log("Its just below emppty");
+  console.log("x =" + pointDataX);
+  console.log("y =" + pointDataY);
+  var startTime = 0;//original timestamp to miliseconds)
+  var dataset	= [];
+
+  //see/check array of "source"
+// var totalArray= source.length;
+// for(i=0; i<totalArray; i++){
+//   console.log(source[i]);
+// }
+
+  //dataset='{{item[0]}}';
+  //var someJavaScriptVar = {{item[0]}}';
+  
   var tagID =1;
-	var previousTS=1540105543000;
+	var previousTS=0;
   //timeD = time difference
   var timeD = 0;
+  //var dataset = {{ results|tojson }};
+  //var dataset=0;
   
-  for(var y = 0; y<10000; y++) //rows.length
+  
+  
+  for(var y = 0; y<source.length; y++) //rows.length
   {         
     timeD = startTime - previousTS;
     //round(random) is so that no decimal points is added, only whole numbers)
@@ -86,8 +106,8 @@ function transformData(){
     //update the tagID randomly, 1 of 10 tags
     tagID += round(random(0,10));
   }
-console.log(dataset);
-  
+
+console.log();
 }
 
   // display image (img, x, y)
