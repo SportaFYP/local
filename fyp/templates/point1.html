@@ -4,18 +4,6 @@
 <head>
 
     <style>
-        /* .button {
-            background-color: #3498DB;
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        } */
 
         .button1 {
             background-color: rgb(219, 38, 38);
@@ -29,7 +17,6 @@
             margin: 4px 2px;
             cursor: pointer;
         }
-
         .button2 {
             background-color:  rgb(30, 190, 52);
             border: none;
@@ -43,8 +30,17 @@
             cursor: pointer;
         }
 
-       
+    
         </style>
+     <!-- DataTables CSS -->
+    <link href="{{ url_for('static', filename = 'dataTables.bootstrap.css') }}" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="{{ url_for('static', filename = 'dataTables.responsive.css') }}" rel="stylesheet">
+
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script>
+     
+        
         
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script>
 
@@ -82,7 +78,8 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-<script type = "text/javascript" 
+
+    <script type = "text/javascript" 
 src = "{{ url_for('static', filename = 'sketch.js') }}" ></script>
 
  
@@ -93,14 +90,24 @@ src = "{{ url_for('static', filename = 'point.js') }}" ></script>
 src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
 
 <script>
-    function myFunction() {
-        confirm("Start Recording?");
+    function confirmRecord() {
+        var ask = confirm("Start Recording?");
+    if (ask) {
+        //window.alert("This post was successfully deleted.");
+        window.location.href = "/start";
+    }
+    else{
+        window.alert("You have cancelled recording.");
+    }
+
     }
     </script>
 </head>
 
 <body>
 
+        <div id="wrapper">
+    
             <!-- Navigation -->
             <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
@@ -137,29 +144,23 @@ src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
                 <div class="navbar-default sidebar" role="navigation">
                     <div class="sidebar-nav navbar-collapse">
                         <ul class="nav" id="side-menu">
-                            
+                            <li>
+                                <a href="/"><i class="fa fa-bar-chart-o fa-fw"></i> Home</span></a>
+                            </li>
+
                             <li>
                                 <a href="/create"><i class="fa fa-edit fa-fw"></i> Create Match</a>
                             </li>
-                            <li>
-                                <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
-                                <ul class="nav nav-second-level">
-                                    <li>
-                                        <a href="#">Flot Charts</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Morris.js Charts</a>
-                                    </li>
-                                </ul>
+                          
                                 <!-- /.nav-second-level -->
-                            </li>
+                            <!-- </li>
                             <li>
                                 <a href="#"><i class="fa fa-table fa-fw"></i> Tables</a>
                             </li>
                             <li>
                                 <a href="#"><i class="fa fa-dashboard fa-fw"></i> Forms</a>
-                            </li>
-                            <li>
+                            </li> -->
+                            <!-- <li>
                                 <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
@@ -181,9 +182,9 @@ src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
                                         <a href="#">Grid</a>
                                     </li>
                                 </ul>
-                                <!-- /.nav-second-level -->
-                            </li>
-                            <li>
+                                
+                            </li> -->
+                            <!-- <li>
                                 <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
@@ -208,12 +209,12 @@ src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
                                                 <a href="#">Third Level Item</a>
                                             </li>
                                         </ul>
-                                        <!-- /.nav-third-level -->
+                                        
                                     </li>
                                 </ul>
-                                <!-- /.nav-second-level -->
-                            </li>
-                            <li>
+                               
+                            </li> -->
+                            <!-- <li>
                                 <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
                                 <ul class="nav nav-second-level">
                                     <li>
@@ -223,8 +224,8 @@ src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
                                         <a href="#">Login Page</a>
                                     </li>
                                 </ul>
-                                <!-- /.nav-second-level -->
-                            </li>
+                                
+                            </li> -->
                         </ul>
                     </div>
                     <!-- /.sidebar-collapse -->
@@ -233,14 +234,14 @@ src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
             </nav>
     
             <div id="page-wrapper">
-                    <div id="wrapper">
-            
-                            <div id="sports-court">
-                                <!-- Our sketch will go here! -->
-                              </div>
-                              <p><a onclick="myFunction()" href="/start" class="button2">Start</a>
-                                <a href="/stop" class="button1">Stop</a></p>
                 <div class="row">
+                    <div id="sports-court">
+                                <!-- Our sketch will go here! -->
+                            </div>
+                            <!-- <p><a onclick="confirmRecord()" href="/start" class="button2">Start Recording</a> -->
+                                <p><a onclick="confirmRecord()" class="button2">Start Recording</a>
+                            <a href="/stop" class="button1">Stop Recording</a></p>
+                            <a href="/record" class="button1">record page</a></p>
                     <div class="col-lg-12">
                         <h1 class="page-header">Sporta Table</h1>
                     </div>
@@ -331,4 +332,5 @@ src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
     
     </body>
 
+  
 </html>
