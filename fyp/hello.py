@@ -15,6 +15,15 @@ import datetime
 import time
 import pymysql
 import re
+from flask import Flask, request, redirect, url_for
+from werkzeug.utils import secure_filename
+from flask import send_from_directory
+
+UPLOAD_FOLDER1 = 'static/videos'
+ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'webm'])
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER1
 
 
 
@@ -376,7 +385,9 @@ def startMQTT():
     # 2) endTime
     # 3) RID
     # 4) MID
-   
+    # global matchID
+    # print ("matchid = ")
+    # print (matchID)
     now = datetime.datetime.now()
     sql = '''INSERT INTO recordings (Match_ID, startTime) VALUES(%s,%s)'''
     recordingData = (1, now)
@@ -429,26 +440,55 @@ def stopMQTT():
     conn.commit()
     # clear RID and now1
     now1=None
-    RID = 0L
+    # RID = 0L
     return recordpage()
 
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route('/saveVideo', methods=['GET', 'POST'])
-def saveVideo():
+def saveVideo():     
+    # try:   
+    global RID
+    print("savevideo rid = ")
+    print(RID)
     if request.method == 'POST':
-        fileName = request.get_data()
-        print("file name from ajax: "+fileName)
-        global RID
-        sql = '''UPDATE recordings SET saveFile = %s WHERE RecordingID = %s'''
-        print("Savefile = ")
-        print(RID)
-        print(fileName)
-        recordingData = (fileName, RID)
-        cur = conn.cursor()
-        cur.execute(sql, recordingData)
-        conn.commit()
+        print("enter save video")
+        filename = request.get_data()
+            
         if filename == "exited":
             stopMQTT()
-    return render_template('index.html')
+        else:
+            print("file name from ajax: "+ request.files['file'].filename)
+            file = request.files['file']
+            sql = '''UPDATE recordings SET saveFile = %s WHERE RecordingID = %s'''
+            print("Savefile = ")
+            print(RID)
+            print( file.filename)
+            recordingData = ( file.filename, RID)
+            cur = conn.cursor()
+            cur.execute(sql, recordingData)
+            conn.commit()
+            if file:
+                print("allowed file")
+                filename = secure_filename(file.filename)
+                file.save(os.path.join(UPLOAD_FOLDER1, filename))
+                return redirect(url_for('uploaded_file',
+                                            filename=filename))
+    # except Exception as e: 
+    #     print("error catch = ")
+    #     print(e)
+    return render_template('replay.html')
+
+@app.route("/replay")
+def viewreplay():
+    return render_template('replay.html')
+
+@app.route('/videos/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER1,
+                               filename)
 
 def on_subscribe(client, userdata, mid, granted_qos):
     print("Subscribed to topic!")
