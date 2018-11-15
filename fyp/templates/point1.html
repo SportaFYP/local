@@ -38,7 +38,6 @@
     <!-- DataTables Responsive CSS -->
     <link href="{{ url_for('static', filename = 'dataTables.responsive.css') }}" rel="stylesheet">
 
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script>
      
         
         
@@ -69,8 +68,8 @@
     <link href="{{ url_for('static', filename = 'sb-admin-2.css') }}" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <!-- <link href="{{ url_for('static', filename = 'font-awesome.min.css') }}" rel="stylesheet" type="text/css"> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="{{ url_for('static', filename = 'font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> -->
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -150,6 +149,10 @@ src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
 
                             <li>
                                 <a href="/create"><i class="fa fa-edit fa-fw"></i> Create Match</a>
+                            </li>
+
+                            <li>
+                                <a href="/tag"><i class="fa fa-edit fa-fw"></i> Tag </a>
                             </li>
                           
                                 <!-- /.nav-second-level -->
@@ -241,7 +244,50 @@ src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
                             <!-- <p><a onclick="confirmRecord()" href="/start" class="button2">Start Recording</a> -->
                                 <!-- <p><a onclick="confirmRecord()" class="button2">Start Recording</a> -->
                             <!-- <a href="/stop" class="button1">Stop Recording</a></p> -->
-                            <a href="/record" class="button1">record page</a></p>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-3">
+                                                <i class="fa fa-camera fa-5x"></i>
+                                            </div>
+                                            <div class="col-xs-9 text-right">
+                                                <div class="huge"></div>
+                                                <div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <a href="/record">
+                                        <div class="panel-footer">
+                                            <span class="pull-left">Record Page</span>
+                                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                    <div class="panel panel-green">
+                                        <div class="panel-heading">
+                                            <div class="row">
+                                                <div class="col-xs-3">
+                                                    <i class="fa fa-film fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-9 text-right">
+                                                    <div class="huge"></div>
+                                                    <div></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a href="#">
+                                            <div class="panel-footer">
+                                                <span class="pull-left">View Recording</span>
+                                                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                        </a>
+                                    </div>
+                            </div> 
                     <div class="col-lg-12">
                         <h1 class="page-header">Sporta Table</h1>
                     </div>
@@ -286,9 +332,9 @@ src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
                                 <div class="col-sm-6"><div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate"></div></div></div></div>
                                 <!-- /.table-responsive -->
                                 <div class="well">
-                                    <h4>DataTables Usage Information</h4>
-                                    <p>DataTables is a very flexible, advanced tables plugin for jQuery. In SB Admin, we are using a specialized version of DataTables built for Bootstrap 3. We have also customized the table headings to use Font Awesome icons in place of images. For complete documentation on DataTables, visit their website at <a target="_blank" href="https://datatables.net/">https://datatables.net/</a>.</p>
-                                    <a class="btn btn-default btn-lg btn-block" target="_blank" href="https://datatables.net/">View DataTables Documentation</a>
+                                    <h4>Sporta DataTables Information</h4>
+                                    <p>SPORTA - Sports Positioning on real time analytics, using real time positioning <a target="_blank" href="/">SPORTA</a>.</p>
+                                    <!-- <a class="btn btn-default btn-lg btn-block" target="_blank" href="https://datatables.net/">View DataTables Documentation</a> -->
                                 </div>
                             </div>
                             <!-- /.panel-body -->
