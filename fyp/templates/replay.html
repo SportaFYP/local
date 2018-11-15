@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SPORTA - Sports Positioning on Real Time Analytics
+    </title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{{ url_for('static', filename = 'bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="{{ url_for('static', filename = 'metisMenu.min.css') }}" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="{{ url_for('static', filename = 'dataTables.bootstrap.css') }}" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="{{ url_for('static', filename = 'dataTables.responsive.css') }}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename = 'sb-admin-2.css') }}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <!-- <link href="{{ url_for('static', filename = 'font-awesome.min.css') }}" rel="stylesheet" type="text/css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="../dist/ss.js"></script>
+			<!-- <script type="text/javascript" src="../../dist/Numpy.js"></script> -->
+			<!-- <script type="text/javascript" src="../../dist/PolySolve.js"></script> -->
+            <script type="text/javascript" src="../static/points/Scipy.js"></script>
+            <script type="text/javascript" src="static/points/p5.min.js"></script>
+            <script type="text/javascript" src="static/points/sketchNew.js"></script>
+            <script type="text/javascript" src="static/points/particle.js"></script>
+            <script type="text/javascript" src="static/points/video.js"></script>
+            <link rel="stylesheet" href="static/points/videoStyle.css">
+
+
+    <style>
+        .button1 {
+            color: #0099CC;
+            background: transparent;
+            border: 2px solid #0099CC;
+            border-radius: 6px; 
+            border: none;
+            color: white;
+            padding: 16px 32px;
+            text-align: center;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            -webkit-transition-duration: 0.4s; /* Safari */
+            transition-duration: 0.4s;
+            cursor: pointer;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        .button1 {
+            background-color: white; 
+            color: black; 
+            border: 2px solid #008CBA;
+        }
+        .button1:hover {
+            background-color: #008CBA;
+            color: white;
+        }
+        </style>
+</head>
+
+<body>
+
+        <div id="wrapper">
+    
+            <!-- Navigation -->
+            <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">SPORTA</a>
+                </div>
+                <!-- /.navbar-header -->
+    
+                <ul class="nav navbar-top-links navbar-right">
+                    <!-- /.dropdown -->
+                    
+                    <!-- /.dropdown -->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            
+                            <li class="divider"></li>
+                            <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            </li>
+                        </ul>
+                        <!-- /.dropdown-user -->
+                    </li>
+                    <!-- /.dropdown -->
+                </ul>
+                <!-- /.navbar-top-links -->
+    
+                <div class="navbar-default sidebar" role="navigation">
+                    <div class="sidebar-nav navbar-collapse">
+                        <ul class="nav" id="side-menu">
+                            <li>
+                                <a href="/"><i class="fa fa-bar-chart-o fa-fw"></i> Home</span></a>
+                            </li>
+
+                            <li>
+                                <a href="/create"><i class="fa fa-edit fa-fw"></i> Create Match</a>
+                            </li>
+
+                          
+                                <!-- /.nav-second-level -->
+                            <!-- </li>
+                            <li>
+                                <a href="#"><i class="fa fa-table fa-fw"></i> Tables</a>
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-dashboard fa-fw"></i> Forms</a>
+                            </li> -->
+                            <!-- <li>
+                                <a href="#"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#">Panels and Wells</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Buttons</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Notifications</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Typography</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"> Icons</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Grid</a>
+                                    </li>
+                                </ul>
+                                
+                            </li> -->
+                            <!-- <li>
+                                <a href="#"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#">Second Level Item</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Second Level Item</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Third Level <span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level">
+                                            <li>
+                                                <a href="#">Third Level Item</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Third Level Item</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Third Level Item</a>
+                                            </li>
+                                            <li>
+                                                <a href="#">Third Level Item</a>
+                                            </li>
+                                        </ul>
+                                        
+                                    </li>
+                                </ul>
+                               
+                            </li> -->
+                            <!-- <li>
+                                <a href="#"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="#">Blank Page</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Login Page</a>
+                                    </li>
+                                </ul>
+                                
+                            </li> -->
+                        </ul>
+                    </div>
+                    <!-- /.sidebar-collapse -->
+                </div>
+                <!-- /.navbar-static-side -->
+            </nav>
+            <body>
+                    <div id="video-container">
+                            <!-- Video -->
+                            <video id="video" width="640" height="365">
+                                    <source id="mp4_src" src="{{ url_for('static', filename = 'videos/RecordRTC-20181015-n4lxyagwj37.webm') }}" type="video/webm">
+                              <!-- <source src="videos/mikethefrog.ogv" type="video/ogv">
+                              <source src="videos/mikethefrog.mp4" type="video/mp4"> -->
+                              <p>
+                                Your browser doesn't support HTML5 video.
+                                <a href="videos/mikethefrog1.mp4">Download</a> the video instead.
+                              </p>
+                            </video>
+                            <!-- Video Controls -->
+                            <div id="video-controls">
+                              <button type="button" id="play-pause">Play</button>
+                              <input type="range" id="seek-bar" value="0">
+                              <button type="button" id="mute">Mute</button>
+                              <input type="range" id="volume-bar" min="0" max="1" step="0.1" value="1">
+                              <button type="button" id="full-screen">Full-Screen</button>
+                            </div>
+                          </div>
+
+
+
+
+            <!-- <video id="myVideo">
+                <source id="mp4_src" src="{{ url_for('static', filename = 'videos/RecordRTC-2018109-cmvpctm50w.webm') }}" type="video/webm">
+                <source id="ogg_src"  src="mov_bbb.ogg" type="video/ogg">
+                Your browser does not support the video tag.
+            </video>
+
+            <button onclick="playVid()" type="button">Play Video</button>
+            <button onclick="pauseVid()" type="button">Pause Video</button> 
+
+            <script>
+            var x = document.getElementById("myVideo"); 
+
+            function playVid() { 
+                x.play(); 
+            } 
+
+            function pauseVid() { 
+                x.pause(); 
+            } 
+            </script> -->
+            </body>
+
+            
