@@ -153,23 +153,37 @@ var start = false;
             });
             };
     
-
+            function saveVideo(fileName,file) {
+            var form = new FormData();
+            form.append('file',file, fileName);
+            //form.append('title', searchedObj.title);
+            //Chrome inspector shows that the post data includes a file and a title.                                                                                                                                           
+            $.ajax({
+            type: 'POST',
+            url: '/saveVideo',
+            data: form,
+            cache: false,
+            processData: false,
+            contentType: false
+            }).done(function(data) {
+            console.log(data);
+            });
 
 
       //ajax function--> take file.name, and pass to the method /saveVideo
-      function saveVideo(fileName) {
-        counter++;
-        console.log("before calling save video: "+ fileName)
-        document.getElementById("recordMessage").innerHTML = "You have successfully created " + counter + " recordings in this session.";
+    //   
+    //     counter++;
+    //     console.log("before calling save video: "+ fileName)
+    //     document.getElementById("recordMessage").innerHTML = "You have successfully created " + counter + " recordings in this session.";
 
-        $.ajax({
-        type: "POST",
-        url: "/saveVideo",
-        data: fileName,
-        success: function (data) {
-            alert(JSON.stringify(data));
-        }
-    });
+    //     $.ajax({
+    //     type: "POST",
+    //     url: "/saveVideo",
+    //     data: fileName,
+    //     success: function (data) {
+    //         alert(JSON.stringify(data));
+    //     }
+    // });
     }
 
 
@@ -1569,9 +1583,10 @@ var start = false;
                         type: mimeType
                     });
 
-                    invokeSaveAsDialog(file, file.name);
+                    //invokeSaveAsDialog(file, file.name);
                     //call the ajax methos to saved file.name in db
-                    saveVideo(file.name);
+                    console.log("file.name =" + file.name)
+                    saveVideo(file.name,file);
                     return;
                 // };
 
