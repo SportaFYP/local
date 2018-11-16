@@ -234,30 +234,7 @@ def viewMatch(matchID):
 
 @app.route('/recordingview/<RID>')
 def viewRecordings(RID):
-        # mycursor = conn.cursor()
-        # RID = ("SELECT * FROM recordings WHERE (Match_ID, RecordingID) = (%s, %s)")
-        # RID1 = (2, RID)
-        # sql5 = ("SELECT * FROM projects WHERE (RecordingID, success)= (%s, %s)")
-        # ro = (RID1, 1)
-        # mycursor.execute(sql5, ro)
-        # print(mycursor)
-        # RID = 0L
-        # return point()
-        print("RID:")
-        print(RID)
-        RID1 = (RID,)
-        # with RID.... can u finally get the points?
-        mycursor = conn.cursor()
-        # hello =("SELECT * FROM projects WHERE RecordingID = %s")
-        hello =("SELECT tagId,timestamp,coordinates_x,coordinates_y FROM projects WHERE RecordingID = %s")
-        mycursor.execute(hello, RID1)
-        results = mycursor.fetchall()
-        # print("results[0][0]")
-        # print(results[0][0])
-        # print(results)
-        # results = result.fetchall()
-        print(results)
-        return viewMatch(matchID)
+        return redirect(url_for('viewreplay'))
 
 ## User login
 @app.route('/login', methods=['POST'])
@@ -483,7 +460,32 @@ def saveVideo():
 
 @app.route("/replay")
 def viewreplay():
-    return render_template('replay.html')
+    # mycursor = conn.cursor()
+    # RID = ("SELECT * FROM recordings WHERE (Match_ID, RecordingID) = (%s, %s)")
+    # RID1 = (2, RID)
+    # sql5 = ("SELECT * FROM projects WHERE (RecordingID, success)= (%s, %s)")
+    # ro = (RID1, 1)
+    # mycursor.execute(sql5, ro)
+    # print(mycursor)
+    # RID = 0L
+    # return point()
+    print("RID:")
+    print(RID)
+    RID1 = (RID,)
+    # with RID.... can u finally get the points?
+    mycursor = conn.cursor()
+    # hello =("SELECT * FROM projects WHERE RecordingID = %s")
+    hello =("SELECT tagId,timestamp,coordinates_x,coordinates_y FROM projects WHERE RecordingID = %s")
+    mycursor.execute(hello, RID1)
+    results = mycursor.fetchall()
+    # print("results[0][0]")
+    # print(results[0][0])
+     # print(results)
+     # results = result.fetchall()
+    video = "videos/RecordRTC-20181015-n4lxyagwj37.webm" 
+    print(results)
+     # return viewreplay()
+    return render_template('replay.html',video = video)
 
 @app.route('/videos/<filename>')
 def uploaded_file(filename):
