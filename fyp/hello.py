@@ -252,8 +252,8 @@ def viewRecordings(RID):
     # hello =("SELECT * FROM projects WHERE RecordingID = %s")
     hello =("SELECT tagId,timestamp,coordinates_x,coordinates_y FROM projects WHERE RecordingID = %s")
     mycursor.execute(hello, RID1)
-    results = mycursor.fetchall()
-    print(results)
+    coords = mycursor.fetchall()
+    print(coords)
     return redirect(url_for('viewreplay'))
 
 ## User login

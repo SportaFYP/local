@@ -219,7 +219,7 @@
                                 <tr role="row"> <!---<th class="sorting_asc" tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 284px;">Start Time</th>
                                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 340px;">End Time</th>
                                                 <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 313px;">MatchID</th> -->
-                                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 249px;">view1</th>
+                                                <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 249px;">matchnotes</th>
                                                 <!-- <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 190px;">Match Notes</th> -->
                                 </tr>
                                 <!-- <th>Match ID</th>
@@ -230,12 +230,12 @@
                             </thead>
                             
                             <tbody>
-                                {% for item in data %}
+                                {% for item in data.matchNotes %}
                                     <tr>
-                                        <!-- <td>{{item[2]}}</td>
-                                        <td>{{item[3]}}</td>
-                                        <td>{{item[1]}}</td> -->
-                                        <td><a href="/match/{{item[4]}}" class="button">View</a></td>
+                                        <!-- <td>{{item[2]}}</td> -->
+                                        <!-- <td>{{item[3]}}</td> -->
+                                        <td>{{item[4]}}</td> 
+                                        <!-- <td><a href="/match/{{item[4]}}" class="button">View</a></td> -->
                                        
                                     </tr>
                                 {% endfor %}
