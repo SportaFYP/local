@@ -41,10 +41,10 @@ client = mqtt.Client()
 # engine = create_engine('sqlite:///tutorial.db', echo=True)
 
 # MySQL VRIABLES############################################
-host = "172.20.129.227"
+host = "localhost"
 port = 3306
 topic = "tagsLive" 
-user = "admin1"
+user = "root"
 passwd="Sportapassword12"
 db="Sportadb"
 RID=0L
@@ -226,8 +226,10 @@ def viewMatch(matchID):
         mycursor = conn.cursor()
         query=("SELECT * FROM recordings WHERE Match_ID=%s")
         mycursor.execute(query,MID)
-
+        session['my_var1'] = MID
         rowss = mycursor.fetchall()
+    
+        return render_template('point1.html', rowss=rowss )
 
         
         query1=("SELECT matchnotes FROM matches WHERE MatchID=%s")
@@ -247,13 +249,14 @@ def viewRecordings(RID):
     print("RID:")
     print(RID)
     RID1 = (RID,)
+    session['my_var'] = RID
     # with RID.... can u finally get the points?
     mycursor = conn.cursor()
     # hello =("SELECT * FROM projects WHERE RecordingID = %s")
     hello =("SELECT tagId,timestamp,coordinates_x,coordinates_y FROM projects WHERE RecordingID = %s")
     mycursor.execute(hello, RID1)
     coords = mycursor.fetchall()
-    print(coords)
+    # print(results)
     return redirect(url_for('viewreplay'))
 
 ## User login
@@ -385,9 +388,11 @@ def startMQTT():
     # global matchID
     # print ("matchid = ")
     # print (matchID)
+    my_var1 = session.get('my_var1', None)
+    rid3 = my_var1.decode('unicode-escape')
     now = datetime.datetime.now()
     sql = '''INSERT INTO recordings (Match_ID, startTime) VALUES(%s,%s)'''
-    recordingData = (1, now)
+    recordingData = ([rid3], now)
     cur = conn.cursor()
     cur.execute(sql, recordingData)
             
@@ -494,10 +499,30 @@ def viewreplay():
     # print(results[0][0])
      # print(results)
      # results = result.fetchall()
-    video = "videos/RecordRTC-20181015-n4lxyagwj37.webm" 
-    
-     # return viewreplay()
-    return render_template('replay.html',video = video)
+    mycursor = conn.cursor()
+    my_var = session.get('my_var', None)
+    print("RID videos = ")
+    print(my_var)
+    rid2 = my_var.decode('unicode-escape')
+    hello =("SELECT saveFile FROM recordings WHERE RecordingID = %s")
+    mycursor.execute(hello, [rid2])
+    results = mycursor.fetchone()
+
+    # video = "videos/" + results
+    print("result video =")
+    print(results[0])
+
+    # video = "videos/RecordRTC-20181015-n4lxyagwj37.webm" 
+    video = "videos/" + str(results[0])
+    print("result video =")
+    print(video)
+
+    coord =("SELECT tagId,timestamp,coordinates_x,coordinates_y FROM projects WHERE RecordingID = %s")
+    mycursor.execute(coord, [rid2])
+    coords = mycursor.fetchall()
+
+    data1 = {'video': video, 'coords': coords }
+    return render_template('replay.html',data1 = data1)
 
 @app.route('/videos/<filename>')
 def uploaded_file(filename):
