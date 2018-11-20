@@ -105,45 +105,7 @@
     </style>
 
 <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
-<script src ="{{ url_for('static', filename = 'jquery.min.js') }}" ></script>
-
-<!-- Bootstrap Core JavaScript -->
-<script src="{{ url_for('static', filename = 'bootstrap.min.js') }}"></script>
-
-<!-- Metis Menu Plugin JavaScript -->
-<script src="{{ url_for('static', filename = 'metisMenu.min.js') }}"></script>
-
-<!-- DataTables JavaScript -->
-<script src="{{ url_for('static', filename = 'jquery.dataTables.min.js') }}"></script>
-<script src="{{ url_for('static', filename = 'dataTables.bootstrap.min.js') }}"></script>
-<script src="{{ url_for('static', filename = 'dataTables.responsive.js') }}"></script>
-
-<!-- Custom Theme JavaScript -->
-<script src="{{ url_for('static', filename = 'sb-admin-2.js') }}"></script>
-
- <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script> -->
- <script src ="{{ url_for('static', filename = 'p5.js') }}" > </script>
-    
-    
-    
-  
-
- <!-- <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script> -->
- <script src ="{{ url_for('static', filename = 'RecordRTC.js') }}" ></script>
-
- <!-- for Edge/FF/Chrome/Opera/etc. getUserMedia support -->
- <!-- <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script> -->
- <script src ="{{ url_for('static', filename = 'adaptor.js') }}" ></script>
- <!-- <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"> </script> -->
- <script src ="{{ url_for('static', filename = 'DetectRTC.js') }}" ></script>
-
- <!-- video element -->
- <!-- <link href="https://cdn.webrtc-experiment.com/getHTMLMediaElement.css" rel="stylesheet"> -->
- <link href="{{ url_for('static', filename = 'getHTMLMediaElement.css') }}" rel="stylesheet">
- <!-- <script src="https://cdn.webrtc-experiment.com/getHTMLMediaElement.js"></script> -->
- <script src="{{ url_for('static', filename = 'getHTMLMediaElement.js') }}"></script>
-
-
+<link href="{{ url_for('static', filename = 'jquery.min.js') }}" rel="javascript">
 <script type=text/javascript>
 var counter = 0;
 var start = false;
@@ -244,7 +206,27 @@ var start = false;
     <!-- DataTables Responsive CSS -->
     <link href="{{ url_for('static', filename = 'dataTables.responsive.css') }}" rel="stylesheet">
 
-   
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script> -->
+    <script src="{{ url_for('static', filename = 'p5.js') }}" rel="javascript"> </script>
+    
+    
+    
+  
+
+    <!-- <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script> -->
+    <script src="{{ url_for('static', filename = 'RecordRTC.js') }}" rel="javascript"></script>
+
+    <!-- for Edge/FF/Chrome/Opera/etc. getUserMedia support -->
+    <!-- <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script> -->
+    <script src="{{ url_for('static', filename = 'adaptor.js') }}" rel="javascript"></script>
+    <!-- <script src="https://cdn.webrtc-experiment.com/DetectRTC.js"> </script> -->
+    <script src="{{ url_for('static', filename = 'DetectRTC.js') }}" rel="javascript"></script>
+
+    <!-- video element -->
+    <!-- <link href="https://cdn.webrtc-experiment.com/getHTMLMediaElement.css" rel="stylesheet"> -->
+    <link href="{{ url_for('static', filename = 'getHTMLMediaElement.css') }}" rel="stylesheet">
+    <!-- <script src="https://cdn.webrtc-experiment.com/getHTMLMediaElement.js"></script> -->
+    <script src="{{ url_for('static', filename = 'getHTMLMediaElement.js') }}"></script>
     <script>
         function confirmRecord() {
             var ask = confirm("Start Recording?");
@@ -505,7 +487,7 @@ var start = false;
                 <!-- <a onclick="confirmRecord()" class="button2" id="btn-start-recording">Start Recording</a> -->
                 <!-- <a href="/stop" class="button1">Stop Recording</a></p> -->
             <div style="margin-top: 10px;" id="recording-player">
-               
+
             </div>
         </section>
       
@@ -2278,9 +2260,21 @@ var start = false;
        
     </article>
 <!-- jQuery -->
-<!-- <script src="{{ url_for('static', filename = 'jquery.min.js') }}"></script> -->
+<script src="{{ url_for('static', filename = 'jquery.min.js') }}"></script>
     
+<!-- Bootstrap Core JavaScript -->
+<script src="{{ url_for('static', filename = 'bootstrap.min.js') }}"></script>
 
+<!-- Metis Menu Plugin JavaScript -->
+<script src="{{ url_for('static', filename = 'metisMenu.min.js') }}"></script>
+
+<!-- DataTables JavaScript -->
+<script src="{{ url_for('static', filename = 'jquery.dataTables.min.js') }}"></script>
+<script src="{{ url_for('static', filename = 'dataTables.bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename = 'dataTables.responsive.js') }}"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="{{ url_for('static', filename = 'sb-admin-2.js') }}"></script>
     <footer>
  
     </footer>

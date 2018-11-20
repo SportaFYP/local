@@ -38,7 +38,7 @@
     <!-- DataTables Responsive CSS -->
     <link href="{{ url_for('static', filename = 'dataTables.responsive.css') }}" rel="stylesheet">
 
-     
+
         
         
     <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script> -->
@@ -103,6 +103,7 @@ src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
 
     }
     </script>
+    
 </head>
 
 <body>
@@ -320,7 +321,7 @@ src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
                                         <th>Match Notes</th> -->
                                     </thead>
                                     <tbody>
-                                        {% for item in rowss %}
+                                        {% for item in data.rowss %}
                                             <tr>
                                                 <td>{{item[2]}}</td>
                                                 <td>{{item[3]}}</td>
