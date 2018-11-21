@@ -16,8 +16,11 @@ var begin;
 var end;
 
 function setup() {
-  createCanvas(400, 400);
-  
+  // createCanvas(400, 400);
+  var canvas = createCanvas(700, 400);
+  bg = loadImage("static/points/bbcourt.png");
+  canvas.parent('sketch-holder')
+
   createData();
   //creates 2 tags
   var p1 = new Particle(1);
@@ -97,6 +100,7 @@ function update(){
 }
 
 function draw() {
+  // background(bg);
   background(200);
   //if(startPlay)
   //{

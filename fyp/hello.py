@@ -41,10 +41,10 @@ client = mqtt.Client()
 # engine = create_engine('sqlite:///tutorial.db', echo=True)
 
 # MySQL VRIABLES############################################
-host = "localhost"
+host = "172.20.129.227"
 port = 3306
 topic = "tagsLive" 
-user = "root"
+user = "admin1"
 passwd="Sportapassword12"
 db="Sportadb"
 RID=0L
@@ -529,6 +529,18 @@ def viewreplay():
     
     print("matchnotes == ")
     print(matchNotes)
+    data1 = {'video': video, 'coords': coords, 'matchNotes': matchNotes }
+    return render_template('replay.html', data1 = data1)
+
+    # mid1 = my_var1
+    matchdetail=("SELECT matchnotes FROM matches WHERE MatchID=%s")
+    mycursor.execute(matchdetail, my_var1)
+    matchdetails = mycursor.fetchall()
+    matchNotes = matchdetails
+
+    print("matchnotes == ")
+    print(matchNotes)
+    
     data1 = {'video': video, 'coords': coords, 'matchNotes': matchNotes }
     return render_template('replay.html', data1 = data1)
 
