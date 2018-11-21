@@ -226,11 +226,9 @@ def viewMatch(matchID):
         mycursor = conn.cursor()
         query=("SELECT * FROM recordings WHERE Match_ID=%s")
         mycursor.execute(query,MID)
-        session['my_var1'] = MID
+        session['my_var1'] = matchID
+        session['my_var2'] = matchID
         rowss = mycursor.fetchall()
-    
-        return render_template('point1.html', rowss=rowss )
-
         
         query1=("SELECT matchnotes FROM matches WHERE MatchID=%s")
         mycursor.execute(query1,MID)
@@ -389,10 +387,10 @@ def startMQTT():
     # print ("matchid = ")
     # print (matchID)
     my_var1 = session.get('my_var1', None)
-    rid3 = my_var1.decode('unicode-escape')
+    mid1 = my_var1.decode('unicode-escape')
     now = datetime.datetime.now()
     sql = '''INSERT INTO recordings (Match_ID, startTime) VALUES(%s,%s)'''
-    recordingData = ([rid3], now)
+    recordingData = ([mid1], now)
     cur = conn.cursor()
     cur.execute(sql, recordingData)
             
@@ -509,8 +507,8 @@ def viewreplay():
     results = mycursor.fetchone()
 
     # video = "videos/" + results
-    print("result video =")
-    print(results[0])
+    # print("result video =")
+    # print(results[0])
 
     # video = "videos/RecordRTC-20181015-n4lxyagwj37.webm" 
     video = "videos/" + str(results[0])
@@ -521,8 +519,18 @@ def viewreplay():
     mycursor.execute(coord, [rid2])
     coords = mycursor.fetchall()
 
-    data1 = {'video': video, 'coords': coords }
-    return render_template('replay.html',data1 = data1)
+    my_var2 = session.get('my_var2', None)
+    print("my_var2 = ")
+    print(my_var2)
+    mid2 = my_var2.decode('unicode-escape')
+    matchdetail=("SELECT matchnotes FROM matches WHERE MatchID=%s")
+    mycursor.execute(matchdetail, [mid2])
+    matchNotes = mycursor.fetchall()
+    
+    print("matchnotes == ")
+    print(matchNotes)
+    data1 = {'video': video, 'coords': coords, 'matchNotes': matchNotes }
+    return render_template('replay.html', data1 = data1)
 
 @app.route('/videos/<filename>')
 def uploaded_file(filename):
