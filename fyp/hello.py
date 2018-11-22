@@ -3,6 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session, abo
 import os
 from hashlib import md5
 from sqlalchemy.orm import sessionmaker
+import simplejson as json
 # from tabledef import *
 # import sqlite3
 # from sqlite3 import Error
@@ -45,7 +46,7 @@ host = "172.20.129.227"
 port = 3306
 topic = "tagsLive" 
 user = "admin1"
-passwd="Sportapassword"
+passwd="Sportapassword12"
 db="Sportadb"
 RID=0L
 matchID=0
@@ -198,6 +199,10 @@ def displayTablebyname():
 
         return render_template('homepage.html', rows=rows)
 
+@app.route("/viewAll")
+def viewAllmatches():
+    return redirect(url_for('displayTable'))
+
 # @app.route('/match/<matchID>')
 # def viewMatch(matchID):
 #     print ('view match')
@@ -230,13 +235,13 @@ def viewMatch(matchID):
         session['my_var2'] = matchID
         rowss = mycursor.fetchall()
         
-        query1=("SELECT matchnotes FROM matches WHERE MatchID=%s")
+        query1=("SELECT * FROM matches WHERE MatchID=%s")
         mycursor.execute(query1,MID)
 
-        matchNotes = mycursor.fetchall()
+        matchNotes = mycursor.fetchone()
         print ("matchNotes")
         print (matchNotes)
-        data = {'rowss': rowss, 'matchNotes': matchNotes}
+        data = {'rowss': rowss, 'matchNotes': matchNotes[0]}
 
         return render_template('point1.html', data=data)
 
@@ -247,14 +252,15 @@ def viewRecordings(RID):
     print("RID:")
     print(RID)
     RID1 = (RID,)
-    session['my_var'] = RID
+    print("123")
     # with RID.... can u finally get the points?
     mycursor = conn.cursor()
     # hello =("SELECT * FROM projects WHERE RecordingID = %s")
     hello =("SELECT tagId,timestamp,coordinates_x,coordinates_y FROM projects WHERE RecordingID = %s")
     mycursor.execute(hello, RID1)
     coords = mycursor.fetchall()
-    # print(results)
+    print(coords)
+    session['my_var'] = RID
     return redirect(url_for('viewreplay'))
 
 ## User login
@@ -510,7 +516,7 @@ def viewreplay():
     # print("result video =")
     # print(results[0])
 
-    # video = "videos/RecordRTC-20181015-n4lxyagwj37.webm" 
+    # video = "videos/RecordRTC-20181015-ch5sjondiee.webm" 
     video = "videos/" + str(results[0])
     print("result video =")
     print(video)
@@ -532,6 +538,17 @@ def viewreplay():
     data1 = {'video': video, 'coords': coords, 'matchNotes': matchNotes }
     return render_template('replay.html', data1 = data1)
 
+    # # mid1 = my_var1
+    # matchdetail=("SELECT matchnotes FROM matches WHERE MatchID=%s")
+    # mycursor.execute(matchdetail, my_var1)
+    # matchdetails = mycursor.fetchall()
+    # matchNotes = matchdetails
+
+    # print("matchnotes == ")
+    # print(matchNotes)
+    
+    # data1 = {'video': video, 'coords': coords, 'matchNotes': matchNotes }
+    # return render_template('replay.html', data1 = data1)
 
 @app.route('/videos/<filename>')
 def uploaded_file(filename):
@@ -632,6 +649,8 @@ def create_point(point):
     :param point:
     :return:
     """
+    print("123")
+    print(point)
     sql = ''' INSERT INTO projects(version, tagId, RecordingID, success, timestamp, magnetic_x, magnetic_y, magnetic_z, coordinates_x, coordinates_y, coordinates_z, acceleration_x, acceleration_y, acceleration_z, yaw, roll, pitch)
               VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) '''
     cur = conn.cursor()
