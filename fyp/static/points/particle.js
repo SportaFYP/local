@@ -23,7 +23,12 @@
 		//draw the point
 		stroke(0);
 		fill(0,150);
-		ellipse(this.lerpPoint.x,this.lerpPoint.y, 20,20);//image
+		var mapX= map(this.lerpPoint.x,0,7770, 0, 700);
+		var mapY= map(this.lerpPoint.y,0,6000, 0, 540);
+		ellipse(mapX,mapY, 20,20);//image
+
+		console.log("mapX: "+ mapX)
+		console.log("mapX: "+ mapY)
 		
 		//loop through history
 		noFill();
@@ -31,12 +36,14 @@
 		for(var i = 0; i<this.history.length; i++)
 		{
 			var pos = this.history[i];
-			curveVertex(pos.x,pos.y);
+			var mapHX= map(pos.x,0,7770, 0, 700);
+			var mapHY= map(pos.y,0,6000, 0, 540);
+			curveVertex(mapHX,mapHY);
       
       if(i ==0)
-      curveVertex(pos.x,pos.y);
+      curveVertex(mapHX,mapHY);
       if(i==history.length-1)
-      curveVertex(pos.x,pos.y);
+      curveVertex(mapHX,mapHY);
 		}
 		endShape();
     //history of points for display of tail

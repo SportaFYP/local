@@ -17,14 +17,14 @@ var end;
 
 function setup() {
   // createCanvas(400, 400);
-  var canvas = createCanvas(700, 400);
-  bg = loadImage("static/points/bbcourt.png");
+  var canvas = createCanvas(700, 540);
+  bg = loadImage("static/points/bbcourt1.png");
   canvas.parent('sketch-holder')
-
-  createData();
+  prepareData();
+  //createData();
   //creates 2 tags
-  var p1 = new Particle(1);
-  var p2 = new Particle(2);
+  var p1 = new Particle(26995);
+  var p2 = new Particle(27005);
   p1.interpolateFunctionX.interp1d([], []);
   p1.interpolateFunctionY.interp1d([], []);
   p2.interpolateFunctionX.interp1d([], []);
@@ -54,6 +54,7 @@ function setup() {
   }
   noLoop();
   totalMS = pVector[pVector.length-1].point.z;
+  console.log("totalMS:" +totalMS);
   console.log("functionX Array of time: ");
   console.log(p1.interpolateFunctionX._x)
 
@@ -101,14 +102,28 @@ function update(){
 
 function draw() {
   // background(bg);
-  background(200);
+  background(bg);
   //if(startPlay)
   //{
     update();
   //}
 }
 
+function prepareData(){
+  //tagId,timestamp,coordinates_x,coordinates_y
+  var p1 = new Particle(1);
+  var p2 = new Particle(2);
+  var startTime = pointsDS[0][1];
+for(var i = 0; i< pointsDS.length; i++){
 
+    var x = pointsDS[i][2];
+    var y = pointsDS[i][3];
+    var elapsed = (pointsDS[i][1] - startTime) * 1000; // to make it Miliseconds
+    var point = createVector(x, y, elapsed);
+    pVector.push({'point': point, 'tagID': pointsDS[i][0]});
+ 
+}
+}
 
 
 
