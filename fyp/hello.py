@@ -4,9 +4,7 @@ import os
 from hashlib import md5
 from sqlalchemy.orm import sessionmaker
 import simplejson as json
-# from tabledef import *
-# import sqlite3
-# from sqlite3 import Error
+
 import paho.mqtt.client as mqtt
 import ssl
 import json
@@ -36,11 +34,6 @@ portMQTT = 1883
 client = mqtt.Client()
 # MQTT variables END#######################################
 
-
-
-# conn = sqlite3.connect("C:\Users\L31304\Desktop\MQTT\MQTT\db\mqtt1.db")
-# engine = create_engine('sqlite:///tutorial.db', echo=True)
-
 # MySQL VRIABLES############################################
 host = "172.20.129.227"
 port = 3306
@@ -56,16 +49,7 @@ conn = MySQLdb.connect(host,
                   db)
 # MySQL VRIABLWS END#######################################
 class ServerError(Exception):pass
-# client = mqtt.Client(transport="websockets")
-# hostMQTT = "mqtt.cloud.pozyxlabs.com"
-# portMQTT = 443
-# topic = "5b165a3953760e60306a0a8c"  # your mqtt topic
-# username = "5b165a3953760e60306a0a8c"  # your mqtt username
-# password = "3f0ac6f0-2938-4270-b49b-5a77157993dc"  # your generated api key
-# set callbacks
-# client.username_pw_set(username, password=password)
-# sets the secure context, enabling the WSS protocol
-# client.tls_set_context(context=ssl.create_default_context())
+
 
 def create_connection(db_file):
     """ create a database connection to the MySQL database
@@ -144,36 +128,16 @@ if __name__ == '__main__':
 
 app = Flask(__name__)
  
-# @app.route('/')
-# def home():
-#     if not session.get('currentRecordingID'):
-#         print("currentRecordingID:")
-#         # print("currentRecordingID:" + session.get('currentRecordingID'))
-#     if not session.get('logged_in'):
-#         return render_template('login.html')
-#     else:
-#         #add in table
-#         # return displayTable()
-#         return render_template('home.html', username=session['username'])
-
-
-
 
 @app.route("/")
 def displayTable():
     mycursor = conn.cursor()
     mycursor.execute("SELECT * FROM matches")
     rows = mycursor.fetchall()
-    # for row in rows:
-    #     MatchID=row[0]
-    #     matchname=row[1]
-    #     matchdate=row[2]
-    #     administrator=row[3]
-    #     matchnotes=row[4]
 
     if not session.get('currentRecordingID'):
         print("currentRecordingID:")
-        # print("currentRecordingID:" + session.get('currentRecordingID'))
+       
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
@@ -192,7 +156,7 @@ def displayTablebyname():
 
     if not session.get('currentRecordingID'):
         print("currentRecordingID:")
-        # print("currentRecordingID:" + session.get('currentRecordingID'))
+       
     if not session.get('logged_in'):
         return render_template('login.html')
     else:
@@ -203,31 +167,13 @@ def displayTablebyname():
 def viewAllmatches():
     return redirect(url_for('displayTable'))
 
-# @app.route('/match/<matchID>')
-# def viewMatch(matchID):
-#     print ('view match')
-#     MID = (matchID,)
-#     print(matchID)
-#     return render_template('point1.html')
-
 @app.route('/match/<matchID>')
 def viewMatch(matchID):
     if session.get('logged_in'):
-        # global matchID
-        # matchID1=(matchID,)
-        # mycursor = conn.cursor()
-        # fetch1 = ("SELECT * FROM recordings WHERE MatchID = %s")
-        # mycursor.execute(fetch1, matchID1)
-        # rowss = mycursor.fetchall()
-        # # sql5 = ("SELECT (Match_ID, startTime, endTime) FROM recordings WHERE Match_ID = %s"),[matchid]
-        # # # sql5 = ("SELECT (startTime, endTime) FROM recordings WHERE Match_ID = %s")
-        # # mycursor.execute(sql5, matchid)
-        # # rowss = mycursor.fetchall()
 
         print ('view match')
         MID = (matchID,)
         print(matchID)
-        # return render_template('point1.html')
         mycursor = conn.cursor()
         query=("SELECT * FROM recordings WHERE Match_ID=%s")
         mycursor.execute(query,MID)
@@ -381,17 +327,6 @@ def create_matches():
 ###### MQTT start here ###############
 @app.route("/start")
 def startMQTT():  
-    # POST_matchdate = str(request.form['matchdate'])
-    # POST_matchID = str(request.form['matchID'])
-    # matchDaata = (POST_matchdate, POST_matchID)
-
-    # 1) startTime
-    # 2) endTime
-    # 3) RID
-    # 4) MID
-    # global matchID
-    # print ("matchid = ")
-    # print (matchID)
     my_var1 = session.get('my_var1', None)
     mid1 = my_var1.decode('unicode-escape')
     now = datetime.datetime.now()
@@ -417,7 +352,6 @@ def startMQTT():
     client.connect(hostMQTT, port=portMQTT)
     client.subscribe(topic)
     print("before client!")
-    # print(client)
     #works blocking, other, non-blocking, clients are available too.
     client.loop_start()
     print("after client!")
@@ -489,20 +423,6 @@ def saveVideo():
 
 @app.route("/replay")
 def viewreplay():
-    # mycursor = conn.cursor()
-    # RID = ("SELECT * FROM recordings WHERE (Match_ID, RecordingID) = (%s, %s)")
-    # RID1 = (2, RID)
-    # sql5 = ("SELECT * FROM projects WHERE (RecordingID, success)= (%s, %s)")
-    # ro = (RID1, 1)
-    # mycursor.execute(sql5, ro)
-    # print(mycursor)
-    # RID = 0L
-    # return point()
-    
-    # print("results[0][0]")
-    # print(results[0][0])
-     # print(results)
-     # results = result.fetchall()
     mycursor = conn.cursor()
     my_var = session.get('my_var', None)
     print("RID videos = ")
@@ -516,7 +436,6 @@ def viewreplay():
     # print("result video =")
     # print(results[0])
 
-    # video = "videos/RecordRTC-20181015-ch5sjondiee.webm" 
     video = "videos/" + str(results[0])
     print("result video =")
     print(video)
@@ -538,17 +457,6 @@ def viewreplay():
     data1 = {'video': video, 'coords': coords, 'matchNotes': matchNotes }
     return render_template('replay.html', data1 = data1)
 
-    # # mid1 = my_var1
-    # matchdetail=("SELECT matchnotes FROM matches WHERE MatchID=%s")
-    # mycursor.execute(matchdetail, my_var1)
-    # matchdetails = mycursor.fetchall()
-    # matchNotes = matchdetails
-
-    # print("matchnotes == ")
-    # print(matchNotes)
-    
-    # data1 = {'video': video, 'coords': coords, 'matchNotes': matchNotes }
-    # return render_template('replay.html', data1 = data1)
 
 @app.route('/videos/<filename>')
 def uploaded_file(filename):
@@ -604,13 +512,6 @@ def on_message(client, userdata, msg):
 
  print("},")
  
-#  file = open("points.txt","a") 
-#  file.write(tagId +",") 
-#  print("54321")
-#  file.write("\n" + timestamp +",") 
-#  file.write(coordinates_x +",") 
-#  file.write(coordinates_y +"")
-#  file.close()
 
 #  print '"coordinates_z":', result['data']['coordinates']['z']
  coordinates_z = result['data']['coordinates']['z']
