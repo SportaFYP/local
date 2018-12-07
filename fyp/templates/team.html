@@ -172,54 +172,37 @@
         <div id="page-wrapper" style="min-height: 908px;">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">TagID</h1>
+                    <h1 class="page-header">Teams</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
+            {% if createTeamStatus == 0 %} <!--Successful-->
+                <div class="row alert alert-success">
+                    <p>Team has been successfully added</p>
+                </div>
+            {% elif createTeamStatus == 1 %} <!--Class already exists-->
+                <div class="row alert alert-danger">
+                    <p>The team that you are trying to add already exists</p>
+                </div>
+            {% endif %}
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Team 1
+                            Create new team
                         </div>
                         <div class="panel-body">
                             <div class="row">
                                 <div class="col-lg-6">
-
-
-                                    <form action="/updateTag" method="POST">
-                                        Tag1:
-                                        <input type="text" value=" " name="tag1" style="
-                                                width: 155px;">
+                                    <form action="/createTeam" method="POST">
+                                        Enter the team name that is to be created:  <input type="text" value="" name="teamId" style="width: 155px;" required>
                                         <br>
-                                        Tag2:
-                                        <input type="text" value=" " name="tag2" style="
-                                                width: 155px;">
                                         <br>
-                                        Tag3:
-                                        <input type="text" value=" " name="tag3" style="
-                                                width: 155px;">
-                                        <br>
-                                        Tag4:
-                                        <input type="text" value=" " name="tag4" style="
-                                                width: 155px;">
-                                        <br>
-                                        Tag5:
-                                        <input type="text" value=" " name="tag5" style="
-                                                width: 155px;">
-                                        <br>
-
-                                        <input type="submit" value="Update Tag" class="btn btn-primary btn-large btn-block"
-                                            style="
-                                              width: 171px;">
+                                        <input type="submit" value="Create Team" class="btn btn-primary btn-large btn-block"
+                                            style="width: 171px;">
                                     </form>
-
-
-
                                 </div>
-                                <!-- /.col-lg-6 (nested) -->
-
                                 <!-- /.col-lg-6 (nested) -->
                             </div>
                             <!-- /.row (nested) -->
@@ -231,6 +214,64 @@
                 <!-- /.col-lg-12 -->
             </div>
             <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">List of Teams</h2>
+                </div>
+                <div class="panel-body">
+                    <div id="dataTables-example_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                        <div class="row">
+                            <div class="col-sm-6"></div>
+                            <div class="col-sm-6"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <table width="100%" class="table table-striped table-bordered table-hover dataTable no-footer dtr-inline"
+                                    id="dataTables-example" role="grid" aria-describedby="dataTables-example_info"
+                                    style="width: 100%;">
+                                    <thead>
+                                        <tr role="row">
+                                            <th class="sorting_asc" tabindex="0" aria-controls="dataTables-example"
+                                                rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending"
+                                                style="width: 284px;">Team Name</th>
+                                            <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                                colspan="1" aria-label="Browser: activate to sort column ascending"
+                                                style="width: 340px;">Created date</th>
+                                            <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                                colspan="1" aria-label="Platform(s): activate to sort column ascending"
+                                                style="width: 313px;">Created by</th>
+                                            <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                                colspan="1" aria-label="CSS grade: activate to sort column ascending"
+                                                style="width: 190px;">Options</th>
+                                        </tr>
+                                        <!-- <th>Match ID</th>
+                                        <th>Match Name</th>
+                                        <th>Match Date</th>
+                                        <th>Recorded By</th>
+                                        <th>Match Notes</th> -->
+                                    </thead>
+                                    <tbody>
+                                        {% for item in rows %}
+                                        <tr>
+                                            <td>{{item[0]}}</td>
+                                            <td>{{item[1]}}</td>
+                                            <td>{{item[2]}}</td>
+                                            <td><a class="btn btn-danger">Delete</a></td>
+
+                                        </tr>
+                                        {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
         </div>
         <!-- /#wrapper -->
 

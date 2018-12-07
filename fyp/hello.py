@@ -187,7 +187,7 @@ def viewMatch(matchID):
         matchNotes = mycursor.fetchone()
         print ("matchNotes")
         print (matchNotes)
-        data = {'rowss': rowss, 'matchNotes': matchNotes[0]}
+        data = {'rowss': rowss, 'matchNotes': matchNotes[0], 'matchData': matchNotes}
 
         return render_template('point1.html', data=data)
 
@@ -216,7 +216,7 @@ def do_admin_login():
     if 'username' in session:
         print("username still valid")
         print(session['username'])
-        return displayTable()
+        return redirect('/')
     
     error = None
     try:
@@ -244,7 +244,7 @@ def do_admin_login():
                     session['username'] = request.form['username']
                     print("Valid password")
                     session['logged_in'] = True
-                    return displayTable()
+                    return redirect('/')
 
             print("invalid password")
             flash("invalid username/password")
@@ -259,23 +259,55 @@ def logout():
     session['logged_in'] = False
     session['username'] = None
     session.clear()
-    return displayTable()
+    return redirect('/')
 
-@app.route("/create")
-def create():
+@app.route("/create-match")
+def create_match_page():
     if session.get('logged_in'):
-        return render_template('create.html')
+        return render_template('create-match.html')
+    else:
+        return redirect('/')
+
+@app.route("/students")
+def create_student_page():
+    if session.get('logged_in'):
+        cur = conn.cursor()
+        cur.execute('SELECT teamId FROM team')
+        teamIdResult = cur.fetchall()
+        rows = [[1, 'apple', 'M', '1E1'], [2, 'cupcake', 'F', '1E3, CCA Casual']]
+        print(session)
+        createStudentStatus = session.get('createStudentStatus')
+        session['createStudentStatus'] = ''
+        return render_template('student.html', **locals())
+    else:
+        return redirect('/')
+
+@app.route("/teams")
+def create_team_page():
+    if session.get('logged_in'):
+        cur = conn.cursor()
+        cur.execute('SELECT * FROM team')
+        rows = cur.fetchall()
+        print(rows)
+        createTeamStatus = session.get('createTeamStatus')
+        session['createTeamStatus'] = ''
+        return render_template('team.html', **locals())
+    else:
+        return redirect('/')
 
 @app.route("/tag")
 def tagpage():
     if session.get('logged_in'):
         return render_template('tag.html')
+    else:
+        return redirect('/')
 
 @app.route("/record")
 def recordpage():
     if session.get('logged_in'):
-
         return render_template('record.html')
+    else:
+        return redirect('/')
 
 @app.route('/displayData', methods=['POST'])
 def disply_data():
@@ -304,7 +336,7 @@ def update_tag():
     return tagpage()
 
 @app.route('/createMatch', methods=['POST'])
-def create_matches():
+def createMatch():
     # data from form
     POST_matchname = str(request.form['matchname'])
     POST_matchdate = str(request.form['matchdate'])
@@ -319,10 +351,55 @@ def create_matches():
     cur = conn.cursor()
     cur.execute(sql, matchData)
     try:
-        conn.commit()
+        conn.commit() 
     except Exception as e: 
         print(e)
     return displayTable()
+
+@app.route('/createStudent', methods=['POST'])
+def createStudent():
+    #SQL statement
+    sql = ''' INSERT INTO teamstudent (`teamId`, `studentName`) 
+              VALUES (%s, %s) '''
+    sql2 = ''' INSERT INTO student (`name`, `gender`) 
+               VALUES (%s, %s) '''
+
+    try:          
+        cur = conn.cursor()
+        cur.execute(sql, ([str(request.form['teamId'])], [str(request.form['studentName'])]))
+
+        cur.execute("select name from student where name = %s", [str(request.form['studentName'])])
+        tmp = cur.fetchall()
+        if tmp:
+            session['createStudentStatus'] = 1 # Student already exists in the database, no need duplicate entries in the student table
+        else:
+            cur.execute(sql2, ([str(request.form['studentName'])], [str(request.form['studentGender'])]))
+            session['createStudentStatus'] = 0
+        conn.commit()
+    except MySQLdb.IntegrityError as ie: # Student-Team pair is already found in database
+        session['createStudentStatus'] = 2
+    except Exception as e:
+        print(e)
+    
+    return redirect('students')
+
+@app.route('/createTeam', methods=['POST'])
+def createTeam():
+    #SQL statement
+    sql = ''' INSERT INTO team (`teamid`, `createdDate`, `createdBy`) 
+              VALUES (%s, %s, %s) '''
+
+    try:          
+        cur = conn.cursor()
+        cur.execute(sql, ([str(request.form['teamId'])], datetime.datetime.now(), session['username']))
+        conn.commit()
+    except MySQLdb.IntegrityError as ie: # Team is already found in database
+        session['createTeamStatus'] = 1
+    except Exception as e:
+        print(e)
+    else:
+        session['createTeamStatus'] = 0
+    return redirect('teams')
 
 ###### MQTT start here ###############
 @app.route("/start")

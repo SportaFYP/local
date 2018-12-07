@@ -166,99 +166,82 @@
                 </div>
                 <!-- /.sidebar-collapse -->
             </div>
-            <!-- /.navbar-static-side -->
-        </nav>
+            <!-- /.sidebar-collapse -->
+    </div>
+    <!-- /.navbar-static-side -->
+    </nav>
 
-        <div id="page-wrapper" style="min-height: 908px;">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">TagID</h1>
-                </div>
-                <!-- /.col-lg-12 -->
+    <div id="page-wrapper" style="min-height: 908px;">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">Create Match</h1>
             </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Team 1
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-6">
-
-
-                                    <form action="/updateTag" method="POST">
-                                        Tag1:
-                                        <input type="text" value=" " name="tag1" style="
-                                                width: 155px;">
-                                        <br>
-                                        Tag2:
-                                        <input type="text" value=" " name="tag2" style="
-                                                width: 155px;">
-                                        <br>
-                                        Tag3:
-                                        <input type="text" value=" " name="tag3" style="
-                                                width: 155px;">
-                                        <br>
-                                        Tag4:
-                                        <input type="text" value=" " name="tag4" style="
-                                                width: 155px;">
-                                        <br>
-                                        Tag5:
-                                        <input type="text" value=" " name="tag5" style="
-                                                width: 155px;">
-                                        <br>
-
-                                        <input type="submit" value="Update Tag" class="btn btn-primary btn-large btn-block"
-                                            style="
-                                              width: 171px;">
-                                    </form>
-
-
-
-                                </div>
-                                <!-- /.col-lg-6 (nested) -->
-
-                                <!-- /.col-lg-6 (nested) -->
-                            </div>
-                            <!-- /.row (nested) -->
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
+            <!-- /.col-lg-12 -->
         </div>
-        <!-- /#wrapper -->
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Match Detail
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <form action="/createMatch" method="POST">
+                                    Match Name:<br>
+                                    <input type="text" value="" name="matchname" style="width: 155px;">
+                                    <br>
+                                    Match Date:<br>
+                                    <input type="date" value="date" name="matchdate">
+                                    <br><br>
+                                    Match Detail:<br>
+                                    <input type="text" style="height:100px;" name="matchnotes">
+                                    <br>
+                                    <br>
+                                    <input type="submit" value="Create Match" class="btn btn-primary btn-large btn-block"
+                                        style="width: 171px;">
+                                </form>
+                            </div>
+                            <!-- /.col-lg-6 (nested) -->
+                        </div>
+                        <!-- /.row (nested) -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /#wrapper -->
 
-        <!-- jQuery -->
-        <script src="{{ url_for('static', filename = 'jquery.min.js') }}"></script>
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename = 'jquery.min.js') }}"></script>
 
-        <!-- Bootstrap Core JavaScript -->
-        <script src="{{ url_for('static', filename = 'bootstrap.min.js') }}"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{{ url_for('static', filename = 'bootstrap.min.js') }}"></script>
 
-        <!-- Metis Menu Plugin JavaScript -->
-        <script src="{{ url_for('static', filename = 'metisMenu.min.js') }}"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{{ url_for('static', filename = 'metisMenu.min.js') }}"></script>
 
-        <!-- DataTables JavaScript -->
-        <script src="{{ url_for('static', filename = 'jquery.dataTables.min.js') }}"></script>
-        <script src="{{ url_for('static', filename = 'dataTables.bootstrap.min.js') }}"></script>
-        <script src="{{ url_for('static', filename = 'dataTables.responsive.js') }}"></script>
+    <!-- DataTables JavaScript -->
+    <script src="{{ url_for('static', filename = 'jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'dataTables.responsive.js') }}"></script>
 
-        <!-- Custom Theme JavaScript -->
-        <script src="{{ url_for('static', filename = 'sb-admin-2.js') }}"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="{{ url_for('static', filename = 'sb-admin-2.js') }}"></script>
 
-        <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-        <script>
-            $(document).ready(function () {
-                $('#dataTables-example').DataTable({
-                    responsive: true
-                });
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+        $(document).ready(function () {
+            $('#dataTables-example').DataTable({
+                responsive: true
             });
-        </script>
+        });
+    </script>
 
 </body>
 
