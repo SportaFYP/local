@@ -16,6 +16,7 @@ import pymysql
 import re
 from flask import Flask, request, redirect, url_for
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import BadRequestKeyError
 from flask import send_from_directory
 
 UPLOAD_FOLDER1 = 'static/videos'
@@ -272,12 +273,36 @@ def create_match_page():
 def create_student_page():
     if session.get('logged_in'):
         cur = conn.cursor()
-        cur.execute('SELECT teamId FROM team')
+        cur.execute('SELECT * FROM student')
+        student = cur.fetchall()
+        cur.execute('SELECT * FROM team')
         teamIdResult = cur.fetchall()
-        rows = [[1, 'apple', 'M', '1E1'], [2, 'cupcake', 'F', '1E3, CCA Casual']]
-        print(session)
+        cur.execute('SELECT * FROM teamstudent')
+        studentInTeam = cur.fetchall()
+
+        rows = []
+        inTeams = {}
+
+        for i in student:
+            inTeamsConcat = ""
+            counterj = 0
+            k = []
+            for j in studentInTeam:
+                if (j[1] == i[1]):
+                    if counterj is not 0:
+                        inTeamsConcat = inTeamsConcat + ", "
+                    inTeamsConcat = inTeamsConcat + j[0]
+                    k.append(j[0])
+                    counterj += 1
+            rows.append((i[0], i[1], i[2], inTeamsConcat))
+            inTeams[i[1]] = k
+
         createStudentStatus = session.get('createStudentStatus')
+        editStudentStatus = session.get('editStudentStatus')
+        deleteStudentStatus = session.get('deleteStudentStatus')
         session['createStudentStatus'] = ''
+        session['editStudentStatus'] = ''
+        session['deleteStudentStatus'] = ''
         return render_template('student.html', **locals())
     else:
         return redirect('/')
@@ -380,7 +405,64 @@ def createStudent():
         session['createStudentStatus'] = 2
     except Exception as e:
         print(e)
+    return redirect('students')
+
+@app.route('/editStudent/<id>/<student>/<gender>', methods=['POST'])
+def editStudent(id, student, gender):
+    sql = '''SELECT teamId FROM teamStudent WHERE (`studentName` = %s)'''
+    sql2 = '''UPDATE student SET `name` = %s WHERE (`id` = %s);'''
+    sql3 = '''UPDATE teamstudent SET studentName = REPLACE (studentName, %s, %s)'''
+    sql4 = '''UPDATE student SET `gender` = %s WHERE (`id` = %s);'''
+    sql5 = '''DELETE FROM teamstudent WHERE (`teamId` = %s) and (`studentName` = %s);'''
+
+    cur = conn.cursor()
+    cur.execute(sql, [student])
+    teams = cur.fetchall()
     
+    # Make sure to check if all the teams are ticked for removal cause that is not allowed
+    tickcount = 0
+    for t in teams:
+        try:
+            if request.form[t[0]] == 'on':
+                tickcount += 1
+        except BadRequestKeyError:
+            print('') # Do nothing
+    if tickcount == len(teams):
+        session['editStudentStatus'] = 1
+        return redirect('students')
+
+    if not (str(request.form['editStudentName']) == student):
+        cur.execute(sql2, ([str(request.form['editStudentName'])], id))
+        cur.execute(sql3, (student, [str(request.form['editStudentName'])]))
+
+    if not (str(request.form['editStudentGender']) == gender):
+        cur.execute(sql4, ([str(request.form['editStudentGender'])], id))
+    
+    for t in teams:
+        try:
+            if request.form[t[0]] == 'on':
+                cur.execute(sql5, ([str(t[0])], [str(request.form['editStudentName'])]))
+        except BadRequestKeyError:
+            print('') # Do nothing
+    conn.commit()
+    session['editStudentStatus'] = 0
+    return redirect('students')
+
+@app.route('/deleteStudent/<studName>')
+def deleteStudent(studName):
+    sql = '''DELETE FROM student WHERE (`name` = %s);'''
+    sql2 = '''DELETE FROM teamstudent WHERE (`studentName` = %s);'''
+
+    try:          
+        cur = conn.cursor()
+        cur.execute(sql, [studName])
+        cur.execute(sql2, [studName])
+
+        session['deleteStudentStatus'] = 0
+        conn.commit()
+    except Exception as e: # Something went wrong
+        session['deleteStudentStatus'] = 1
+        print(e)
     return redirect('students')
 
 @app.route('/createTeam', methods=['POST'])
