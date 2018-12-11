@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import jsonify
 from flask import Flask, flash, redirect, render_template, request, session, abort, g
 import os
 from hashlib import md5
@@ -262,12 +263,30 @@ def logout():
     session.clear()
     return redirect('/')
 
-@app.route("/create-match")
+@app.route("/create-match", methods = ['GET', 'POST'])
 def create_match_page():
     if session.get('logged_in'):
-        return render_template('create-match.html')
+        cur = conn.cursor()
+        cur.execute('SELECT teamId FROM team')
+        teamListResult = cur.fetchall()
+        cur1 = conn.cursor()
+        cur1.execute('SELECT * FROM teamstudent')
+        playerListResult = cur1.fetchall()
+        print playerListResult
+        return render_template('create-match.html', **locals())
     else:
         return redirect('/')
+
+@app.route("/create-match/<team>")
+def create_match_select(team):
+    cur2 = conn.cursor()
+    teamName = team
+    print "teamname in create match: "+teamName
+    query = 'SELECT studentName FROM teamstudent WHERE teamId = %s'
+    cur2.execute(query, [teamName])
+    playerNames = cur2.fetchall()
+    print playerNames
+    return jsonify(playerNames)#redirect('/create-match.html', **locals())
 
 @app.route("/students")
 def create_student_page():
@@ -607,7 +626,7 @@ def viewreplay():
     print("my_var2 = ")
     print(my_var2)
     mid2 = my_var2.decode('unicode-escape')
-    matchdetail=("SELECT matchnotes FROM matches WHERE MatchID=%s")
+    matchdetail=("SELECT * FROM matches WHERE MatchID=%s")
     mycursor.execute(matchdetail, [mid2])
     matchNotes = mycursor.fetchall()
     

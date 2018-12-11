@@ -57,6 +57,11 @@
             display: table;
             clear: both;
         }
+
+        .team {
+            width: 150px;
+            margin: 5px;
+        }
         
         /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
         @media screen and (max-width: 600px) {
@@ -188,19 +193,48 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-lg-6">
-                                <form action="/createMatch" method="POST">
+                                <form action="/createMatch" method="POST" >
                                     Match Name:<br>
-                                    <input type="text" value="" name="matchname" style="width: 155px;">
-                                    <br>
+                                    <input type="text" value=" " name="matchname" style="
+                                    width: 155px;">
+                                    <br><br>
                                     Match Date:<br>
-                                    <input type="date" value="date" name="matchdate">
+                                    <input type="date"  value="date" name="matchdate" >
+                                    
                                     <br><br>
                                     Match Detail:<br>
-                                    <input type="text" style="height:100px;" name="matchnotes">
+                                    <input type="text" style="height:100px;" name="matchnotes"> 
                                     <br>
                                     <br>
-                                    <input type="submit" value="Create Match" class="btn btn-primary btn-large btn-block"
-                                        style="width: 171px;">
+                                    Team 1:<br><br>
+                                    Player 1: 
+                                    <select class = "team" name = "team1" id = "team1">
+                                        <option value = "">Choose Team</option>
+                                        {% for teamslist in teamListResult %}
+                                            <option value="{{teamslist[0]}}">{{teamslist[0]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select class = "team" name = "play1">
+                                        <option value = "">Choose Player</option>
+                                        {% for playlist in playerNames %}
+                                            <option value = "{{playlist[1]}}">{{playlist[1]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select class = "team" name = "tagNum1">
+                                        <option value = "">Choose Tag</option>
+                                        <option value = 1>1</option>
+                                    </select><br><br>
+                                    Player 2: <select class = "team" name = "team2"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play2"><option value = 1>1</option></select><select class = "team" name = "tagNum2"><option value = 1>1</option></select><br><br>
+                                    Player 3: <select class = "team" name = "team3"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play3"><option value = 1>1</option></select><select class = "team" name = "tagNum3"><option value = 1>1</option></select><br><br>
+                                    Player 4: <select class = "team" name = "team4"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play4"><option value = 1>1</option></select><select class = "team" name = "tagNum4"><option value = 1>1</option></select><br><br>
+                                    Player 5: <select class = "team" name = "team5"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play5"><option value = 1>1</option></select><select class = "team" name = "tagNum5"><option value = 1>1</option></select><br><br>
+                                    Team 2:<br><br>
+                                    Player 6: <select class = "team" name = "team6"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play6"><option value = 1>1</option></select><select class = "team" name = "tagNum6"><option value = 1>1</option></select><br><br>
+                                    Player 7: <select class = "team" name = "team7"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play7"><option value = 1>1</option></select><select class = "team" name = "tagNum7"><option value = 1>1</option></select><br><br>
+                                    Player 8: <select class = "team" name = "team8"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play8"><option value = 1>1</option></select><select class = "team" name = "tagNum8"><option value = 1>1</option></select><br><br>
+                                    Player 9: <select class = "team" name = "team9"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play9"><option value = 1>1</option></select><select class = "team" name = "tagNum9"><option value = 1>1</option></select><br><br>
+                                    Player 10: <select class = "team" name = "team10"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play10"><option value = 1>1</option></select><select class = "team" name = "tagNum10"><option value = 1>1</option></select><br><br>
+                                    <input type="submit" value="Create Match" class="btn btn-primary btn-large btn-block" style="width: 171px;" >
                                 </form>
                             </div>
                             <!-- /.col-lg-6 (nested) -->
@@ -240,7 +274,29 @@
             $('#dataTables-example').DataTable({
                 responsive: true
             });
+
+            $('#team1').change(function() {
+                var teamName = $('#team1').val();
+                console.log("before ajax, teamName: "+ teamName);
+                $.ajax({
+                    type: 'GET',
+                    url: "/create-match/"+teamName,
+                    data: { teamId: teamName},
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log("reply: "+response[0])
+
+                        //we need to push this list to the 
+                    }
+                });
+            });
         });
+
+        // let loadList = function () {
+        //     let teamName = document.getElementById('team1').value;
+        //     console.log(teamName);
+        // }
     </script>
 
 </body>
