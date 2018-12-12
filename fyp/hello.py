@@ -331,10 +331,23 @@ def create_team_page():
     if session.get('logged_in'):
         cur = conn.cursor()
         cur.execute('SELECT * FROM team')
-        rows = cur.fetchall()
+        teamrows = cur.fetchall()
+        cur.execute('SELECT * FROM teamstudent')
+        studentrow = cur.fetchall()
+
+        rows = []
+        
+        for t in teamrows:
+            teamcount = 0
+            for s in studentrow:
+                if t[0] == s[0]:
+                    teamcount += 1
+            rows.append([t[0], t[1], t[2], teamcount])
         print(rows)
         createTeamStatus = session.get('createTeamStatus')
+        deleteTeamStatus = session.get('deleteTeamStatus')
         session['createTeamStatus'] = ''
+        session['deleteTeamStatus'] = ''
         return render_template('team.html', **locals())
     else:
         return redirect('/')
@@ -501,6 +514,25 @@ def createTeam():
     else:
         session['createTeamStatus'] = 0
     return redirect('teams')
+
+@app.route('/deleteTeam/<team>')
+def deleteTeam(team):
+    #SQL statement
+    sql = ''' DELETE FROM team WHERE (`teamid` = %s); '''
+         
+    cur = conn.cursor()
+    cur.execute(sql, [team])
+    conn.commit()
+    session['deleteTeamStatus'] = 0
+    return redirect('teams')
+
+
+###### Retrive font start ###############
+@app.route('/fonts/<fontfile>', methods=["GET"])
+def getFont(fontfile):
+    print(fontfile)
+    return redirect('/static/fonts/' + fontfile)
+###### Retrive font end ###############         
 
 ###### MQTT start here ###############
 @app.route("/start")

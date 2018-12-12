@@ -103,8 +103,7 @@
     <link href="{{ url_for('static', filename = 'sb-admin-2.css') }}" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <!-- <link href="{{ url_for('static', filename = 'font-awesome.min.css') }}" rel="stylesheet" type="text/css"> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="{{ url_for('static', filename = 'font-awesome.min.css') }}" rel="stylesheet" >
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -322,7 +321,7 @@
                                             <td><a class="btn btn-primary" data-toggle="modal" data-target="#editUserDialogBox"
                                                     data-id="{{item[0]}}" data-student="{{item[1]}}" data-gender="{{item[2]}}"
                                                     style="margin: 0px 10px 0px 0px;">Edit</a><a class="btn btn-danger"
-                                                    data-toggle="modal" data-target="#confirmDeleteDialogBox"
+                                                    data-toggle="modal" data-target="#deleteUserDialogBox"
                                                     data-student="{{item[1]}}">Delete</a></td>
                                         </tr>
                                         {% endfor %}
@@ -341,12 +340,12 @@
         <!-- /#wrapper -->
 
         <!-- Ask user for confirmation before deleting user -->
-        <div class="modal fade" id="confirmDeleteDialogBox" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteDialogBoxLabel"
+        <div class="modal fade" id="deleteUserDialogBox" tabindex="-1" role="dialog" aria-labelledby="deleteUserDialogBoxLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="confirmDeleteDialogBoxLabel">(deleteStudent)</h5>
+                        <h5 class="modal-title" id="deleteUserDialogBoxLabel">(deleteStudent)</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -438,7 +437,7 @@
             });
         });
 
-        $('#confirmDeleteDialogBox').on('show.bs.modal', function (event) {
+        $('#deleteUserDialogBox').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var modal = $(this)
             modal.find('.modal-title').text('Delete ' + button.data('student')) //(deleteStudent)

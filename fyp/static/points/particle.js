@@ -28,7 +28,7 @@
 		ellipse(mapX,mapY, 20,20);//image
 
 		console.log("mapX: "+ mapX)
-		console.log("mapX: "+ mapY)
+		console.log("mapY: "+ mapY)
 		
 		//loop through history
 		noFill();

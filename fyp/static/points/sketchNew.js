@@ -23,14 +23,14 @@ function setup() {
   prepareData();
   //createData();
   //creates 2 tags
-  var p1 = new Particle(26995);
-  var p2 = new Particle(27005);
+  var p1 = new Particle(28261);
+  //var p2 = new Particle(27005);
   p1.interpolateFunctionX.interp1d([], []);
   p1.interpolateFunctionY.interp1d([], []);
-  p2.interpolateFunctionX.interp1d([], []);
-  p2.interpolateFunctionY.interp1d([], []);
+  //p2.interpolateFunctionX.interp1d([], []);
+  //p2.interpolateFunctionY.interp1d([], []);
   particles.push(p1);
-  particles.push(p2);
+  //particles.push(p2);
   console.log(percentageTime);
   //set up
   for(var i = 0; i < pVector.length; i++){
@@ -79,7 +79,8 @@ function pause(){
 function update(){
   var currentTime = new Date();
   var currentMS = (currentTime - playTime)+playMS;
-  console.log("playMS: "+playMS)
+  console.clear();
+  console.log("playMS: "+playMS);
   console.log("currentMS:" + currentMS);
   
     for(var a = 0; a<particles.length;a++)
