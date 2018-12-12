@@ -272,7 +272,11 @@ def create_match_page():
         cur1 = conn.cursor()
         cur1.execute('SELECT * FROM teamstudent')
         playerListResult = cur1.fetchall()
-        print playerListResult
+        #print playerListResult
+        cur2 = conn.cursor()
+        cur2.execute('SELECT * FROM tags')
+        tagList = cur2.fetchall()
+        print tagList
         return render_template('create-match.html', **locals())
     else:
         return redirect('/')
@@ -281,11 +285,11 @@ def create_match_page():
 def create_match_select(team):
     cur2 = conn.cursor()
     teamName = team
-    print "teamname in create match: "+teamName
+    #print "teamname in create match: "+teamName
     query = 'SELECT studentName FROM teamstudent WHERE teamId = %s'
     cur2.execute(query, [teamName])
     playerNames = cur2.fetchall()
-    print playerNames
+    #print playerNames
     return jsonify(playerNames)#redirect('/create-match.html', **locals())
 
 @app.route("/students")
@@ -399,8 +403,10 @@ def createMatch():
     POST_matchdate = str(request.form['matchdate'])
     POST_administrator = session['username']
     POST_matchnotes = str(request.form['matchnotes'])
+    
     # create match data# 
     matchData = (POST_matchname, POST_matchdate, POST_administrator, POST_matchnotes)
+
     #SQL statement
     sql = ''' INSERT INTO matches(matchname, matchdate, administrator, matchnotes)
               VALUES(%s,%s,%s,%s) '''
@@ -408,10 +414,48 @@ def createMatch():
     cur = conn.cursor()
     cur.execute(sql, matchData)
     try:
-        conn.commit() 
+        conn.commit()
     except Exception as e: 
         print(e)
+    
+    #Get the MatchID that was just inserted
+    cur1 = conn.cursor()
+    cur1.execute('SELECT MatchID FROM matches ORDER BY MatchID DESC LIMIT 1')
+    tempNum = str(cur1.fetchall())
+    matchid = int(tempNum[2] + tempNum[3])
+    #print matchid
+    POST_player1 = (matchid, POST_matchname, str(request.form['team1']), str(request.form['play1']), str(request.form['tagNum1']))
+    POST_player2 = (matchid, POST_matchname, str(request.form['team2']), str(request.form['play2']), str(request.form['tagNum2']))
+    POST_player3 = (matchid, POST_matchname, str(request.form['team3']), str(request.form['play3']), str(request.form['tagNum3']))
+    POST_player4 = (matchid, POST_matchname, str(request.form['team4']), str(request.form['play4']), str(request.form['tagNum4']))
+    POST_player5 = (matchid, POST_matchname, str(request.form['team5']), str(request.form['play5']), str(request.form['tagNum5']))
+    POST_player6 = (matchid, POST_matchname, str(request.form['team6']), str(request.form['play6']), str(request.form['tagNum6']))
+    POST_player7 = (matchid, POST_matchname, str(request.form['team7']), str(request.form['play7']), str(request.form['tagNum7']))
+    POST_player8 = (matchid, POST_matchname, str(request.form['team8']), str(request.form['play8']), str(request.form['tagNum8']))
+    POST_player9 = (matchid, POST_matchname, str(request.form['team9']), str(request.form['play9']), str(request.form['tagNum9']))
+    POST_player10 = (matchid, POST_matchname, str(request.form['team10']), str(request.form['play10']), str(request.form['tagNum10']))
+    POST_allPlayers = [POST_player1, POST_player2, POST_player3, POST_player4, POST_player5, POST_player6, POST_player7, POST_player8, POST_player9, POST_player10]
+    #print POST_allPlayers
+    print "teamName is: " + POST_player1[2] + " Player name is: " + POST_player1[3] + " tag number is: " + POST_player1[4]
+
+    postingQuery = 'INSERT INTO matchdetails(MatchID, matchname, teamID, studentName, tagID) VALUES(%s, %s, %s, %s, %s)'
+
+    insertPlayer = []
+    for players in POST_allPlayers:
+        if players[2] != "" and players[3] != "" and players[4] != "":
+            insertPlayer.append(players)
+    print insertPlayer
+
+    curPost = conn.cursor()
+    curPost.executemany(postingQuery, insertPlayer)
+    try:
+        conn.commit()
+    except Exception as e:
+        print(e)
+
     return displayTable()
+
+    
 
 @app.route('/createStudent', methods=['POST'])
 def createStudent():

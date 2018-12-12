@@ -207,32 +207,166 @@
                                     <br>
                                     Team 1:<br><br>
                                     Player 1: 
-                                    <select class = "team" name = "team1" id = "team1">
+                                    <select class = "team" name = "team1" id = "team1" onchange = "loadPlayers(this, 'play1')">
                                         <option value = "">Choose Team</option>
                                         {% for teamslist in teamListResult %}
                                             <option value="{{teamslist[0]}}">{{teamslist[0]}}</option>
                                         {% endfor %}
                                     </select>
-                                    <select class = "team" name = "play1">
+                                    <select class = "team" name = "play1" id = "play1">
                                         <option value = "">Choose Player</option>
-                                        {% for playlist in playerNames %}
-                                            <option value = "{{playlist[1]}}">{{playlist[1]}}</option>
-                                        {% endfor %}
                                     </select>
                                     <select class = "team" name = "tagNum1">
                                         <option value = "">Choose Tag</option>
-                                        <option value = 1>1</option>
+                                        {% for tags in tagList %}
+                                            <option value="{{tags[1]}}">{{tags[1]}}</option>
+                                        {% endfor %}
                                     </select><br><br>
-                                    Player 2: <select class = "team" name = "team2"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play2"><option value = 1>1</option></select><select class = "team" name = "tagNum2"><option value = 1>1</option></select><br><br>
-                                    Player 3: <select class = "team" name = "team3"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play3"><option value = 1>1</option></select><select class = "team" name = "tagNum3"><option value = 1>1</option></select><br><br>
-                                    Player 4: <select class = "team" name = "team4"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play4"><option value = 1>1</option></select><select class = "team" name = "tagNum4"><option value = 1>1</option></select><br><br>
-                                    Player 5: <select class = "team" name = "team5"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play5"><option value = 1>1</option></select><select class = "team" name = "tagNum5"><option value = 1>1</option></select><br><br>
+                                    Player 2: 
+                                    <select class = "team" name = "team2" id = "team2" onchange = "loadPlayers(this, 'play2')">
+                                        <option value = "">Choose Team</option>
+                                        {% for teamslist in teamListResult %}
+                                            <option value="{{teamslist[0]}}">{{teamslist[0]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select class = "team" name = "play2" id = "play2">
+                                        <option value = "">Choose Player</option>
+                                    </select>
+                                    <select class = "team" name = "tagNum2">
+                                        <option value = "">Choose Tag</option>
+                                        {% for tags in tagList %}
+                                            <option value="{{tags[1]}}">{{tags[1]}}</option>
+                                        {% endfor %}
+                                    </select><br><br>
+                                    Player 3: 
+                                    <select class = "team" name = "team3" id = "team3" onchange = "loadPlayers(this, 'play3')">
+                                        <option value = "">Choose Team</option>
+                                        {% for teamslist in teamListResult %}
+                                            <option value="{{teamslist[0]}}">{{teamslist[0]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select class = "team" name = "play3" id = "play3">
+                                        <option value = "">Choose Player</option>
+                                    </select>
+                                    <select class = "team" name = "tagNum3">
+                                        <option value = "">Choose Tag</option>
+                                        {% for tags in tagList %}
+                                            <option value="{{tags[1]}}">{{tags[1]}}</option>
+                                        {% endfor %}
+                                    </select><br><br>
+                                    Player 4: 
+                                    <select class = "team" name = "team4" id = "team4" onchange = "loadPlayers(this, 'play4')">
+                                        <option value = "">Choose Team</option>
+                                        {% for teamslist in teamListResult %}
+                                            <option value="{{teamslist[0]}}">{{teamslist[0]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select class = "team" name = "play4" id = "play4">
+                                        <option value = "">Choose Player</option>
+                                    </select>
+                                    <select class = "team" name = "tagNum4">
+                                        <option value = "">Choose Tag</option>
+                                        {% for tags in tagList %}
+                                            <option value="{{tags[1]}}">{{tags[1]}}</option>
+                                        {% endfor %}
+                                    </select><br><br>
+                                    Player 5: 
+                                    <select class = "team" name = "team5" id = "team5" onchange = "loadPlayers(this, 'play5')">
+                                        <option value = "">Choose Team</option>
+                                        {% for teamslist in teamListResult %}
+                                            <option value="{{teamslist[0]}}">{{teamslist[0]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select class = "team" name = "play5" id = "play5">
+                                        <option value = "">Choose Player</option>
+                                    </select>
+                                    <select class = "team" name = "tagNum5">
+                                        <option value = "">Choose Tag</option>
+                                        {% for tags in tagList %}
+                                            <option value="{{tags[1]}}">{{tags[1]}}</option>
+                                        {% endfor %}
+                                    </select><br><br>
                                     Team 2:<br><br>
-                                    Player 6: <select class = "team" name = "team6"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play6"><option value = 1>1</option></select><select class = "team" name = "tagNum6"><option value = 1>1</option></select><br><br>
-                                    Player 7: <select class = "team" name = "team7"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play7"><option value = 1>1</option></select><select class = "team" name = "tagNum7"><option value = 1>1</option></select><br><br>
-                                    Player 8: <select class = "team" name = "team8"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play8"><option value = 1>1</option></select><select class = "team" name = "tagNum8"><option value = 1>1</option></select><br><br>
-                                    Player 9: <select class = "team" name = "team9"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play9"><option value = 1>1</option></select><select class = "team" name = "tagNum9"><option value = 1>1</option></select><br><br>
-                                    Player 10: <select class = "team" name = "team10"><option value = 1>1</option><option value = 2>2</option></select><select class = "team" name = "play10"><option value = 1>1</option></select><select class = "team" name = "tagNum10"><option value = 1>1</option></select><br><br>
+                                    Player 6: 
+                                    <select class = "team" name = "team6" id = "team6" onchange = "loadPlayers(this, 'play6')">
+                                        <option value = "">Choose Team</option>
+                                        {% for teamslist in teamListResult %}
+                                            <option value="{{teamslist[0]}}">{{teamslist[0]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select class = "team" name = "play6" id = "play6">
+                                        <option value = "">Choose Player</option>
+                                    </select>
+                                    <select class = "team" name = "tagNum6">
+                                        <option value = "">Choose Tag</option>
+                                        {% for tags in tagList %}
+                                            <option value="{{tags[1]}}">{{tags[1]}}</option>
+                                        {% endfor %}
+                                    </select><br><br>
+                                    Player 7: 
+                                    <select class = "team" name = "team7" id = "team7" onchange = "loadPlayers(this, 'play7')">
+                                        <option value = "">Choose Team</option>
+                                        {% for teamslist in teamListResult %}
+                                            <option value="{{teamslist[0]}}">{{teamslist[0]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select class = "team" name = "play7" id = "play7">
+                                        <option value = "">Choose Player</option>
+                                    </select>
+                                    <select class = "team" name = "tagNum7">
+                                        <option value = "">Choose Tag</option>
+                                        {% for tags in tagList %}
+                                            <option value="{{tags[1]}}">{{tags[1]}}</option>
+                                        {% endfor %}
+                                    </select><br><br>
+                                    Player 8: 
+                                    <select class = "team" name = "team8" id = "team8" onchange = "loadPlayers(this, 'play8')">
+                                        <option value = "">Choose Team</option>
+                                        {% for teamslist in teamListResult %}
+                                            <option value="{{teamslist[0]}}">{{teamslist[0]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select class = "team" name = "play8" id = "play8">
+                                        <option value = "">Choose Player</option>
+                                    </select>
+                                    <select class = "team" name = "tagNum8">
+                                        <option value = "">Choose Tag</option>
+                                        {% for tags in tagList %}
+                                            <option value="{{tags[1]}}">{{tags[1]}}</option>
+                                        {% endfor %}
+                                    </select><br><br>
+                                    Player 9: 
+                                    <select class = "team" name = "team9" id = "team9" onchange = "loadPlayers(this, 'play9')">
+                                        <option value = "">Choose Team</option>
+                                        {% for teamslist in teamListResult %}
+                                            <option value="{{teamslist[0]}}">{{teamslist[0]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select class = "team" name = "play9" id = "play9">
+                                        <option value = "">Choose Player</option>
+                                    </select>
+                                    <select class = "team" name = "tagNum9">
+                                        <option value = "">Choose Tag</option>
+                                        {% for tags in tagList %}
+                                            <option value="{{tags[1]}}">{{tags[1]}}</option>
+                                        {% endfor %}
+                                    </select><br><br>
+                                    Player 10: 
+                                    <select class = "team" name = "team10" id = "team10" onchange = "loadPlayers(this, 'play10')">
+                                        <option value = "">Choose Team</option>
+                                        {% for teamslist in teamListResult %}
+                                            <option value="{{teamslist[0]}}">{{teamslist[0]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <select class = "team" name = "play10" id = "play10">
+                                        <option value = "">Choose Player</option>
+                                    </select>
+                                    <select class = "team" name = "tagNum10">
+                                        <option value = "">Choose Tag</option>
+                                        {% for tags in tagList %}
+                                            <option value="{{tags[1]}}">{{tags[1]}}</option>
+                                        {% endfor %}
+                                    </select><br><br>
                                     <input type="submit" value="Create Match" class="btn btn-primary btn-large btn-block" style="width: 171px;" >
                                 </form>
                             </div>
@@ -273,24 +407,33 @@
             $('#dataTables-example').DataTable({
                 responsive: true
             });
-
-            $('#team1').change(function() {
-                var teamName = $('#team1').val();
-                console.log("before ajax, teamName: "+ teamName);
+        });
+            function loadPlayers(team, playerSelect) {
+                let teamName = team.value;
+                // console.log("before ajax, teamName: " + teamName);
                 $.ajax({
                     type: 'GET',
-                    url: "/create-match/"+teamName,
+                    url: "/create-match/" + teamName,
                     data: { teamId: teamName},
                     contentType: 'application/json',
                     dataType: 'json',
                     success: function(response) {
-                        console.log("reply: "+response[0])
-
-                        //we need to push this list to the 
+                        // console.log("reply: " + response)
+                        let playerNames = response;
+                        let playerList = playerSelect;
+                        console.log(playerList);
+                        let selectedList = document.getElementById(playerList);
+                        for (let i = 0; i < playerNames.length; i++) {
+                            let opts = document.createElement('option');
+                            opts.text = opts.value = playerNames[i];
+                            selectedList.add(opts, 0);
+                        }
                     }
                 });
-            });
-        });
+            };
+
+            
+        
 
         // let loadList = function () {
         //     let teamName = document.getElementById('team1').value;
