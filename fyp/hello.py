@@ -189,14 +189,14 @@ def viewMatch(matchID):
         matchNotes = mycursor.fetchone()
         print ("matchNotes")
         print (matchNotes)
-        data = {'rowss': rowss, 'matchNotes': matchNotes[0], 'matchData': matchNotes}
+        data = {'rowss': rowss, 'matchNotes': matchNotes[0], 'matchData': matchNotes, 'matchID': matchID}
 
-        return render_template('point1.html', data=data)
+        return render_template('point1.html', data=data, )
 
 
 
-@app.route('/recordingview/<RID>')
-def viewRecordings(RID):
+@app.route('/recordingview/<matchID>/<RID>')
+def viewRecordings(matchID, RID):
     print("RID:")
     print(RID)
     RID1 = (RID,)
