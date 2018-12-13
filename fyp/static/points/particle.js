@@ -1,6 +1,12 @@
 
-  function Particle(deviceID){
-    this.tagID = deviceID;
+  function Particle(deviceID, name, playerNumber, teamId){
+		this.tagID = deviceID;
+		this.name = name;
+		this.playerNumber = playerNumber;
+		this.teamId = teamId;
+
+
+
 		this.history= [];//for tail
 		this.interpolateFunctionX = new interpolate();
 		this.interpolateFunctionY = new interpolate();
@@ -22,11 +28,19 @@
 	this.show = function(){
 		//draw the point
 		stroke(0);
-		fill(0,150);
+		if(this.playerNumber>=0 && this.playerNumber<6){
+			fill(0,0, 255);
+		}
+		if(this.playerNumber>=6 && this.playerNumber<10){
+			fill(255,140,0);
+		}
+
 		var mapX= map(this.lerpPoint.x,0,7770, 0, 700);
 		var mapY= map(this.lerpPoint.y,0,6000, 0, 540);
 		ellipse(mapX,mapY, 20,20);//image
-
+		txt = this.playerNumber+1;
+		fill(255);
+		text(txt, mapX- textWidth(txt)/2, mapY +2);
 		console.log("mapX: "+ mapX)
 		console.log("mapY: "+ mapY)
 		

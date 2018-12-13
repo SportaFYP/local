@@ -209,6 +209,7 @@ def viewRecordings(matchID, RID):
     coords = mycursor.fetchall()
     print(coords)
     session['my_var'] = RID
+    session['my_var1'] = matchID
     return redirect(url_for('viewreplay'))
 
 ## User login
@@ -681,7 +682,9 @@ def viewreplay():
     my_var = session.get('my_var', None)
     print("RID videos = ")
     print(my_var)
+    my_var1 = session.get('my_var1', None)
     rid2 = my_var.decode('unicode-escape')
+    mid = my_var1.decode('unicode-escape')
     hello =("SELECT saveFile FROM recordings WHERE RecordingID = %s")
     mycursor.execute(hello, [rid2])
     results = mycursor.fetchone()
@@ -702,13 +705,18 @@ def viewreplay():
     print("my_var2 = ")
     print(my_var2)
     mid2 = my_var2.decode('unicode-escape')
+    print(mid2)
     matchdetail=("SELECT * FROM matches WHERE MatchID=%s")
     mycursor.execute(matchdetail, [mid2])
     matchNotes = mycursor.fetchall()
-    
     print("matchnotes == ")
     print(matchNotes)
-    data1 = {'video': video, 'coords': coords, 'matchNotes': matchNotes }
+
+
+    matchdetails=("SELECT * FROM matchdetails WHERE MatchID=%s")
+    mycursor.execute(matchdetails, [mid2])
+    tagDetails = mycursor.fetchall()
+    data1 = {'video': video, 'coords': coords, 'matchNotes': matchNotes, 'tagDetails' : tagDetails }
     return render_template('replay.html', data1 = data1)
 
 

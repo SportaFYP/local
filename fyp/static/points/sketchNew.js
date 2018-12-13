@@ -22,14 +22,24 @@ function setup() {
   canvas.parent('sketch-holder')
   prepareData();
   //createData();
-  //creates 2 tags
-  var p1 = new Particle(28261);
-  //var p2 = new Particle(27005);
-  p1.interpolateFunctionX.interp1d([], []);
-  p1.interpolateFunctionY.interp1d([], []);
-  //p2.interpolateFunctionX.interp1d([], []);
-  //p2.interpolateFunctionY.interp1d([], []);
-  particles.push(p1);
+  //creates tags
+  console.log("tagDS:" + JSON.stringify(tagDS))
+
+
+  for(var a = 0; a <tagDS.length; a++)
+  {
+    var tag = tagDS[a];
+    var p1 = new Particle(tag[4],tag[3],a,tag[2] );//tagID
+    p1.interpolateFunctionX.interp1d([], []);
+    p1.interpolateFunctionY.interp1d([], []);
+    particles.push(p1);
+  }
+  // var p1 = new Particle(28261);
+  // p1.interpolateFunctionX.interp1d([], []);
+  // p1.interpolateFunctionY.interp1d([], []);
+  // particles.push(p1);
+
+  
   //particles.push(p2);
   console.log(percentageTime);
   //set up
@@ -79,7 +89,7 @@ function pause(){
 function update(){
   var currentTime = new Date();
   var currentMS = (currentTime - playTime)+playMS;
-  console.clear();
+  //console.clear();
   console.log("playMS: "+playMS);
   console.log("currentMS:" + currentMS);
   
@@ -112,8 +122,8 @@ function draw() {
 
 function prepareData(){
   //tagId,timestamp,coordinates_x,coordinates_y
-  var p1 = new Particle(1);
-  var p2 = new Particle(2);
+  // var p1 = new Particle(1);
+  // var p2 = new Particle(2);
   var startTime = pointsDS[0][1];
 for(var i = 0; i< pointsDS.length; i++){
 
