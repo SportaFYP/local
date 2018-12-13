@@ -425,21 +425,25 @@ def createMatch():
     tempNum = str(cur1.fetchall())
     matchid = int(tempNum[2] + tempNum[3])
     #print matchid
-    POST_player1 = (matchid, POST_matchname, str(request.form['team1']), str(request.form['play1']), str(request.form['tagNum1']))
-    POST_player2 = (matchid, POST_matchname, str(request.form['team2']), str(request.form['play2']), str(request.form['tagNum2']))
-    POST_player3 = (matchid, POST_matchname, str(request.form['team3']), str(request.form['play3']), str(request.form['tagNum3']))
-    POST_player4 = (matchid, POST_matchname, str(request.form['team4']), str(request.form['play4']), str(request.form['tagNum4']))
-    POST_player5 = (matchid, POST_matchname, str(request.form['team5']), str(request.form['play5']), str(request.form['tagNum5']))
-    POST_player6 = (matchid, POST_matchname, str(request.form['team6']), str(request.form['play6']), str(request.form['tagNum6']))
-    POST_player7 = (matchid, POST_matchname, str(request.form['team7']), str(request.form['play7']), str(request.form['tagNum7']))
-    POST_player8 = (matchid, POST_matchname, str(request.form['team8']), str(request.form['play8']), str(request.form['tagNum8']))
-    POST_player9 = (matchid, POST_matchname, str(request.form['team9']), str(request.form['play9']), str(request.form['tagNum9']))
-    POST_player10 = (matchid, POST_matchname, str(request.form['team10']), str(request.form['play10']), str(request.form['tagNum10']))
-    POST_allPlayers = [POST_player1, POST_player2, POST_player3, POST_player4, POST_player5, POST_player6, POST_player7, POST_player8, POST_player9, POST_player10]
+    POST_player1 = (matchid, POST_matchname, str(request.form['team1']), str(request.form['play1']), 1, str(request.form['tagNum1']))
+    POST_player2 = (matchid, POST_matchname, str(request.form['team2']), str(request.form['play2']), 2, str(request.form['tagNum2']))
+    POST_player3 = (matchid, POST_matchname, str(request.form['team3']), str(request.form['play3']), 3, str(request.form['tagNum3']))
+    POST_player4 = (matchid, POST_matchname, str(request.form['team4']), str(request.form['play4']), 4, str(request.form['tagNum4']))
+    POST_player5 = (matchid, POST_matchname, str(request.form['team5']), str(request.form['play5']), 5, str(request.form['tagNum5']))
+    POST_player6 = (matchid, POST_matchname, str(request.form['team6']), str(request.form['play6']), 6, str(request.form['tagNum6']))
+    POST_player7 = (matchid, POST_matchname, str(request.form['team7']), str(request.form['play7']), 7, str(request.form['tagNum7']))
+    POST_player8 = (matchid, POST_matchname, str(request.form['team8']), str(request.form['play8']), 8, str(request.form['tagNum8']))
+    POST_player9 = (matchid, POST_matchname, str(request.form['team9']), str(request.form['play9']), 9, str(request.form['tagNum9']))
+    POST_player10 = (matchid, POST_matchname, str(request.form['team10']), str(request.form['play10']), 10, str(request.form['tagNum10']))
+    POST_player11 = (matchid, POST_matchname, str(request.form['team11']), str(request.form['play11']), 11, str(request.form['tagNum11']))
+    POST_player12 = (matchid, POST_matchname, str(request.form['team12']), str(request.form['play12']), 12, str(request.form['tagNum12']))
+    POST_player13 = (matchid, POST_matchname, str(request.form['team13']), str(request.form['play13']), 13, str(request.form['tagNum13']))
+    POST_player14 = (matchid, POST_matchname, str(request.form['team14']), str(request.form['play14']), 14, str(request.form['tagNum14']))
+    POST_allPlayers = [POST_player1, POST_player2, POST_player3, POST_player4, POST_player5, POST_player6, POST_player7, POST_player8, POST_player9, POST_player10, POST_player11, POST_player12, POST_player13, POST_player14]
     #print POST_allPlayers
-    print "teamName is: " + POST_player1[2] + " Player name is: " + POST_player1[3] + " tag number is: " + POST_player1[4]
+    #print "teamName is: " + POST_player1[2] + " Player name is: " + POST_player1[3] + " tag number is: " + POST_player1[4]
 
-    postingQuery = 'INSERT INTO matchdetails(MatchID, matchname, teamID, studentName, tagID) VALUES(%s, %s, %s, %s, %s)'
+    postingQuery = 'INSERT INTO matchinfo(matchID, matchname, teamID, studentName, playerNum, tagID) VALUES(%s, %s, %s, %s, %s, %s)'
 
     insertPlayer = []
     for players in POST_allPlayers:
@@ -713,7 +717,7 @@ def viewreplay():
     print(matchNotes)
 
 
-    matchdetails=("SELECT * FROM matchdetails WHERE MatchID=%s")
+    matchdetails=("SELECT * FROM matchinfo WHERE MatchID=%s")
     mycursor.execute(matchdetails, [mid2])
     tagDetails = mycursor.fetchall()
     data1 = {'video': video, 'coords': coords, 'matchNotes': matchNotes, 'tagDetails' : tagDetails }

@@ -28,17 +28,18 @@
 	this.show = function(){
 		//draw the point
 		stroke(0);
-		if(this.playerNumber>=0 && this.playerNumber<6){
+		if(this.playerNumber>=0 && this.playerNumber<8){
 			fill(0,0, 255);
 		}
-		if(this.playerNumber>=6 && this.playerNumber<10){
+		if(this.playerNumber>=8 && this.playerNumber<15){
 			fill(255,140,0);
 		}
 
 		var mapX= map(this.lerpPoint.x,0,7770, 0, 700);
 		var mapY= map(this.lerpPoint.y,0,6000, 0, 540);
 		ellipse(mapX,mapY, 20,20);//image
-		txt = this.playerNumber+1;
+		txt = this.playerNumber;
+		console.log(this.playerNumber)
 		fill(255);
 		text(txt, mapX- textWidth(txt)/2, mapY +2);
 		console.log("mapX: "+ mapX)
