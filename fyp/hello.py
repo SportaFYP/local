@@ -108,11 +108,11 @@ def main():
                                     ); """                                   
     
    
-   if conn is not None:
-        # create projects table
-        create_table(conn, sql_create_projects_table)
-   else:
-        print("Error! cannot create the database connection.")
+#    if conn is not None:
+#         create projects table
+#         create_table(conn, sql_create_projects_table)
+#    else:
+#         print("Error! cannot create the database connection.")
 
 def selectMatch(db, cursor):
     sql="SELECT * FROM matches"
@@ -191,7 +191,7 @@ def viewMatch(matchID):
         print (matchNotes)
         data = {'rowss': rowss, 'matchNotes': matchNotes[0], 'matchData': matchNotes, 'matchID': matchID}
 
-        return render_template('point1.html', data=data, )
+        return render_template('match.html', data=data, )
 
 
 
