@@ -29,7 +29,7 @@ function setup() {
   for(var a = 0; a <tagDS.length; a++)
   {
     var tag = tagDS[a];
-    var p1 = new Particle(tag[4],tag[3],a,tag[2] );//tagID
+    var p1 = new Particle(tag[7],tag[5],tag[6],tag[3] );//tagID
     p1.interpolateFunctionX.interp1d([], []);
     p1.interpolateFunctionY.interp1d([], []);
     particles.push(p1);
@@ -64,9 +64,9 @@ function setup() {
   }
   noLoop();
   totalMS = pVector[pVector.length-1].point.z;
-  console.log("totalMS:" +totalMS);
-  console.log("functionX Array of time: ");
-  console.log(p1.interpolateFunctionX._x)
+  //console.log("totalMS:" +totalMS);
+  //console.log("functionX Array of time: ");
+  //console.log(p1.interpolateFunctionX._x);
 
   //play();
 }
