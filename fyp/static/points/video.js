@@ -34,8 +34,8 @@ window.onload = function() {
 			console.log("video current time= " +video.currentTime)
 			if (video.currentTime == 0){percentageTime=0}
 			play();
-			// Update the button text to 'Pause'
-			playButton.innerHTML = "Pause";
+			// Update the button icon
+			playButton.innerHTML = "<i class=\"fa fa-pause fa-fw\"></i>";
 		} else {
 			// Pause the video
 			video.pause();
@@ -43,8 +43,8 @@ window.onload = function() {
 			//percentageTime = (seekBar.value / 100);
 			pause();
 			
-			// Update the button text to 'Play'
-			playButton.innerHTML = "Play";
+			// Update the button icon
+			playButton.innerHTML = "<i class=\"fa fa-play fa-fw\"></i>";
 		}
 	});
 
@@ -55,14 +55,14 @@ window.onload = function() {
 			// Mute the video
 			video.muted = true;
 
-			// Update the button text
-			muteButton.innerHTML = "Unmute";
+			// Update the button icon
+			muteButton.innerHTML = "<i class=\"fa fa-volume-mute fa-fw\"></i>";
 		} else {
 			// Unmute the video
 			video.muted = false;
 
-			// Update the button text
-			muteButton.innerHTML = "Mute";
+			// Update the button icon
+			muteButton.innerHTML = "<i class=\"fa fa-volume-up fa-fw\"></i>";
 		}
 	});
 

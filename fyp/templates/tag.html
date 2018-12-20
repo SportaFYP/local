@@ -94,8 +94,7 @@
     <link href="{{ url_for('static', filename = 'sb-admin-2.css') }}" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <!-- <link href="{{ url_for('static', filename = 'font-awesome.min.css') }}" rel="stylesheet" type="text/css"> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="{{ url_for('static', filename = 'css/font-awesome.min.css') }}" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -147,16 +146,16 @@
                 <div class="sidebar-nav navbar-collapse">
                     <ul class="nav" id="side-menu">
                         <li>
-                            <a href="/"><i class="fa fa-bar-chart-o fa-fw"></i> Home</span></a>
+                            <a href="/"><i class="fas fa-home fa-fw"></i> Home</span></a>
                         </li>
                         <li>
-                            <a href="/create-match"><i class="fa fa-edit fa-fw"></i> Create Match</a>
+                            <a href="/create-match"><i class="fas fa-plus fa-fw"></i> Create Match</a>
                         </li>
                         <li>
-                            <a href="/students"><i class="fa fa-edit fa-fw"></i> Students</a>
+                            <a href="/students"><i class="fas fa-user fa-fw"></i> Students</a>
                         </li>
                         <li>
-                            <a href="/teams"><i class="fa fa-edit fa-fw"></i> Teams</a>
+                            <a href="/teams"><i class="fas fa-users fa-fw"></i> Teams</a>
                         </li>
                         <li>
                             <a href="/tag"><i class="fa fa-edit fa-fw"></i> Tag</a>
@@ -166,99 +165,101 @@
                 </div>
                 <!-- /.sidebar-collapse -->
             </div>
-            <!-- /.navbar-static-side -->
+            <!-- /.sidebar-collapse -->
         </nav>
+        <!-- /.navbar-static-side -->
+    </div>
 
-        <div id="page-wrapper" style="min-height: 908px;">
-            <div class="row">
-                <div class="col-lg-12">
-                    <h1 class="page-header">TagID</h1>
-                </div>
-                <!-- /.col-lg-12 -->
+    <div id="page-wrapper" style="min-height: 908px;">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">TagID</h1>
             </div>
-            <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Team 1
-                        </div>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-lg-6">
-
-
-                                    <form action="/updateTag" method="POST">
-                                        Tag1:
-                                        <input type="text" value=" " name="tag1" style="
-                                                width: 155px;">
-                                        <br>
-                                        Tag2:
-                                        <input type="text" value=" " name="tag2" style="
-                                                width: 155px;">
-                                        <br>
-                                        Tag3:
-                                        <input type="text" value=" " name="tag3" style="
-                                                width: 155px;">
-                                        <br>
-                                        Tag4:
-                                        <input type="text" value=" " name="tag4" style="
-                                                width: 155px;">
-                                        <br>
-                                        Tag5:
-                                        <input type="text" value=" " name="tag5" style="
-                                                width: 155px;">
-                                        <br>
-
-                                        <input type="submit" value="Update Tag" class="btn btn-primary btn-large btn-block"
-                                            style="
-                                              width: 171px;">
-                                    </form>
-
-
-
-                                </div>
-                                <!-- /.col-lg-6 (nested) -->
-
-                                <!-- /.col-lg-6 (nested) -->
-                            </div>
-                            <!-- /.row (nested) -->
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-                </div>
-                <!-- /.col-lg-12 -->
-            </div>
-            <!-- /.row -->
+            <!-- /.col-lg-12 -->
         </div>
-        <!-- /#wrapper -->
+        <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Team 1
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-6">
 
-        <!-- jQuery -->
-        <script src="{{ url_for('static', filename = 'jquery.min.js') }}"></script>
 
-        <!-- Bootstrap Core JavaScript -->
-        <script src="{{ url_for('static', filename = 'bootstrap.min.js') }}"></script>
+                                <form action="/updateTag" method="POST">
+                                    Tag1:
+                                    <input type="text" value=" " name="tag1" style="
+                                                width: 155px;">
+                                    <br>
+                                    Tag2:
+                                    <input type="text" value=" " name="tag2" style="
+                                                width: 155px;">
+                                    <br>
+                                    Tag3:
+                                    <input type="text" value=" " name="tag3" style="
+                                                width: 155px;">
+                                    <br>
+                                    Tag4:
+                                    <input type="text" value=" " name="tag4" style="
+                                                width: 155px;">
+                                    <br>
+                                    Tag5:
+                                    <input type="text" value=" " name="tag5" style="
+                                                width: 155px;">
+                                    <br>
 
-        <!-- Metis Menu Plugin JavaScript -->
-        <script src="{{ url_for('static', filename = 'metisMenu.min.js') }}"></script>
+                                    <input type="submit" value="Update Tag" class="btn btn-primary btn-large btn-block"
+                                        style="
+                                              width: 171px;">
+                                </form>
 
-        <!-- DataTables JavaScript -->
-        <script src="{{ url_for('static', filename = 'jquery.dataTables.min.js') }}"></script>
-        <script src="{{ url_for('static', filename = 'dataTables.bootstrap.min.js') }}"></script>
-        <script src="{{ url_for('static', filename = 'dataTables.responsive.js') }}"></script>
 
-        <!-- Custom Theme JavaScript -->
-        <script src="{{ url_for('static', filename = 'sb-admin-2.js') }}"></script>
 
-        <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-        <script>
-            $(document).ready(function () {
-                $('#dataTables-example').DataTable({
-                    responsive: true
-                });
+                            </div>
+                            <!-- /.col-lg-6 (nested) -->
+
+                            <!-- /.col-lg-6 (nested) -->
+                        </div>
+                        <!-- /.row (nested) -->
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename = 'jquery.min.js') }}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{{ url_for('static', filename = 'bootstrap.min.js') }}"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="{{ url_for('static', filename = 'metisMenu.min.js') }}"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="{{ url_for('static', filename = 'jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename = 'dataTables.responsive.js') }}"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="{{ url_for('static', filename = 'sb-admin-2.js') }}"></script>
+
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+        $(document).ready(function () {
+            $('#dataTables-example').DataTable({
+                responsive: true
             });
-        </script>
+        });
+    </script>
 
 </body>
 

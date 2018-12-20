@@ -1,6 +1,7 @@
 var particles = [];
 var img;  
 var tags = [];
+var canvas;
 
 function preload() {
   // load image
@@ -11,8 +12,8 @@ function preload() {
 } 
 
 function setup() {
-    var canvas = createCanvas(650, 400);
-    canvas.parent('sports-court');
+    canvas = createCanvas(650, 400);
+    canvas.parent('sketch-holder');
     //particle = new Particle(300, 300);   
     transformData();
    

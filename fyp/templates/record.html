@@ -258,7 +258,7 @@ var start = false;
     <link href="{{ url_for('static', filename = 'sb-admin-2.css') }}" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="{{ url_for('static', filename = 'font-awesome.min.css') }}" rel="stylesheet" >
+    <link href="{{ url_for('static', filename = 'css/font-awesome.min.css') }}" rel="stylesheet" >
 
 
 
@@ -267,6 +267,8 @@ var start = false;
 <body>
         <div id="wrapper">
     
+            <div id="wrapper">
+
                 <!-- Navigation -->
                 <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
                     <div class="navbar-header">
@@ -282,14 +284,14 @@ var start = false;
         
                     <ul class="nav navbar-top-links navbar-right">
                         <!-- /.dropdown -->
-                        
+        
                         <!-- /.dropdown -->
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="fa fa-user"></i></i> <i class="fa fa-caret-down"></i>
+                                <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-user">
-                                
+        
                                 <li class="divider"></li>
                                 <li><a href="/logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                                 </li>
@@ -304,16 +306,16 @@ var start = false;
                         <div class="sidebar-nav navbar-collapse">
                             <ul class="nav" id="side-menu">
                                 <li>
-                                    <a href="/"><i class="fa fa-bar-chart-o fa-fw"></i> Home</span></a>
+                                    <a href="/"><i class="fas fa-home fa-fw"></i> Home</span></a>
                                 </li>
                                 <li>
-                                    <a href="/create-match"><i class="fa fa-edit fa-fw"></i> Create Match</a>
+                                    <a href="/create-match"><i class="fas fa-plus fa-fw"></i> Create Match</a>
                                 </li>
                                 <li>
-                                    <a href="/students"><i class="fa fa-edit fa-fw"></i> Students</a>
+                                    <a href="/students"><i class="fas fa-user fa-fw"></i> Students</a>
                                 </li>
                                 <li>
-                                    <a href="/teams"><i class="fa fa-edit fa-fw"></i> Teams</a>
+                                    <a href="/teams"><i class="fas fa-users fa-fw"></i> Teams</a>
                                 </li>
                                 <li>
                                     <a href="/tag"><i class="fa fa-edit fa-fw"></i> Tag</a>
@@ -323,9 +325,10 @@ var start = false;
                         </div>
                         <!-- /.sidebar-collapse -->
                     </div>
-                    <!-- /.navbar-static-side -->
+                    <!-- /.sidebar-collapse -->
                 </nav>
-                </div>
+                <!-- /.navbar-static-side -->
+            </div>
     <article>
         
         <section class="experiment recordrtc">
