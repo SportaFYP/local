@@ -17,7 +17,7 @@ var end;
 
 function setup() {
   // createCanvas(400, 400);
-  var canvas = createCanvas(700, 540);
+  var canvas = createCanvas($('#sketch-holder').width(), ($('#sketch-holder').width() / 16 * 9));
   bg = loadImage("static/points/bbcourt1.png");
   canvas.parent('sketch-holder')
   prepareData();
@@ -89,7 +89,10 @@ function pause(){
 function update(){
   var currentTime = new Date();
   var currentMS = (currentTime - playTime)+playMS;
-  //console.clear();
+
+  if (isNaN(currentMS))
+			currentMS = 0;
+
   console.log("playMS: "+playMS);
   console.log("currentMS:" + currentMS);
   
@@ -101,7 +104,7 @@ function update(){
       //console.log("xPoint: "+ yPoint);
       var lerpPoint = createVector(xPoint,yPoint);
       if(currentMS<=totalMS || startPlay == false){
-      particles[a].update(lerpPoint)//which will add to history etc
+      particles[a].update(lerpPoint, currentMS)//which will add to history etc
       }else{
         end = new Date();
         console.log("Total Time taken:"+(end-begin));
@@ -134,6 +137,12 @@ for(var i = 0; i< pointsDS.length; i++){
     pVector.push({'point': point, 'tagID': pointsDS[i][0]});
  
 }
+}
+
+function clearHistory() {
+  for(var i = 0; i<particles.length; i++){
+    particles[i].clearHistory();
+  }
 }
 
 

@@ -2,7 +2,7 @@ window.onload = function() {
 
 	// Video
 	var video = document.getElementById("video");
-	video.currentTime = 999999999;
+	video.currentTime = 1000000000;
 	console.log("video duration =" +video.duration)
 	// var onloadplay = true;
 	// video.play()
@@ -107,15 +107,17 @@ window.onload = function() {
 
 	// Play the video when the seek handle is dropped
 	seekBar.addEventListener("mouseup", function() {
-		if (playButton.innerHTML == "Play") {
+		if (playButton.innerHTML == "<i class=\"fa fa-play fa-fw\"></i>") {
 		percentageTime = (seekBar.value / 100);
+		clearHistory();
 		play();
 		pause();
-		}else if(playButton.innerHTML == "Pause"){
+		}else if(playButton.innerHTML == "<i class=\"fa fa-pause fa-fw\"></i>"){
 		video.play();
 		console.log("seek is dropped");
 		startPlay= true;
 		percentageTime = (seekBar.value / 100);
+		clearHistory();
 		play();
 		//video.paused=false;
 		}

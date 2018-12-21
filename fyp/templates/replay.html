@@ -163,6 +163,14 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{{ url_for('static', filename = 'bootstrap.min.js') }}"></script>
+
+    <!-- Resize the basketball canvas when the browser is resized -->
+    <script>
+        $(window).resize(function(){
+            $('#defaultCanvas0').width($('#sketch-holder').width())
+            $('#defaultCanvas0').height($('#sketch-holder').width() / 16 * 9)
+        })
+    </script>
 </body>
 
 </html>
