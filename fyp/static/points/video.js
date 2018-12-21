@@ -22,6 +22,12 @@ window.onload = function() {
 
 	// Event listener for the play/pause button
 	playButton.addEventListener("click", function() {
+
+		// Check to see if we are playing from the beginning
+		if (seekBar.value == 100){
+			clearHistory(); // Clear the tail or the tail is going to include the points drawn from when the video was last played
+		}
+
 		if (video.paused == true) {
 
 			// Play the video
@@ -96,6 +102,12 @@ window.onload = function() {
 		//percentageTime = (seekBar.value / 100);
 		// Update the slider value
 		seekBar.value = value;
+	});
+
+	// Handle things when video ends
+	video.addEventListener("ended", function() {
+		// Update the button icon
+		playButton.innerHTML = "<i class=\"fa fa-play fa-fw\"></i>";
 	});
 
 	// Pause the video when the seek handle is being dragged
