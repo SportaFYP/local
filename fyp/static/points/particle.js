@@ -37,7 +37,7 @@ function Particle(deviceID, name, playerNumber, teamId) {
 			fill(0, 0, 255);
 		}
 		if (this.playerNumber >= 8 && this.playerNumber < 15) {
-			fill(255, 140, 0);
+			fill(102,51,0);
 		}
 
 		var mapX = map(this.lerpPoint.x, 0, 7770, 0, $('#defaultCanvas0').width());
