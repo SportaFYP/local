@@ -186,47 +186,13 @@
             </div>
             <!-- /.col-lg-12 -->
         </div>
-        <!-- CREATE STUDENT -->
-        {% if createStudentStatus == 0 %}
-        <!--Successful-->
+        {% if studentStatusType == 0 %}
         <div class="row alert alert-success">
-            <p>The student has been successfully added and assigned to the team</p>
+            <p>{{studentStatusMessage}}</p>
         </div>
-        {% elif createStudentStatus == 1 %}
-        <!--Student already exists, just need to add into new team-->
-        <div class="row alert alert-success">
-            <p>The student that you are trying to add already exists. The student has been assigned to the team
-                alongside the student's existing teams</p>
-        </div>
-        {% elif createStudentStatus == 2 %}
-        <!--Student already exists and already inside the team-->
+        {% elif studentStatusType == 1 %}
         <div class="row alert alert-danger">
-            <p>The student that you are trying to add already exists and was already assigned into the given team</p>
-        </div>
-        <!-- EDIT STUDENT -->
-        {% elif editStudentStatus == 0 %}
-        <div class="row alert alert-success">
-            <p>The edits made to the student has been saved successfully</p>
-        </div>
-        {% elif editStudentStatus == 1 %}
-        <div class="row alert alert-danger">
-            <p>You are trying to remove the student from all assigned teams. The student needs to have at least one
-                assigned team</p>
-        </div>
-        {% elif editStudentStatus == 2 %}
-        <div class="row alert alert-danger">
-            <p>An error occured while trying to edit the student. Please try again later</p>
-        </div>
-        <!-- DELETE STUDENT -->
-        {% elif deleteStudentStatus == 0 %}
-        <!--Successful-->
-        <div class="row alert alert-success">
-            <p>The student has been removed from the teams that he or she is part of and was deleted successfully</p>
-        </div>
-        {% elif deleteStudentStatus == 1 %}
-        <!--An error occured-->
-        <div class="row alert alert-danger">
-            <p>Unable to delete the student. Please try again later</p>
+            <p>{{studentStatusMessage}}</p>
         </div>
         {% endif %}
         <!-- /.row -->

@@ -300,14 +300,14 @@ def create_match_select(team):
 def upload_students():
     if request.method == 'POST':
         if 'studList' not in request.files:
-            flash('No file selected. Please select a .csv file to upload.')
+            setStudentStatus(1, "No file selected. Please select a .csv file to upload.")
             return redirect('/students')
         file = request.files['studList']
         #if studFile.filename == '':
         #    flash('No selected file')
         #    return redirect('/students')
         if not allowed_csv(file.filename):
-            flash('File selected is not a .csv file. Please select a .csv file to upload.')
+            setStudentStatus(1, "File selected is not a .csv file. Please select a .csv file to upload.")
             return redirect('/students')
         if file and allowed_csv(file.filename):
             filename = secure_filename(file.filename)
@@ -356,7 +356,7 @@ def uploaded_csv(filename):
                 cur2 = conn.cursor()
                 cur2.executemany(sqlPushTeam,[(row[2], row[1], row[0])])
                 conn.commit()
-    flash('New student list has been uploaded')
+    setStudentStatus(0, "New student list has been uploaded")
     return redirect("/students")
 
 # @app.route("/updateTables/<filename")
@@ -404,15 +404,19 @@ def create_student_page():
             rows.append((i[0], i[1], i[2], inTeamsConcat))
             inTeams[i[1]] = k
 
-        createStudentStatus = session.get('createStudentStatus')
-        editStudentStatus = session.get('editStudentStatus')
-        deleteStudentStatus = session.get('deleteStudentStatus')
-        session['createStudentStatus'] = ''
-        session['editStudentStatus'] = ''
-        session['deleteStudentStatus'] = ''
+        studentStatusType = session.get('studentStatusType')
+        studentStatusMessage = session.get('studentStatusMessage')
+
+        session['studentStatusType'] = ''
+        session['studentStatusMessage'] = ''
         return render_template('student.html', **locals())
     else:
         return redirect('/')
+
+def setStudentStatus(status, message):
+    session['studentStatusType'] = status
+    session['studentStatusMessage'] = message
+
 
 @app.route("/teams")
 def create_team_page():
@@ -560,13 +564,13 @@ def createStudent():
         cur.execute("select name from student where name = %s", [str(request.form['studentName'])])
         tmp = cur.fetchall()
         if tmp:
-            session['createStudentStatus'] = 1 # Student already exists in the database, no need duplicate entries in the student table
+            setStudentStatus(0, "The student that you are trying to add already exists. The student has been assigned to the team alongside the student's existing teams")
         else:
             cur.execute(sql2, ([str(request.form['studentName'])], [str(request.form['studentGender'])]))
-            session['createStudentStatus'] = 0
+            setStudentStatus(0, "The student has been successfully added and assigned to the team")
         conn.commit()
     except MySQLdb.IntegrityError as ie: # Student-Team pair is already found in database
-        session['createStudentStatus'] = 2
+            setStudentStatus(1, "The student that you are trying to add already exists and was already assigned into the given team")
     except Exception as e:
         print(e)
     return redirect('students')
@@ -592,7 +596,7 @@ def editStudent(id, student, gender):
         except BadRequestKeyError:
             print('') # Do nothing
     if tickcount == len(teams):
-        session['editStudentStatus'] = 1
+        setStudentStatus(1, "You are trying to remove the student from all assigned teams. The student needs to have at least one assigned team")
         return redirect('students')
 
     if not (str(request.form['editStudentName']) == student):
@@ -609,7 +613,7 @@ def editStudent(id, student, gender):
         except BadRequestKeyError:
             print('') # Do nothing
     conn.commit()
-    session['editStudentStatus'] = 0
+    setStudentStatus(0, "The edits made to the student has been saved successfully")
     return redirect('students')
 
 @app.route('/deleteStudent/<studName>')
@@ -622,10 +626,10 @@ def deleteStudent(studName):
         cur.execute(sql, [studName])
         cur.execute(sql2, [studName])
 
-        session['deleteStudentStatus'] = 0
+        setStudentStatus(0, "The student has been removed from the teams that he or she is part of and was deleted successfully")
         conn.commit()
     except Exception as e: # Something went wrong
-        session['deleteStudentStatus'] = 1
+        setStudentStatus(1, "Unable to delete the student. Please try again later")
         print(e)
     return redirect('students')
 
