@@ -205,21 +205,12 @@
                     <div class="panel-body">
                         <div class="col-lg-6">
                             <form action="/createStudent/uploadStuds" method="POST" enctype="multipart/form-data">
-                                <label for = "studList">Upload only CSV files</label> 
+                                <label for="studList">Upload only CSV files</label>
                                 <input type="file" id="studList" name="studList" accept=".csv">
                                 <br>
                                 <input type="submit" value="Upload List" class="btn btn-primary btn-large btn-block"
-                                                style="width: 171px;">
+                                    style="width: 171px;">
                             </form>
-                            {% with messages = get_flashed_messages() %}
-                                {% if messages %}
-                                    <ul>
-                                        {% for message in messages %}
-                                            <li>{{message}}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                            {% endwith %}
                         </div>
                     </div>
                 </div>
@@ -283,19 +274,15 @@
                                 <thead>
                                     <tr role="row">
                                         <th class="sorting_asc" tabindex="0" aria-controls="dataTables-example" rowspan="1"
-                                            colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending"
-                                            style="width: 284px;">Student ID</th>
+                                            colspan="1" aria-sort="ascending" style="width: 284px;">Student ID</th>
                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
-                                            colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 340px;">Student
-                                            Name</th>
+                                            colspan="1" style="width: 340px;">Student Name</th>
                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
-                                            colspan="1" aria-label="Platform(s): activate to sort column ascending"
-                                            style="width: 313px;">Gender</th>
+                                            colspan="1" style="width: 313px;">Gender</th>
                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
-                                            colspan="1" aria-label="Engine version: activate to sort column ascending"
-                                            style="width: 249px;">In Teams</th>
+                                            colspan="1" style="width: 249px;">In Teams</th>
                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
-                                            colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 190px;">Options</th>
+                                            colspan="1" style="width: 190px;">Options</th>
                                     </tr>
                                     <!-- <th>Match ID</th>
                                         <th>Match Name</th>
@@ -381,10 +368,8 @@
                             <thead>
                                 <tr role="row">
                                     <th tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1"
-                                        aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">Teams
-                                        that the student is in</th>
-                                    <th tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1"
-                                        aria-label="CSS grade: activate to sort column ascending">Remove from team</th>
+                                        aria-sort="ascending">Teams that the student is in</th>
+                                    <th tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1">Remove from team</th>
                                 </tr>
                             </thead>
                             <tbody id="teamTable">
