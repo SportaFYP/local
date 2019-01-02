@@ -387,6 +387,10 @@
             modal.find('.modal-title').text(button.data('viewrec')) //(deleteStudent)
             document.getElementById('viewRec').src = button.data('viewrec')
         })
+
+        $('#videoBox').on('hidden.bs.modal', function (event) {
+            document.getElementById('viewRec').src = ''
+        })
     </script>
 </body>
 
