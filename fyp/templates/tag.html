@@ -57,6 +57,11 @@
             display: table;
             clear: both;
         }
+
+        .team {
+            width: 155px;
+            margin: 5px;
+        }
         
         /* Responsive layout - when the screen is less than 600px wide, make the two columns stack on top of each other instead of next to each other */
         @media screen and (max-width: 600px) {
@@ -173,7 +178,7 @@
     <div id="page-wrapper" style="min-height: 908px;">
         <div class="row">
             <div class="col-lg-12">
-                <h1 class="page-header">TagID</h1>
+                <h1 class="page-header">Tags</h1>
             </div>
             <!-- /.col-lg-12 -->
         </div>
@@ -182,7 +187,7 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Team 1
+                        Update tag ids
                     </div>
                     <div class="panel-body">
                         <div class="row">
@@ -190,26 +195,18 @@
 
 
                                 <form action="/updateTag" method="POST">
-                                    Tag1:
-                                    <input type="text" value=" " name="tag1" style="
+                                    Choose tag to update: 
+                                    <select class="team" name="tagnum" style="width: 155px">
+                                        <option value="">Choose Tag</option>
+                                        {% for tag in tags %}
+                                        <option value="{{tag[0]}}">{{tag[0]}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    Key in updated tag id:
+                                    <input type="text" value=" " name="tagid" style="
                                                 width: 155px;">
-                                    <br>
-                                    Tag2:
-                                    <input type="text" value=" " name="tag2" style="
-                                                width: 155px;">
-                                    <br>
-                                    Tag3:
-                                    <input type="text" value=" " name="tag3" style="
-                                                width: 155px;">
-                                    <br>
-                                    Tag4:
-                                    <input type="text" value=" " name="tag4" style="
-                                                width: 155px;">
-                                    <br>
-                                    Tag5:
-                                    <input type="text" value=" " name="tag5" style="
-                                                width: 155px;">
-                                    <br>
+                                    <br><br>
+                                    
 
                                     <input type="submit" value="Update Tag" class="btn btn-primary btn-large btn-block"
                                         style="
@@ -232,6 +229,61 @@
             <!-- /.col-lg-12 -->
         </div>
         <!-- /.row -->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Tags
+                    </div>
+                    <div class="panel-body">
+                            <div id="dataTables-example_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                                    <div class="row">
+                                        <div class="col-sm-6"></div>
+                                        <div class="col-sm-6"></div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <table width="100%" class="table table-striped table-bordered table-hover dataTable no-footer dtr-inline"
+                                                id="dataTables-example" role="grid" aria-describedby="dataTables-example_info" style="width: 100%;">
+                                                <thead>
+                                                    <tr role="row">
+                                                        <th class="sorting_asc" tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                                            colspan="1" aria-sort="ascending" style="width: 284px;">Tag Number</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                                            colspan="1" style="width: 340px;">Tag ID</th>
+                                                        <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                                            colspan="1" style="width: 313px;">Last Updated</th>
+                                                    </tr>
+                                                    <!-- <th>Match ID</th>
+                                                        <th>Match Name</th>
+                                                        <th>Match Date</th>
+                                                        <th>Recorded By</th>
+                                                        <th>Match Notes</th> -->
+                                                </thead>
+                                                <tbody>
+                                                    {% for item in tags %}
+                                                    <tr>
+                                                        <td>{{item[0]}}</td>
+                                                        <td>{{item[1]}}</td>
+                                                        <td>{{item[2]}}</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate"></div>
+                                    </div>
+                                </div>
+                    </div>
+                    <!-- /.panel-body -->
+                </div>
+                <!-- /.panel -->
+            </div>
+            <!-- /.col-lg-12 -->
+        </div>
+        <!-- /.row -->    
     </div>
     <!-- /#wrapper -->
 

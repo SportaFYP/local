@@ -278,9 +278,9 @@ def create_match_page():
         playerListResult = cur1.fetchall()
         #print playerListResult
         cur2 = conn.cursor()
-        cur2.execute('SELECT * FROM tags')
+        cur2.execute('SELECT * FROM tags WHERE TagId IS NOT NULL')
         tagList = cur2.fetchall()
-        print tagList
+        # print tagList
         return render_template('create-match.html', **locals())
     else:
         return redirect('/')
@@ -294,7 +294,7 @@ def create_match_select(team):
     cur2.execute(query, [teamName])
     playerNames = cur2.fetchall()
     #print playerNames
-    return jsonify(playerNames)#redirect('/create-match.html', **locals())
+    return jsonify(playerNames)
 
 @app.route("/createStudent/uploadStuds", methods = ['GET', 'POST'])
 def upload_students():
@@ -351,30 +351,14 @@ def uploaded_csv(filename):
             else:
                 sqlPushStudents = "INSERT INTO students(studentID, studentName, class, uploadedBY, uploadDTG) VALUES (%s, %s, %s, %s, %s)"
                 cur1 = conn.cursor()
-                cur1.executemany(sqlPushStudents,[(row[0], row[1], row[2], session['username'], datetime.datetime.now())])
+                cur1.executemany(sqlPushStudents,[(row[0], row[1], row[2], session['username'], datetime.datetime.now())]) # studentID, studentName, class columns in csv file
                 sqlPushTeam = "INSERT INTO teamstudents(teamId, studentName, studentID) VALUES (%s, %s, %s)"
                 cur2 = conn.cursor()
-                cur2.executemany(sqlPushTeam,[(row[2], row[1], row[0])])
+                cur2.executemany(sqlPushTeam,[(row[2], row[1], row[0])]) # class, studentName, studentID columns in csv file
                 conn.commit()
     setStudentStatus(0, "New student list has been uploaded")
     return redirect("/students")
-
-# @app.route("/updateTables/<filename")
-# def update_tables(filename):
-    
-#     stud_file = str(a.filename)
-#     print stud_file
-#     with open(str(a.filename), mode = 'r') as studFile:
-#         csv_reader = csv.reader(studFile, delimiter=',')
-#         lineNum = 0
-#         for row in csv_reader:
-#             if lineNum == 0:
-#                 print('Column Names: {", ".join(row)}')
-#                 lineNum += 1
-#             print('{row[0]}')
-#             lineNum += 1
-#     return jsonify(stud_file)
-    
+ 
 
 @app.route("/students")
 def create_student_page():
@@ -447,7 +431,10 @@ def create_team_page():
 @app.route("/tag")
 def tagpage():
     if session.get('logged_in'):
-        return render_template('tag.html')
+        cur2 = conn.cursor()
+        cur2.execute('SELECT * FROM tags')
+        tags = cur2.fetchall()
+        return render_template('tag.html', **locals())
     else:
         return redirect('/')
 
@@ -469,15 +456,15 @@ def disply_data():
 
 @app.route('/updateTag', methods=['POST'])
 def update_tag():
-    POST_tag1 = str(request.form['tag1'])
-    POST_tag2 = str(request.form['tag2'])
-    POST_tag3 = str(request.form['tag3'])
-    POST_tag4 = str(request.form['tag4'])
-    POST_tag5 = str(request.form['tag5'])
-    updatetag = (POST_tag1, POST_tag2, POST_tag3, POST_tag4, POST_tag5)
-    tag = "UPDATE tags SET tag1 =%s, tag2=%s, tag3=%s, tag4= %s, tag5=%s"
+    POST_tagNum = str(request.form['tagnum'])
+    POST_tagid = str(request.form['tagid'])
+    updatetag = (POST_tagid, POST_tagNum)
+    tag = "UPDATE tags SET TagId =%s WHERE TagNumber =%s"
     mycursor = conn.cursor()
     mycursor.execute(tag, updatetag)
+    updatetime = (datetime.datetime.now(), POST_tagNum)
+    tag1 = "UPDATE tags SET LastUpdated =%s WHERE TagNumber =%s"
+    mycursor.execute(tag1, updatetime)
     try:
         conn.commit()
     except Exception as e: 
