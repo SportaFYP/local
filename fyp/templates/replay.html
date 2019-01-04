@@ -34,7 +34,7 @@
     <link href="{{ url_for('static', filename = 'sb-admin-2.css') }}" rel="stylesheet">
 
     <!-- Custom Fonts -->
-    <link href="{{ url_for('static', filename = 'css/font-awesome.min.css') }}" rel="stylesheet" >
+    <link href="{{ url_for('static', filename = 'css/font-awesome.min.css') }}" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -50,7 +50,7 @@
     <script type="text/javascript" src="/static/points/sketchNew.js"></script>
     <script type="text/javascript" src="/static/points/particle.js"></script>
     <script type="text/javascript" src="/static/points/video.js"></script>
-
+    <script type="text/javascript" src="/static/points/canvasjs.min.js"></script>
 
     <style>
         #video-container {
@@ -150,6 +150,10 @@
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="statistics">
                     <h1>Statistics</h1>
+                    <table id="distance">
+
+                    </table>
+                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
                 </div>
             </div>
 
@@ -166,7 +170,7 @@
 
     <!-- Resize the basketball canvas when the browser is resized -->
     <script>
-        $(window).resize(function(){
+        $(window).resize(function () {
             $('#defaultCanvas0').width($('#sketch-holder').width())
             $('#defaultCanvas0').height($('#sketch-holder').width() / 16 * 9)
         })

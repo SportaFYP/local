@@ -73,4 +73,15 @@ function Particle(deviceID, name, playerNumber, teamId) {
 		this.history.splice(0, this.history.length)
 	}
 
+	this.getTotalDistanceWalked = function() {
+		var distance = 0;
+		for (var i = 0; i < (this.interpolateFunctionX._x.length - 1); i++){
+			distance += dist(this.interpolateFunctionX._y[i], this.interpolateFunctionY._y[i], this.interpolateFunctionX._y[i+1], this.interpolateFunctionY._y[i+1]);
+		}
+
+		console.log("total distance for tag " + this.playerNumber + " = " + distance);
+
+		return distance;
+	}
+
 }

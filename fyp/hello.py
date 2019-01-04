@@ -194,9 +194,9 @@ def viewMatch(matchID):
         print (matchNotes)
         data = {'rowss': rowss, 'matchNotes': matchNotes[0], 'matchData': matchNotes, 'matchID': matchID}
 
-        return render_template('match.html', data=data, )
-
-
+        return render_template('match.html', data=data)
+    else:
+        return render_template('login.html')
 
 @app.route('/recordingview/<matchID>/<RID>')
 def viewRecordings(matchID, RID):
