@@ -8,10 +8,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+    <script type="text/javascript" src="/static/points/overlay.js"></script>
     <script>
         var pointsDS = {{ data1.coords | tojson }};
         var tagDS = {{ data1.tagDetails | tojson }};
-        console.log(tagDS);
+
+        var overlayJSON = JSON.parse(decodeHTML("{{overlays}}"));
+        var overlays = [];
+
         // console.log("pointsDS:")
         // console.log(pointsDS)
     </script>
@@ -43,8 +47,6 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script type="text/javascript" src="/static/points/ss.js"></script>
-    <!-- <script type="text/javascript" src="../../dist/Numpy.js"></script> -->
-    <!-- <script type="text/javascript" src="../../dist/PolySolve.js"></script> -->
     <script type="text/javascript" src="/static/points/Scipy.js"></script>
     <script type="text/javascript" src="/static/points/p5.min.js"></script>
     <script type="text/javascript" src="/static/points/sketchNew.js"></script>
@@ -131,6 +133,19 @@
                         <source id="results" src="results">
                         <div id="sketch-holder" style="float: right; width: 50%;">
                         </div>
+                        <div id="overlay-table" class="table table-striped table-bordered table-hover dataTable no-footer dtr-inline"
+                            style="float: right; width: 50%;">
+                            <table style="width: 100%; height: 100%;">
+                                <thead>
+                                    <tr role="row">
+                                        <th class="sorting_asc" tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                            colspan="5" aria-sort="ascending" style="width: 100%;">Overlay</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="overlayList">
+                                </tbody>
+                            </table>
+                        </div>
                         <div id="video-controls">
                             <table style="width: 100%; height: 100%;">
                                 <tr>
@@ -174,6 +189,11 @@
             $('#defaultCanvas0').width($('#sketch-holder').width())
             $('#defaultCanvas0').height($('#sketch-holder').width() / 16 * 9)
         })
+
+        $(window).on("load", function () {
+            canvasWidth = $('#defaultCanvas0').width()
+            canvasHeight = $('#defaultCanvas0').height()
+        });
     </script>
 </body>
 

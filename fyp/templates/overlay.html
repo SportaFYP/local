@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <script type="text/javascript" src="/static/points/overlay.js"></script>
+    <script>
+        var matchID = "{{matchID}}";
+        var overlayJSON = JSON.parse(decodeHTML("{{overlays}}"));
+        var overlays = [];
+        var tempOverlay = new Overlay("", 0, 0, 0, 0, "rgba(0, 0, 128, 0.25)");
+        var initialMouseX;
+        var initialMouseY;
+        var canvasWidth, canvasHeight;
+        var isDrawing = false;
+
+        function setup() {
+            var canvas = createCanvas($('#bballcourt').width(), ($('#bballcourt').width() / 16 * 9));
+            bg = loadImage("/static/points/bbcourt1.png");
+            canvas.parent('bballcourt');
+
+            for (var i = 0; i < overlayJSON.length; i++) {
+                overlays.push(new Overlay(overlayJSON[i].name, overlayJSON[i].xorig, overlayJSON[i].yorig, overlayJSON[i].width, overlayJSON[i].height, overlayJSON[i].color))
+            }
+
+            for (var i = 0; i < overlays.length; i++) {
+                row = "<tr><td>" + overlays[i].name + "</td><td><input type=\"color\" id=\"color\" value=" + rgbToHex(overlays[i].color) + "></td><td><a class=\"btn btn-danger\" onclick=\"deleteOverlay(" + i + ")\">Delete</a></td></td></tr>"
+                $('#overlayList').append(row)
+            }
+        }
+
+        function draw() {
+            background(bg);
+            for (var i = 0; i < overlays.length; i++) {
+                overlays[i].draw(canvasWidth, canvasHeight);
+            }
+            tempOverlay.draw(canvasWidth, canvasHeight);
+            $('#addOverlay').attr("disabled", tempOverlay.width == 0 || tempOverlay.height == 0 || $('#overlayName').val() == '')
+        }
+
+        function mousePressed() {
+            if (isMouseInsideCanvas()) {
+                initialMouseX = mouseX;
+                initialMouseY = mouseY;
+                tempOverlay.xorig = initialMouseX / canvasWidth;
+                tempOverlay.yorig = initialMouseY / canvasHeight;
+                tempOverlay.width = 0;
+                tempOverlay.height = 0;
+                isDrawing = true;
+            }
+        }
+
+        function mouseDragged() {
+            if (isDrawing) {
+                if (mouseX > canvasWidth) {
+                    tempOverlay.width = (canvasWidth - initialMouseX) / canvasWidth;
+                } else if (mouseX < 0) {
+                    tempOverlay.width = (0 - initialMouseX) / canvasWidth;
+                } else {
+                    tempOverlay.width = (mouseX - initialMouseX) / canvasWidth;
+                }
+                if (mouseY > canvasHeight) {
+                    tempOverlay.height = (canvasHeight - initialMouseY) / canvasHeight;
+                } else if (mouseY < 0) {
+                    tempOverlay.height = (0 - initialMouseY) / canvasHeight;
+                } else {
+                    tempOverlay.height = (mouseY - initialMouseY) / canvasHeight;
+                }
+            }
+        }
+
+        function mouseReleased() {
+            isDrawing = false;
+        }
+
+        function isMouseInsideCanvas() {
+            return 0 < mouseX && mouseX < canvasWidth && 0 < mouseY && mouseY < canvasHeight;
+        }
+
+        function addOverlay() {
+            tempOverlay.name = $('#overlayName').val();
+            overlays.push(tempOverlay);
+            saveOverlay();
+        }
+
+        function deleteOverlay(i) {
+            overlays.splice(i, 1)
+            saveOverlay();
+        }
+
+        function saveOverlay() {
+            $.post("/saveOverlay",
+                {
+                    matchID: '{{matchID}}',
+                    overlayData: JSON.stringify(overlays)
+                },
+                function (data, status) {
+                }).done(function () {
+                    location.reload(true);
+                })
+        }
+    </script>
+    <title>SPORTA - Sports Positioning on Real Time Analytics
+    </title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="{{ url_for('static', filename = 'bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="{{ url_for('static', filename = 'metisMenu.min.css') }}" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="{{ url_for('static', filename = 'dataTables.bootstrap.css') }}" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="{{ url_for('static', filename = 'dataTables.responsive.css') }}" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="{{ url_for('static', filename = 'sb-admin-2.css') }}" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="{{ url_for('static', filename = 'css/font-awesome.min.css') }}" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="/static/points/ss.js"></script>
+    <!-- <script type="text/javascript" src="../../dist/Numpy.js"></script> -->
+    <!-- <script type="text/javascript" src="../../dist/PolySolve.js"></script> -->
+    <script type="text/javascript" src="/static/points/Scipy.js"></script>
+    <script type="text/javascript" src="/static/points/p5.min.js"></script>
+    <script type="text/javascript" src="/static/points/canvasjs.min.js"></script>
+
+    <style>
+
+    </style>
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <h1>Overlay</h1>
+        <div style="float: left; width: 50%">
+            <div class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+                <div class="row">
+                    <div class="col-sm-6"></div>
+                    <div class="col-sm-6"></div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table width="100%" class="table table-striped table-bordered table-hover dataTable no-footer dtr-inline"
+                            role="grid" style="width: 100%;">
+                            <thead>
+                                <tr role="row">
+                                    <th class="sorting_asc" tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                        colspan="1" aria-sort="ascending" style="width: 33%;">Name</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                        colspan="1" style="width: 33%;">Color</th>
+                                    <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                        colspan="1" style="width: 34%;">Options</th>
+                                </tr>
+                            </thead>
+                            <tbody id="overlayList">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="dataTables_paginate paging_simple_numbers" id="dataTables-example_paginate"></div>
+                </div>
+            </div>
+        </div>
+        <div style="float: right; width: 50%;">
+            <div id="bballcourt"></div>
+            <br />
+            <input type="text" id="overlayName" class="form-control" placeholder="Name of new overlay" style="width: 35%;">
+            <br />
+            Color: <input type="color" id="color" onchange="changeColor($(this))">
+            <br />
+            <br />
+            <button type="button" id="addOverlay" class="btn btn-success" onclick="addOverlay()" disabled>Add selected
+                overlay</button>
+        </div>
+    </div>
+
+
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename = 'jquery.min.js') }}"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="{{ url_for('static', filename = 'bootstrap.min.js') }}"></script>
+
+    <!-- Resize the basketball canvas when the browser is resized -->
+    <script>
+        $(window).resize(function () {
+            $('#defaultCanvas0').width($('#bballcourt').width())
+            $('#defaultCanvas0').height($('#bballcourt').width() / 16 * 9)
+        })
+
+        $(window).on("load", function () {
+            canvasWidth = $('#defaultCanvas0').width()
+            canvasHeight = $('#defaultCanvas0').height()
+        });
+
+        $("#color").val(rgbToHex(tempOverlay.color));
+
+        function changeColor(color) {
+            tempOverlay.color = hexToRgbA(color.val());
+        }
+    </script>
+</body>
+
+</html>

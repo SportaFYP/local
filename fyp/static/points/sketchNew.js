@@ -15,6 +15,7 @@ var startPlay = false;
 var begin;
 var end;
 var dataPoints = [];
+var canvasWidth, canvasHeight;
 
 function setup() {
   // createCanvas(400, 400);
@@ -22,7 +23,6 @@ function setup() {
   bg = loadImage("static/points/bbcourt1.png");
   canvas.parent('sketch-holder')
   prepareData();
-  //createData();
   //creates tags
   console.log("tagDS:" + JSON.stringify(tagDS))
 
@@ -61,19 +61,27 @@ function setup() {
       }
     }
   }
-  noLoop();
   totalMS = pVector[pVector.length - 1].point.z;
 
   for (var k = 0; k < particles.length; k++) {
-    var row = "<tr><td>Total distance walked for tag " + particles[k].playerNumber + ": " + particles[k].getTotalDistanceWalked() + "mm</td></tr>";
+    var row = "<tr><td>Total distance walked for tag " + particles[k].playerNumber + ": " + (particles[k].getTotalDistanceWalked() / 1000) + "m</td></tr>";
     $("#distance").append(row);
     if (particles[k].playerNumber >= 0 && particles[k].playerNumber < 8) {
-      dataPoints.push({ label: particles[k].playerNumber, y: particles[k].getTotalDistanceWalked(), color: "#0000ff" })
-		}
-		if (particles[k].playerNumber >= 8 && particles[k].playerNumber < 15) {
-      dataPoints.push({ label: particles[k].playerNumber, y: particles[k].getTotalDistanceWalked(), color: "#663300" })
-		}
+      dataPoints.push({ label: particles[k].playerNumber + " - " + particles[k].name, y: (particles[k].getTotalDistanceWalked() / 1000), color: "#0000ff" })
+    }
+    if (particles[k].playerNumber >= 8 && particles[k].playerNumber < 15) {
+      dataPoints.push({ label: particles[k].playerNumber + " - " + particles[k].name, y: (particles[k].getTotalDistanceWalked() / 1000), color: "#663300" })
+    }
   }
+
+  for (var i = 0; i < overlayJSON.length; i++) {
+    overlays.push(new Overlay(overlayJSON[i].name, overlayJSON[i].xorig, overlayJSON[i].yorig, overlayJSON[i].width, overlayJSON[i].height, overlayJSON[i].color))
+  }
+
+  for (var i = 0; i < overlays.length; i++) {
+    row = "<td><input type=\"checkbox\" onchange=\"overlays[" + i + "].isVisible = this.checked\" checked>" + overlays[i].name + "</td>"
+    $('#overlayList').append(row)
+}
 
   var chart = new CanvasJS.Chart("chartContainer", {
     animationEnabled: true,
@@ -88,7 +96,7 @@ function setup() {
     axisY2: {
       interlacedColor: "rgba(1,77,101,.2)",
       gridColor: "rgba(1,77,101,.1)",
-      title: "Distance walked (mm)"
+      title: "Distance walked (m)"
     },
     data: [{
       type: "bar",
@@ -127,8 +135,8 @@ function update() {
   if (isNaN(currentMS))
     currentMS = 0;
 
-  console.log("playMS: " + playMS);
-  console.log("currentMS:" + currentMS);
+  //console.log("playMS: " + playMS);
+  //console.log("currentMS:" + currentMS);
 
   for (var a = 0; a < particles.length; a++) {
     var xPoint = particles[a].interpolateFunctionX._f(currentMS);
@@ -156,6 +164,13 @@ function draw() {
   background(bg);
   //if(startPlay)
   //{
+
+  for (var i = 0; i < overlays.length; i++) {
+    if (overlays[i].isVisible){
+      overlays[i].draw(canvasWidth, canvasHeight);
+    }
+  }
+
   update();
   //}
 }
@@ -181,100 +196,3 @@ function clearHistory() {
     particles[i].clearHistory();
   }
 }
-
-function createData() {
-  x = width / 2;
-  y = height / 2;
-  console.log("height and width of first point:");
-  console.log(x);
-  console.log(y);
-  var x1 = createVector(x, y, 0);
-  var x2 = createVector(x + 10, y + 10, 200);
-  var x3 = createVector(x - 20, y + 5, 500);
-  var x4 = createVector(x - 30, y - 30, 800);
-  var x5 = createVector(x + 20, y + 5, 900);
-  var x6 = createVector(x + 25, y - 15, 1100);
-  var x7 = createVector(x - 30, y - 30, 1600);
-  var x8 = createVector(x - 20, y - 30, 2100);
-  var x9 = createVector(x - 20, y - 30, 2300);
-  var x10 = createVector(x - 20, y - 30, 2500);
-  var x11 = createVector(x - 20, y - 30, 2700);
-  var x12 = createVector(x - 20, y - 30, 2780);
-  var x13 = createVector(x - 20, y - 30, 2860);
-  var x14 = createVector(x - 20, y - 30, 2960);
-  var x15 = createVector(x - 20, y - 30, 3200);
-  var x16 = createVector(x - 20, y - 30, 3300);
-  var x17 = createVector(x - 20, y - 30, 3650);
-  var x18 = createVector(x - 20, y - 30, 3800);
-  var x19 = createVector(x - 20, y - 30, 3900);
-  var x20 = createVector(x + 200, y + 200, 24000);
-
-  pVector.push({ 'point': x1, 'tagID': 1 });
-  pVector.push({ 'point': x2, 'tagID': 1 });
-  pVector.push({ 'point': x3, 'tagID': 1 });
-  pVector.push({ 'point': x4, 'tagID': 1 });
-  pVector.push({ 'point': x5, 'tagID': 1 });
-  pVector.push({ 'point': x6, 'tagID': 1 });
-  pVector.push({ 'point': x7, 'tagID': 1 });
-  pVector.push({ 'point': x8, 'tagID': 1 });
-  pVector.push({ 'point': x9, 'tagID': 1 });
-  pVector.push({ 'point': x10, 'tagID': 1 });
-  pVector.push({ 'point': x12, 'tagID': 1 });
-  pVector.push({ 'point': x13, 'tagID': 1 });
-  pVector.push({ 'point': x14, 'tagID': 1 });
-  pVector.push({ 'point': x15, 'tagID': 1 });
-  pVector.push({ 'point': x16, 'tagID': 1 });
-  pVector.push({ 'point': x17, 'tagID': 1 });
-  pVector.push({ 'point': x18, 'tagID': 1 });
-  pVector.push({ 'point': x19, 'tagID': 1 });
-  pVector.push({ 'point': x20, 'tagID': 1 });
-
-
-  var sx = width / 3;
-  var sy = height / 3;
-  var x1 = createVector(sx, sy, 0);
-  var x2 = createVector(sx + 10, sy + 10, 400);
-  var x3 = createVector(sx - 20, sy + 5, 900);
-  var x4 = createVector(sx - 30, sy - 30, 1300);
-  var x5 = createVector(sx + 20, sy + 5, 1500);
-  var x6 = createVector(sx + 25, sy - 15, 1700);
-  var x7 = createVector(sx - 30, sy - 30, 1800);
-  var x8 = createVector(sx - 20, sy - 30, 2000);
-  var x9 = createVector(sx - 20, sy - 30, 2500);
-  var x10 = createVector(sx - 20, sy - 30, 2600);
-  var x11 = createVector(sx - 20, sy - 30, 2700);
-  var x12 = createVector(sx - 20, sy - 30, 2780);
-  var x13 = createVector(sx - 20, sy - 30, 2860);
-  var x14 = createVector(sx - 20, sy - 30, 2960);
-  var x15 = createVector(sx - 20, sy - 30, 3200);
-  var x16 = createVector(sx - 20, sy - 30, 3300);
-  var x17 = createVector(sx - 20, sy - 30, 3650);
-  var x18 = createVector(sx - 20, sy - 30, 3800);
-  var x19 = createVector(sx - 20, sy - 30, 3900);
-  var x20 = createVector(sx + 200, sy + 200, 24000);
-  pVector.push({ 'point': x1, 'tagID': 2 });
-  pVector.push({ 'point': x2, 'tagID': 2 });
-  pVector.push({ 'point': x3, 'tagID': 2 });
-  pVector.push({ 'point': x4, 'tagID': 2 });
-  pVector.push({ 'point': x5, 'tagID': 2 });
-  pVector.push({ 'point': x6, 'tagID': 2 });
-  pVector.push({ 'point': x7, 'tagID': 2 });
-  pVector.push({ 'point': x8, 'tagID': 2 });
-  pVector.push({ 'point': x9, 'tagID': 2 });
-  pVector.push({ 'point': x10, 'tagID': 2 });
-  pVector.push({ 'point': x12, 'tagID': 2 });
-  pVector.push({ 'point': x13, 'tagID': 2 });
-  pVector.push({ 'point': x14, 'tagID': 2 });
-  pVector.push({ 'point': x15, 'tagID': 2 });
-  pVector.push({ 'point': x16, 'tagID': 2 });
-  pVector.push({ 'point': x17, 'tagID': 2 });
-  pVector.push({ 'point': x18, 'tagID': 2 });
-  pVector.push({ 'point': x19, 'tagID': 2 });
-  pVector.push({ 'point': x20, 'tagID': 2 });
-  print(pVector);
-
-  // console.log('Start x: '+lerp(pVector[count].x, pVector[count+1].x, 0.002));
-  // console.log('Start y: '+lerp(pVector[count].y, pVector[count+1].y, 0.002));
-
-}
-

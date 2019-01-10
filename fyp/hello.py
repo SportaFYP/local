@@ -794,9 +794,42 @@ def viewreplay():
     matchdetails=("SELECT * FROM matchinfo WHERE MatchID=%s")
     mycursor.execute(matchdetails, [mid2])
     tagDetails = mycursor.fetchall()
-    data1 = {'video': video, 'coords': coords, 'matchNotes': matchNotes, 'tagDetails' : tagDetails }
-    return render_template('replay.html', data1 = data1)
 
+    overlaySql = ("SELECT overlayData FROM overlay where matchID = %s")
+    mycursor.execute(overlaySql, [mid2])
+    overlays = mycursor.fetchall()
+    overlays = overlays[0][0]
+
+    data1 = {'video': video, 'coords': coords, 'matchNotes': matchNotes, 'tagDetails' : tagDetails }
+    return render_template('replay.html', **locals())
+
+@app.route('/overlay/<matchID>')
+def overlay_page(matchID):
+    sql = ("SELECT overlayData FROM overlay where matchID = %s")
+
+    cur = conn.cursor()
+    cur.execute(sql, [matchID])
+    overlays = cur.fetchall()
+
+    overlays = str(overlays[0][0])
+
+    print(overlays)
+
+    return render_template('overlay.html', **locals())
+
+@app.route('/saveOverlay', methods=['POST'])
+def saveOverlay():
+    sql = ("INSERT INTO overlay (`matchID`, `overlayData`) VALUES (%s, %s)")
+    sql2 = ("UPDATE overlay SET `overlayData` = %s WHERE (matchID = %s);")
+
+    cur = conn.cursor()
+    try:
+        cur.execute(sql, (request.form['matchID'], request.form['overlayData']))
+    except MySQLdb.IntegrityError as ie:
+        cur.execute(sql2, (request.form['overlayData'], request.form['matchID']))
+    conn.commit()
+
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
 @app.route('/videos/<filename>')
 def uploaded_file(filename):
