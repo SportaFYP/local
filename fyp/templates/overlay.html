@@ -29,7 +29,7 @@
             }
 
             for (var i = 0; i < overlays.length; i++) {
-                row = "<tr><td>" + overlays[i].name + "</td><td><input type=\"color\" id=\"color\" value=" + rgbToHex(overlays[i].color) + "></td><td><a class=\"btn btn-danger\" onclick=\"deleteOverlay(" + i + ")\">Delete</a></td></td></tr>"
+                row = "<tr><td>" + overlays[i].name + "</td><td><input type=\"color\" id=\"color" + i + "\" value=" + rgbToHex(overlays[i].color) + " onchange=\"changeOverlayColor(" + i + ", $(this))\"></td><td><a class=\"btn btn-danger\" onclick=\"deleteOverlay(" + i + ")\">Delete</a></td></td></tr>"
                 $('#overlayList').append(row)
             }
         }
@@ -85,6 +85,11 @@
         function addOverlay() {
             tempOverlay.name = $('#overlayName').val();
             overlays.push(tempOverlay);
+            saveOverlay();
+        }
+
+        function changeOverlayColor(i, color) {
+            overlays[i].color = hexToRgbA(color.val());
             saveOverlay();
         }
 
