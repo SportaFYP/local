@@ -638,6 +638,10 @@ def createTeam():
         session['createTeamStatus'] = 0
     return redirect('teams')
 
+@app.route('/heat')
+def heatmap():
+    return render_template('heatmap.html', **locals())
+
 @app.route('/deleteTeam/<team>')
 def deleteTeam(team):
     #SQL statement
