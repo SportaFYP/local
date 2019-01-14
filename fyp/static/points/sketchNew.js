@@ -83,7 +83,7 @@ function setup() {
     $('#overlayList').append(row)
 }
 
-  var chart = new CanvasJS.Chart("chartContainer", {
+  var distance = {
     animationEnabled: true,
 
     title: {
@@ -104,11 +104,14 @@ function setup() {
       axisYType: "secondary",
       dataPoints: dataPoints
     }]
-  });
+  };
 
   $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     if ($(e.target).attr("href") == "#statistics") {
-      chart.render();
+      distanceGraph = new CanvasJS.Chart("distanceGraph", distance)
+      distanceGraph.render();
+    } else {
+      distanceGraph.destroy();
     }
   });
 }

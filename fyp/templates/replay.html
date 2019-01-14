@@ -202,7 +202,7 @@
                     <table id="distance">
 
                     </table>
-                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                    <div id="distanceGraph" style="height: 370px; width: 100%;"></div>
                     <div id='court'></div>
                 </div>
             </div>
@@ -298,20 +298,6 @@
             canvasWidth = $('#defaultCanvas0').width()
             canvasHeight = $('#defaultCanvas0').height()
         });
-    </script>
-
-    <!-- jQuery -->
-    <script src="{{ url_for('static', filename = 'jquery.min.js') }}"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="{{ url_for('static', filename = 'bootstrap.min.js') }}"></script>
-
-    <!-- Resize the basketball canvas when the browser is resized -->
-    <script>
-        $(window).resize(function () {
-            $('#defaultCanvas0').width($('#sketch-holder').width())
-            $('#defaultCanvas0').height($('#sketch-holder').width() / 16 * 9)
-        })
     </script>
 </body>
 
