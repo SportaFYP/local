@@ -158,7 +158,7 @@ function setup() {
   $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     if ($(e.target).attr("href") == "#statistics") {
       distanceGraph = new CanvasJS.Chart("distanceGraph", distance)
-      particleTimeGraph = new CanvasJS.Chart("particleTimeGraph", overlayTimeGraphs[0])
+      particleTimeGraph = new CanvasJS.Chart("particleTimeGraph", overlayTimeGraphs[document.getElementById("selectPlayer").selectedIndex])
       distanceGraph.render();
       particleTimeGraph.render();
     } else {
