@@ -96,31 +96,33 @@ function setup() {
         }
       }
       $('#seconds').append("<p>" + particles[k].name + " " + overlays[l].name + ": " + counter + "</p>");
-      secondsNotInOverlay -= counter;
-      timeDataPoints.push({ label: overlays[l].name, y: (counter / 1000), color: rgbToHex(overlays[l].color) });
+      if (counter != 0) {
+        secondsNotInOverlay -= counter;
+        timeDataPoints.push({ label: overlays[l].name, y: (counter / 1000), color: rgbToHex(overlays[l].color) });
+      }
     }
-    
+
     timeDataPoints.push({ label: "Not in any overlay", y: (secondsNotInOverlay / 1000), color: "#888888" });
 
     var playerTime = {
-        theme: "light2",
-        animationEnabled: true,
-        title:{
-          text: "Time spent in overlay for " + particles[k].name
-        },		
-        data: [
-        {       
+      theme: "light2",
+      animationEnabled: true,
+      title: {
+        text: "Time spent in overlay for " + particles[k].name
+      },
+      data: [
+        {
           type: "doughnut",
           startAngle: 0,
           showInLegend: true,
           toolTipContent: "{label} - {y}(#percent %)",
-          yValueFormatString: "######ms",
+          yValueFormatString: "######0.###s",
           legendText: "{label}",
           indexLabel: "{label} - {y}",
           dataPoints: timeDataPoints
         }
-        ]
-      };
+      ]
+    };
 
     overlayTimeGraphs.push(playerTime);
 
