@@ -15,6 +15,19 @@ class Overlay {
         rect((this.xorig * width), (this.yorig * height), (this.width * width), (this.height * height));
         //console.log((this.xorig * width) + " " + (this.yorig * height) + " " + (this.width * width) + " " + (this.height * height));
     }
+
+    isPlayerInOverlay(x, y, width, height) {
+        var calX = x / width;
+        var calY = y / height;
+        var x1 = this.xorig + this.width;
+        var y1 = this.yorig + this.height;
+
+        if (this.xorig < calX && calX < x1 && this.yorig < calY && calY < y1){
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 function hexToRgbA(hex) {

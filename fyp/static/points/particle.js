@@ -40,8 +40,8 @@ function Particle(deviceID, name, playerNumber, teamId) {
 			fill(102,51,0);
 		}
 
-		var mapX = map(this.lerpPoint.x, 0, 7770, 0, canvasWidth);
-		var mapY = map(this.lerpPoint.y, 0, 6000, 0, canvasHeight);
+		var mapX = map(this.lerpPoint.x, 0, pozyxWidth, 0, canvasWidth);
+		var mapY = map(this.lerpPoint.y, 0, pozyxHeight, 0, canvasHeight);
 		ellipse(mapX, mapY, 20, 20);//image
 		txt = this.playerNumber;
 		//console.log(this.playerNumber)
@@ -55,8 +55,8 @@ function Particle(deviceID, name, playerNumber, teamId) {
 		beginShape();
 		for (var i = 0; i < this.history.length; i++) {
 			var pos = this.history[i].lerpPoint;
-			var mapHX = map(pos.x, 0, 7770, 0, canvasWidth);
-			var mapHY = map(pos.y, 0, 6000, 0, canvasHeight);
+			var mapHX = map(pos.x, 0, pozyxWidth, 0, canvasWidth);
+			var mapHY = map(pos.y, 0, pozyxHeight, 0, canvasHeight);
 			curveVertex(mapHX, mapHY);
 
 			if (i == 0)

@@ -518,6 +518,7 @@ def createMatch():
     #print "teamName is: " + POST_player1[2] + " Player name is: " + POST_player1[3] + " tag number is: " + POST_player1[4]
 
     postingQuery = 'INSERT INTO matchinfo(matchID, matchname, teamID, studentName, playerNum, tagID) VALUES(%s, %s, %s, %s, %s, %s)'
+    overlayQuery = 'INSERT INTO `sportadb`.`overlay` (`matchID`, `overlayData`) VALUES (%s, \'[]\');'
 
     insertPlayer = []
     for players in POST_allPlayers:
@@ -527,6 +528,8 @@ def createMatch():
 
     curPost = conn.cursor()
     curPost.executemany(postingQuery, insertPlayer)
+    curPost.execute(overlayQuery, [matchid])
+
     try:
         conn.commit()
     except Exception as e:

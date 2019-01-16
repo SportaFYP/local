@@ -202,7 +202,11 @@
                     <table id="distance">
 
                     </table>
-                    <div id="distanceGraph" style="height: 370px; width: 100%;"></div>
+                    <div id="seconds"></div>
+                    <select id="selectPlayer" class="form-control" onchange="selectedPlayer()" style="position: relative; left: 50%; width: 50%;">
+                    </select>
+                    <div id="distanceGraph" style="width: 50%;"></div>
+                    <div id="particleTimeGraph" style="width: 50%; float: right;"></div>
                     <div id='court'></div>
                 </div>
             </div>
@@ -215,7 +219,7 @@
         var chartDiv = document.getElementById('court');
         var court = d3.select(chartDiv).append('court').append('svg');
         court.attr('width', 480)
-             .attr('height', 480/50*47*2)
+            .attr('height', 480 / 50 * 47 * 2)
 
         // court.append('table');
 
@@ -225,23 +229,23 @@
         // var data_g = d3.select(chartDiv).append('shot').append('svg')
 
         var slider_axis = court.append('g')
-                               .attr('class', 'slider-axis');
+            .attr('class', 'slider-axis');
         var slider_rect = court.append('g')
-                               .attr('class', 'slider-rect');
+            .attr('class', 'slider-rect');
 
         var rect_entity = slider_rect.append('rect');
 
         const court_xScale = d3.scaleLinear()
-                                     .domain([-25, 25]);
+            .domain([-25, 25]);
         const court_yScale = d3.scaleLinear()
-                                     .domain([-4,43]);
+            .domain([-4, 43]);
         const shot_xScale = d3.scaleLinear()
-                                     .domain([-250, 250]);
+            .domain([-250, 250]);
         const shot_yScale = d3.scaleLinear()
-                                     .domain([-45,420]);
+            .domain([-45, 420]);
 
         var color = d3.scaleSequential(d3.interpolateOrRd)
-                      .domain([5e-6, 3e-2]); // Points per square pixel.
+            .domain([5e-6, 3e-2]); // Points per square pixel.
 
 
 
@@ -295,9 +299,15 @@
         })
 
         $(window).on("load", function () {
-            canvasWidth = $('#defaultCanvas0').width()
-            canvasHeight = $('#defaultCanvas0').height()
+            canvasWidth = $('#defaultCanvas0').width();
+            canvasHeight = $('#defaultCanvas0').height();
         });
+
+        function selectedPlayer() {
+            particleTimeGraph.destroy();
+            particleTimeGraph = new CanvasJS.Chart("particleTimeGraph", overlayTimeGraphs[document.getElementById("selectPlayer").selectedIndex]);
+            particleTimeGraph.render()
+        }
     </script>
 </body>
 
