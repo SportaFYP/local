@@ -12,28 +12,28 @@ function Heat_Map(){
                .nice();
 
 
-    d3.csv('\\static\\bbCourtHeat\\kobe.csv', data => {
+    d3.csv('\\static\\bbCourtHeat\\coords.csv', data => {
             //filtering the unreasonable shot
             var data = data//.filter(d=>d.loc_y < 400)
             var temp_data = d3.nest()
-                      .key(function(d) { return d.season; })
+                      .key(function(d) { return d.tagId; })
                       .entries(data);
             // var target = (year.getFullYear()).toString()+'-'+(year.getFullYear()+1).toString().substring(2, 4)
 
             // temp_data = temp_data.filter(d=>d.key==target);
-            console.log(temp_data[0].values)
-            var shot = temp_data[0].values;
+            console.log(temp_data[1].values)
+            var shot = temp_data[1].values;
 
             shot = d3.contourDensity()
-                     .x(function(d) { return shot_xScale(d.loc_x); })
-                     .y(function(d) { return shot_yScale(d.loc_y); })
+                     .x(function(d) { return shot_xScale(d.coordinates_x); })
+                     .y(function(d) { return shot_yScale(d.coordinates_y); })
                      .size([innerWidth, innerHeight])
                      .bandwidth(30)
                      (shot)
 
             var heatmap = heat_g.selectAll('path').data(shot)
 
-            // heatmap.exit().remove();
+            heatmap.exit().remove();
 
             heatmap
                 .attr('fill', 'none')
@@ -44,7 +44,7 @@ function Heat_Map(){
                 .merge(heatmap)
                   .attr('fill', function(d) { return color(d.value); })
                   .attr('d', d3.geoPath());
-
+            console.log("Here")
 
 
             // var shot_contour = heat_g.selectAll('.heat_map').data(d3.contourDensity()
@@ -70,5 +70,5 @@ function Heat_Map(){
 
           });
 
-
+          console.log("reached");
 }

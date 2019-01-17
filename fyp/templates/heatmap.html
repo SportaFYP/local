@@ -84,9 +84,9 @@ body {
         const court_yScale = d3.scaleLinear()
                                      .domain([-4,43]);
         const shot_xScale = d3.scaleLinear()
-                                     .domain([-250, 250]);
+                                     .domain([0, 5440]);
         const shot_yScale = d3.scaleLinear()
-                                     .domain([-45,420]);
+                                     .domain([0, 7770]);
 
         var color = d3.scaleSequential(d3.interpolateOrRd)
                       .domain([5e-6, 3e-2]); // Points per square pixel.

@@ -785,6 +785,20 @@ def viewreplay():
     coord =("SELECT tagId,timestamp,coordinates_x,coordinates_y FROM projects WHERE RecordingID = %s")
     mycursor.execute(coord, [rid2])
     coords = mycursor.fetchall()
+    print(coords[0])
+    coordsData = [['tagId', 'timestamp', 'coordinates_x', 'coordinates_y']]
+    for x in coords:
+        coordsData.append(x)
+    print(coordsData)
+    coordFile = open('coords.csv', 'w')
+    with coordFile as csvFile:
+        # coordFields = ['tagId', 'timestamp', 'coordinates_x', 'coordinates_y']
+        writer = csv.writer(csvFile)
+        # writer.writeheader()
+        writer.writerows(coordsData)
+    
+    csvFile.close()
+
 
     my_var2 = session.get('my_var2', None)
     print("my_var2 = ")
