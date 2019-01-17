@@ -161,6 +161,7 @@ function setup() {
       particleTimeGraph = new CanvasJS.Chart("particleTimeGraph", overlayTimeGraphs[document.getElementById("selectPlayer").selectedIndex])
       distanceGraph.render();
       particleTimeGraph.render();
+      $("#court").css("top", particleTimeGraph.height)
     } else {
       distanceGraph.destroy();
       particleTimeGraph.destroy();
