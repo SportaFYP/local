@@ -325,16 +325,16 @@ def allowed_csv(filename):
 @app.route("/students/<filename>")
 def uploaded_csv(filename):  
     CSV_LOCATION = CSV_FOLDER + filename
-    sqlDrop = 'DROP TABLE IF EXISTS students'
-    sqlCreate = '''CREATE TABLE students (studentID varchar(20) NOT NULL PRIMARY KEY, studentName varchar(50) NOT NULL, class varchar(20) NOT NULL, uploadedBy varchar(50) NOT NULL, uploadDTG DATETIME NOT NULL)'''
+    sqlDrop = 'DROP TABLE IF EXISTS student'
+    sqlCreate = '''CREATE TABLE student (studentID varchar(20) NOT NULL PRIMARY KEY, studentName varchar(50) NOT NULL, class varchar(20) NOT NULL, uploadedBy varchar(50) NOT NULL, uploadDTG DATETIME NOT NULL)'''
     cur = conn.cursor()
     cur.execute(sqlDrop)
     cur.close()
     cur = conn.cursor()
     cur.execute(sqlCreate)
     cur.close()
-    sqlDropTeam = 'DROP TABLE IF EXISTS teamstudents'
-    sqlCreateTeam = '''CREATE TABLE teamstudents (teamId varchar(20) NOT NULL, studentName varchar(50) NOT NULL, studentID varchar(20) NOT NULL, PRIMARY KEY (studentID, studentName, teamId))'''
+    sqlDropTeam = 'DROP TABLE IF EXISTS teamstudent'
+    sqlCreateTeam = '''CREATE TABLE teamstudent (teamId varchar(20) NOT NULL, studentName varchar(50) NOT NULL, studentID varchar(20) NOT NULL, PRIMARY KEY (studentID, studentName, teamId))'''
     cur = conn.cursor()
     cur.execute(sqlDropTeam)
     cur.close()
@@ -349,10 +349,10 @@ def uploaded_csv(filename):
                 print row
                 lineNum += 1
             else:
-                sqlPushStudents = "INSERT INTO students(studentID, studentName, class, uploadedBY, uploadDTG) VALUES (%s, %s, %s, %s, %s)"
+                sqlPushStudents = "INSERT INTO student(studentID, studentName, class, uploadedBY, uploadDTG) VALUES (%s, %s, %s, %s, %s)"
                 cur1 = conn.cursor()
                 cur1.executemany(sqlPushStudents,[(row[0], row[1], row[2], session['username'], datetime.datetime.now())]) # studentID, studentName, class columns in csv file
-                sqlPushTeam = "INSERT INTO teamstudents(teamId, studentName, studentID) VALUES (%s, %s, %s)"
+                sqlPushTeam = "INSERT INTO teamstudent(teamId, studentName, studentID) VALUES (%s, %s, %s)"
                 cur2 = conn.cursor()
                 cur2.executemany(sqlPushTeam,[(row[2], row[1], row[0])]) # class, studentName, studentID columns in csv file
                 conn.commit()
@@ -785,12 +785,17 @@ def viewreplay():
     coord =("SELECT tagId,timestamp,coordinates_x,coordinates_y FROM projects WHERE RecordingID = %s")
     mycursor.execute(coord, [rid2])
     coords = mycursor.fetchall()
-    print(coords[0])
+    # print(coords[0])
+    tagslist = []
+    for y in coords:
+        if y[0] not in tagslist:
+            tagslist.append(y[0])
+    print(tagslist)
     coordsData = [['tagId', 'timestamp', 'coordinates_x', 'coordinates_y']]
     for x in coords:
         coordsData.append(x)
-    print(coordsData)
-    coordFile = open('coords.csv', 'w')
+    # print(coordsData)
+    coordFile = open('coords.csv', 'wb')
     with coordFile as csvFile:
         # coordFields = ['tagId', 'timestamp', 'coordinates_x', 'coordinates_y']
         writer = csv.writer(csvFile)

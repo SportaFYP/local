@@ -209,6 +209,12 @@
                     <div id="distanceGraph" style="width: 50%;"></div>
                     <div id="particleTimeGraph" style="width: 50%; float: right;"></div>
                     <div id="court" style="position: relative"></div>
+                    <select style="position: relative">
+                        <option value="">Choose Player</option>
+                        {% for taglist in tagslist %}
+                            <option value="{{taglist}}">{{taglist}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
             </div>
 
