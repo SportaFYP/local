@@ -1,5 +1,5 @@
 class TimeCoord {
-  constructor(lerpPoint, currentMS) {
+	constructor(lerpPoint, currentMS) {
 		this.lerpPoint = lerpPoint;
 		this.currentMS = currentMS;
 	}
@@ -37,7 +37,7 @@ function Particle(deviceID, name, playerNumber, teamId) {
 			fill(0, 0, 255);
 		}
 		if (this.playerNumber >= 8 && this.playerNumber < 15) {
-			fill(102,51,0);
+			fill(102, 51, 0);
 		}
 
 		var mapX = map(this.lerpPoint.x, 0, pozyxWidth, 0, canvasWidth);
@@ -54,29 +54,31 @@ function Particle(deviceID, name, playerNumber, teamId) {
 		noFill();
 		beginShape();
 		for (var i = 0; i < this.history.length; i++) {
-			var pos = this.history[i].lerpPoint;
-			var mapHX = map(pos.x, 0, pozyxWidth, 0, canvasWidth);
-			var mapHY = map(pos.y, 0, pozyxHeight, 0, canvasHeight);
-			curveVertex(mapHX, mapHY);
+			if ((currentMS - this.history[i].currentMS) < (tailDuration * 1000)) {
+				var pos = this.history[i].lerpPoint;
+				var mapHX = map(pos.x, 0, pozyxWidth, 0, canvasWidth);
+				var mapHY = map(pos.y, 0, pozyxHeight, 0, canvasHeight);
+				curveVertex(mapHX, mapHY);
 
-			if (i == 0)
-				curveVertex(mapHX, mapHY);
-			if (i == history.length - 1)
-				curveVertex(mapHX, mapHY);
+				if (i == 0)
+					curveVertex(mapHX, mapHY);
+				if (i == history.length - 1)
+					curveVertex(mapHX, mapHY);
+			}
 		}
 		endShape();
 		//history of points for display of tail
 
 	}
 
-	this.clearHistory = function() {
+	this.clearHistory = function () {
 		this.history.splice(0, this.history.length)
 	}
 
-	this.getTotalDistanceWalked = function() {
+	this.getTotalDistanceWalked = function () {
 		var distance = 0;
-		for (var i = 0; i < (this.interpolateFunctionX._x.length - 1); i++){
-			distance += dist(this.interpolateFunctionX._y[i], this.interpolateFunctionY._y[i], this.interpolateFunctionX._y[i+1], this.interpolateFunctionY._y[i+1]);
+		for (var i = 0; i < (this.interpolateFunctionX._x.length - 1); i++) {
+			distance += dist(this.interpolateFunctionX._y[i], this.interpolateFunctionY._y[i], this.interpolateFunctionX._y[i + 1], this.interpolateFunctionY._y[i + 1]);
 		}
 
 		console.log("total distance for tag " + this.playerNumber + " = " + distance);

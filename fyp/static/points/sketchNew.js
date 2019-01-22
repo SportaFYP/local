@@ -9,6 +9,7 @@ var timePrev;
 var once = true;
 var playMS;
 var playTime;
+var currentMS;
 var totalMS;
 var percentageTime = 0;
 var startPlay = false;
@@ -76,6 +77,10 @@ function setup() {
   }
 
   for (var k = 0; k < particles.length; k++) {
+
+    row = "<td>" + particles[k].playerNumber + " - " + particles[k].name + "</td>"
+    $('#particleList').append(row)
+
     var row = "<tr><td>Total distance walked for tag " + particles[k].playerNumber + ": " + (particles[k].getTotalDistanceWalked() / 1000) + "m</td></tr>";
     $("#distance").append(row);
     if (particles[k].playerNumber >= 0 && particles[k].playerNumber < 8) {
@@ -186,7 +191,7 @@ function pause() {
 
 function update() {
   var currentTime = new Date();
-  var currentMS = (currentTime - playTime) + playMS;
+  currentMS = (currentTime - playTime) + playMS;
 
   if (isNaN(currentMS))
     currentMS = 0;
