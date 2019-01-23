@@ -175,10 +175,11 @@
                                 <thead>
                                     <tr role="row">
                                         <th tabindex="0" aria-controls="dataTables-example" rowspan="1"
-                                            colspan="7" aria-sort="ascending" style="width: 100%;">Players</th>
+                                            colspan="7" aria-sort="ascending" style="width: 100%;">Players:</th>
                                     </tr>
                                 </thead>
                                 <tbody id="particleList">
+                                    <tr class="particleRow"></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -191,10 +192,11 @@
                                 <thead>
                                     <tr role="row">
                                         <th tabindex="0" aria-controls="dataTables-example" rowspan="1"
-                                            colspan="5" aria-sort="ascending" style="width: 100%;">Overlay</th>
+                                            colspan="5" aria-sort="ascending" style="width: 100%;">Overlay:</th>
                                     </tr>
                                 </thead>
                                 <tbody id="overlayList">
+                                    <tr class="overlayRow"></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -217,11 +219,6 @@
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="statistics">
                     <h1>Statistics</h1>
-                    ***BEGIN DEBUG***
-                    <table id="distance">
-                    </table>
-                    <div id="seconds"></div>
-                    ***END DEBUG***
                     <select id="selectPlayer" class="form-control" onchange="selectedPlayer()" style="position: relative; left: 50%; width: 50%;">
                     </select>
                     <div id="distanceGraph" style="width: 50%;"></div>

@@ -73,16 +73,22 @@ function setup() {
 
   for (var i = 0; i < overlays.length; i++) {
     row = "<td><input type=\"checkbox\" onchange=\"overlays[" + i + "].isVisible = this.checked\" checked>" + overlays[i].name + "</td>"
-    $('#overlayList').append(row)
+    $('.overlayRow:nth-child(' + (Math.floor(i / 5) + 1) + ')').append(row)
+
+    if ((i % 4) == 0 && i != 0){
+      $('#overlayList').append('<tr class="overlayRow"></tr>')
+    }
   }
 
   for (var k = 0; k < particles.length; k++) {
 
     row = "<td>" + particles[k].playerNumber + " - " + particles[k].name + "</td>"
-    $('#particleList').append(row)
+    $('.particleRow:nth-child(' + (Math.floor(k / 7) + 1) + ')').append(row)
+    
+    if ((k % 6) == 0 && k != 0){
+      $('#particleList').append('<tr class="overlayRow"></tr>')
+    }
 
-    var row = "<tr><td>Total distance walked for tag " + particles[k].playerNumber + ": " + (particles[k].getTotalDistanceWalked() / 1000) + "m</td></tr>";
-    $("#distance").append(row);
     if (particles[k].playerNumber >= 0 && particles[k].playerNumber < 8) {
       distanceDataPoints.push({ label: particles[k].playerNumber + " - " + particles[k].name, y: (particles[k].getTotalDistanceWalked() / 1000), color: "#0000ff" })
     }
@@ -100,7 +106,6 @@ function setup() {
           counter++;
         }
       }
-      $('#seconds').append("<p>" + particles[k].name + " " + overlays[l].name + ": " + counter + "</p>");
       if (counter != 0) {
         secondsNotInOverlay -= counter;
         timeDataPoints.push({ label: overlays[l].name, y: (counter / 1000), color: rgbToHex(overlays[l].color) });
