@@ -379,13 +379,13 @@ def create_student_page():
             counterj = 0
             k = []
             for j in studentInTeam:
-                if (j[1] == i[1]):
+                if (j[1] == i[0]):
                     if counterj is not 0:
                         inTeamsConcat = inTeamsConcat + ", "
                     inTeamsConcat = inTeamsConcat + j[0]
                     k.append(j[0])
                     counterj += 1
-            rows.append((i[0], i[1], i[2], inTeamsConcat))
+            rows.append((i[0], i[1], inTeamsConcat))
             inTeams[i[1]] = k
 
         studentStatusType = session.get('studentStatusType')
@@ -542,21 +542,21 @@ def createMatch():
 @app.route('/createStudent', methods=['POST'])
 def createStudent():
     #SQL statement
-    sql = ''' INSERT INTO teamstudent (`teamId`, `studentName`) 
+    sql = ''' INSERT INTO teamstudent (`teamId`, `studentId`) 
               VALUES (%s, %s) '''
-    sql2 = ''' INSERT INTO student (`name`, `gender`) 
+    sql2 = ''' INSERT INTO student (`studentId`, `studentName`) 
                VALUES (%s, %s) '''
 
     try:          
         cur = conn.cursor()
-        cur.execute(sql, ([str(request.form['teamId'])], [str(request.form['studentName'])]))
+        cur.execute(sql, ([str(request.form['teamId'])], [str(request.form['studentId'])]))
 
-        cur.execute("select name from student where name = %s", [str(request.form['studentName'])])
+        cur.execute("select studentId from student where studentId = %s", [str(request.form['studentId'])])
         tmp = cur.fetchall()
         if tmp:
             setStudentStatus(0, "The student that you are trying to add already exists. The student has been assigned to the team alongside the student's existing teams")
         else:
-            cur.execute(sql2, ([str(request.form['studentName'])], [str(request.form['studentGender'])]))
+            cur.execute(sql2, ([str(request.form['studentId'])], [str(request.form['studentName'])]))
             setStudentStatus(0, "The student has been successfully added and assigned to the team")
         conn.commit()
     except MySQLdb.IntegrityError as ie: # Student-Team pair is already found in database
@@ -565,16 +565,14 @@ def createStudent():
         print(e)
     return redirect('students')
 
-@app.route('/editStudent/<id>/<student>/<gender>', methods=['POST'])
-def editStudent(id, student, gender):
-    sql = '''SELECT teamId FROM teamStudent WHERE (`studentName` = %s)'''
-    sql2 = '''UPDATE student SET `name` = %s WHERE (`id` = %s);'''
-    sql3 = '''UPDATE teamstudent SET studentName = REPLACE (studentName, %s, %s)'''
-    sql4 = '''UPDATE student SET `gender` = %s WHERE (`id` = %s);'''
-    sql5 = '''DELETE FROM teamstudent WHERE (`teamId` = %s) and (`studentName` = %s);'''
+@app.route('/editStudent/<studentId>/<studentName>', methods=['POST'])
+def editStudent(studentId, studentName):
+    sql = '''SELECT teamId FROM teamStudent WHERE (`studentId` = %s)'''
+    sql2 = '''UPDATE student SET `studentName` = %s WHERE (`studentId` = %s);'''
+    sql3 = '''DELETE FROM teamstudent WHERE (`teamId` = %s) and (`studentId` = %s);'''
 
     cur = conn.cursor()
-    cur.execute(sql, [student])
+    cur.execute(sql, [studentId])
     teams = cur.fetchall()
     
     # Make sure to check if all the teams are ticked for removal cause that is not allowed
@@ -589,32 +587,28 @@ def editStudent(id, student, gender):
         setStudentStatus(1, "You are trying to remove the student from all assigned teams. The student needs to have at least one assigned team")
         return redirect('students')
 
-    if not (str(request.form['editStudentName']) == student):
-        cur.execute(sql2, ([str(request.form['editStudentName'])], id))
-        cur.execute(sql3, (student, [str(request.form['editStudentName'])]))
-
-    if not (str(request.form['editStudentGender']) == gender):
-        cur.execute(sql4, ([str(request.form['editStudentGender'])], id))
+    if not (str(request.form['editStudentName']) == studentName):
+        cur.execute(sql2, ([str(request.form['editStudentName'])], studentId))
     
     for t in teams:
         try:
             if request.form[t[0]] == 'on':
-                cur.execute(sql5, ([str(t[0])], [str(request.form['editStudentName'])]))
+                cur.execute(sql3, ([str(t[0])], studentId))
         except BadRequestKeyError:
             print('') # Do nothing
     conn.commit()
     setStudentStatus(0, "The edits made to the student has been saved successfully")
     return redirect('students')
 
-@app.route('/deleteStudent/<studName>')
-def deleteStudent(studName):
-    sql = '''DELETE FROM student WHERE (`name` = %s);'''
-    sql2 = '''DELETE FROM teamstudent WHERE (`studentName` = %s);'''
+@app.route('/deleteStudent/<studentId>')
+def deleteStudent(studentId):
+    sql = '''DELETE FROM student WHERE (`studentId` = %s);'''
+    sql2 = '''DELETE FROM teamstudent WHERE (`studentId` = %s);'''
 
     try:          
         cur = conn.cursor()
-        cur.execute(sql, [studName])
-        cur.execute(sql2, [studName])
+        cur.execute(sql, [studentId])
+        cur.execute(sql2, [studentId])
 
         setStudentStatus(0, "The student has been removed from the teams that he or she is part of and was deleted successfully")
         conn.commit()

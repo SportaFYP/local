@@ -291,7 +291,7 @@
                                         <td><a class="btn btn-primary" data-toggle="modal" data-target="#editUserDialogBox"
                                                 data-id="{{item[0]}}" data-student="{{item[1]}}" style="margin: 0px 10px 0px 0px;">Edit</a><a
                                                 class="btn btn-danger" data-toggle="modal" data-target="#deleteUserDialogBox"
-                                                data-student="{{item[1]}}">Delete</a></td>
+                                                data-id="{{item[0]}}" data-student="{{item[1]}}">Delete</a></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -342,6 +342,8 @@
 
                 <form id="editStudentForm" method="POST">
                     <div class="modal-body">
+                        Student ID:<br>
+                        <input type="text" value="" name="editStudentId" disabled><br>
                         Student Name:<br>
                         <input type="text" value="" name="editStudentName" required><br>
                         <br>
@@ -402,7 +404,7 @@
             modal.find('.modal-title').text('Delete ' + button.data('student')) //(deleteStudent)
             modal.find('.modal-body').text('Are you sure you want to delete ' + button.data('student') + '?') //(deleteStudentConfirm)
             $('#deleteStudent').click(function () {
-                window.location = '/deleteStudent/' + button.data('student');
+                window.location = '/deleteStudent/' + button.data('id');
             });
         })
 
@@ -412,6 +414,7 @@
             var modal = $(this)
             document.getElementById('editStudentForm').action = '/editStudent/' + button.data('id') + '/' + button.data('student')
             modal.find('.modal-title').text('Edit ' + button.data('student'))
+            $('[name=editStudentId]').val(button.data('id'));
             $('[name=editStudentName]').val(button.data('student'));
 
             var inTeams = {{ inTeams| tojson | safe }};
