@@ -222,17 +222,11 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <form action="/createStudent" method="POST">
+                                    Student ID:<br>
+                                    <input type="text" value="" name="studentId" required><br>
+                                    <br>
                                     Student Name:<br>
                                     <input type="text" value="" name="studentName" required><br>
-                                    <br>
-                                    Gender:<br>
-                                    <table>
-                                        <tr>
-                                            <td style="padding: 0px 10px 0px 0px;"><input type="radio" name="studentGender"
-                                                    value="M" checked> Male</td>
-                                            <td><input type="radio" name="studentGender" value="F"> Female<br></td>
-                                        </tr>
-                                    </table>
                                     <br>
                                     Assign to team:<br>
                                     <select name="teamId" style="width: 155px;">
@@ -278,8 +272,6 @@
                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
                                             colspan="1" style="width: 340px;">Student Name</th>
                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
-                                            colspan="1" style="width: 313px;">Gender</th>
-                                        <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
                                             colspan="1" style="width: 249px;">In Teams</th>
                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
                                             colspan="1" style="width: 190px;">Options</th>
@@ -296,11 +288,10 @@
                                         <td>{{item[0]}}</td>
                                         <td>{{item[1]}}</td>
                                         <td>{{item[2]}}</td>
-                                        <td>{{item[3]}}</td>
                                         <td><a class="btn btn-primary" data-toggle="modal" data-target="#editUserDialogBox"
-                                                data-id="{{item[0]}}" data-student="{{item[1]}}" data-gender="{{item[2]}}"
-                                                style="margin: 0px 10px 0px 0px;">Edit</a><a class="btn btn-danger"
-                                                data-toggle="modal" data-target="#deleteUserDialogBox" data-student="{{item[1]}}">Delete</a></td>
+                                                data-id="{{item[0]}}" data-student="{{item[1]}}" style="margin: 0px 10px 0px 0px;">Edit</a><a
+                                                class="btn btn-danger" data-toggle="modal" data-target="#deleteUserDialogBox"
+                                                data-student="{{item[1]}}">Delete</a></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -354,22 +345,14 @@
                         Student Name:<br>
                         <input type="text" value="" name="editStudentName" required><br>
                         <br>
-                        Gender:<br>
-                        <table>
-                            <tr>
-                                <td style="padding: 0px 10px 0px 0px;"><input type="radio" name="editStudentGender"
-                                        value="M"> Male</td>
-                                <td><input type="radio" name="editStudentGender" value="F"> Female<br></td>
-                            </tr>
-                        </table>
-                        <br>
                         <table width="100%" class="table table-striped table-bordered table-hover dataTable no-footer dtr-inline"
                             id="dataTables-example" role="grid" aria-describedby="dataTables-example_info" style="width: 100%;">
                             <thead>
                                 <tr role="row">
                                     <th tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1"
                                         aria-sort="ascending">Teams that the student is in</th>
-                                    <th tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1">Remove from team</th>
+                                    <th tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="1">Remove
+                                        from team</th>
                                 </tr>
                             </thead>
                             <tbody id="teamTable">
@@ -427,30 +410,27 @@
 
             var button = $(event.relatedTarget) // Button that triggered the modal
             var modal = $(this)
-            document.getElementById('editStudentForm').action = '/editStudent/' + button.data('id') + '/' + button.data('student') + '/' + button.data('gender')
+            document.getElementById('editStudentForm').action = '/editStudent/' + button.data('id') + '/' + button.data('student')
             modal.find('.modal-title').text('Edit ' + button.data('student'))
             $('[name=editStudentName]').val(button.data('student'));
-            if (button.data('gender') == 'M')
-                $('input[name=editStudentGender]')[0].checked = true;
-            else if (button.data('gender') == 'F')
-                $('input[name=editStudentGender]')[1].checked = true;
 
-            var inTeams = {{ inTeams| tojson | safe
-        }};
-        t = inTeams[button.data('student')];
-        teamTable = document.getElementById('teamTable');
-        teamTable.innerHTML = ""
-        for (i = 0; i < t.length; i++) {
-            row = teamTable.insertRow(i)
-            cell0 = row.insertCell(0)
-            cell1 = row.insertCell(1)
-            cell0.innerHTML = t[i]
-            cell1.innerHTML = '<input class="deleteTeam" type="checkbox" name="' + t[i] + '">'
-        }
+            var inTeams = {{ inTeams| tojson | safe }};
 
-        if (t.length == 1)
-            $('.deleteTeam').prop('disabled', true);
-        })
+            t = inTeams[button.data('student')];
+            teamTable = document.getElementById('teamTable');
+            teamTable.innerHTML = ""
+            for (i = 0; i < t.length; i++) {
+                row = teamTable.insertRow(i)
+                cell0 = row.insertCell(0)
+                cell1 = row.insertCell(1)
+                cell0.innerHTML = t[i]
+                cell1.innerHTML = '<input class="deleteTeam" type="checkbox" name="' + t[i] + '">'
+            }
+
+            if (t.length == 1) {
+                $('.deleteTeam').prop('disabled', true);
+            }
+        });
     </script>
 
 </body>

@@ -8,6 +8,7 @@ class Overlay {
         this.height = height;
         this.color = color;
         this.isVisible = true;
+        this.playerTimeInOverlay = []
     }
 
     draw(width, height) {
@@ -27,6 +28,12 @@ class Overlay {
         } else {
             return false
         }
+    }
+
+    addPlayerIntoOverlayArray(particle, timeInOverlay, color) {
+        var obj = { label: particle.playerNumber + " - " + particle.name, y: (timeInOverlay / 1000), color: color }
+
+        this.playerTimeInOverlay.push(obj)
     }
 }
 

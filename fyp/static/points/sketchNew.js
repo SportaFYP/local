@@ -17,6 +17,7 @@ var begin;
 var end;
 var distanceDataPoints = [];
 var overlayTimeGraphs = [];
+var playerTimeInOverlayGraphs = [];
 var canvasWidth, canvasHeight;
 var pozyxWidth = 7770;
 var pozyxHeight = 6000;
@@ -75,7 +76,7 @@ function setup() {
     row = "<td><input type=\"checkbox\" onchange=\"overlays[" + i + "].isVisible = this.checked\" checked>" + overlays[i].name + "</td>"
     $('.overlayRow:nth-child(' + (Math.floor(i / 5) + 1) + ')').append(row)
 
-    if ((i % 4) == 0 && i != 0){
+    if ((i % 4) == 0 && i != 0) {
       $('#overlayList').append('<tr class="overlayRow"></tr>')
     }
   }
@@ -84,8 +85,8 @@ function setup() {
 
     row = "<td>" + particles[k].playerNumber + " - " + particles[k].name + "</td>"
     $('.particleRow:nth-child(' + (Math.floor(k / 7) + 1) + ')').append(row)
-    
-    if ((k % 6) == 0 && k != 0){
+
+    if ((k % 6) == 0 && k != 0) {
       $('#particleList').append('<tr class="overlayRow"></tr>')
     }
 
@@ -109,6 +110,12 @@ function setup() {
       if (counter != 0) {
         secondsNotInOverlay -= counter;
         timeDataPoints.push({ label: overlays[l].name, y: (counter / 1000), color: rgbToHex(overlays[l].color) });
+        if (particles[k].playerNumber >= 0 && particles[k].playerNumber < 8) {
+          overlays[l].addPlayerIntoOverlayArray(particles[k], counter, "#0000ff")
+        }
+        if (particles[k].playerNumber >= 8 && particles[k].playerNumber < 15) {
+          overlays[l].addPlayerIntoOverlayArray(particles[k], counter, "#663300")
+        }
       }
     }
 
@@ -165,16 +172,57 @@ function setup() {
     }]
   };
 
+  for (var l = 0; l < overlays.length; l++) {
+    if (overlays[l].playerTimeInOverlay.length != 0) {
+      var playerTimeInOverlay = {
+        animationEnabled: true,
+
+        title: {
+          text: "Total time players spent in " + overlays[l].name,
+          fontFamily: "Arial"
+        },
+        axisX: {
+          interval: 1
+        },
+        axisY2: {
+          interlacedColor: "rgba(1,77,101,.2)",
+          gridColor: "rgba(1,77,101,.1)",
+          title: "Distance walked (m)"
+        },
+        data: [{
+          type: "bar",
+          name: "players",
+          axisYType: "secondary",
+          yValueFormatString: "######0.###s",
+          dataPoints: overlays[l].playerTimeInOverlay
+        }]
+      };
+
+
+      playerTimeInOverlayGraphs.push(playerTimeInOverlay)
+
+      option = document.createElement("option");
+      option.text = overlays[l].name;
+
+      document.getElementById("selectOverlay").add(option);
+    }
+  }
+
   $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     if ($(e.target).attr("href") == "#statistics") {
-      distanceGraph = new CanvasJS.Chart("distanceGraph", distance)
-      particleTimeGraph = new CanvasJS.Chart("particleTimeGraph", overlayTimeGraphs[document.getElementById("selectPlayer").selectedIndex])
+      distanceGraph = new CanvasJS.Chart("distanceGraph", distance);
+      particleTimeGraph = new CanvasJS.Chart("particleTimeGraph", overlayTimeGraphs[document.getElementById("selectPlayer").selectedIndex]);
+      playerTimeInOverlayGraph = new CanvasJS.Chart("playerTimeInOverlayGraph", playerTimeInOverlayGraphs[document.getElementById("selectOverlay").selectedIndex]);
       distanceGraph.render();
       particleTimeGraph.render();
+      playerTimeInOverlayGraph.render();
       $("#court").css("top", particleTimeGraph.height)
+      //$("#selectOverlay").css("top", particleTimeGraph.height)
+      //$("#playerTimeInOverlayGraph").css("top", selectOverlay.height)
     } else {
       distanceGraph.destroy();
       particleTimeGraph.destroy();
+      playerTimeInOverlayGraph.render();
     }
   });
 }
