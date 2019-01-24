@@ -208,6 +208,13 @@ function setup() {
     }
   }
 
+  if (document.getElementById('selectOverlay').length == 0) {
+    option = document.createElement("option");
+    option.text = "There is no overlays drawn for this match";
+
+    document.getElementById("selectOverlay").add(option);
+  }
+
   $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     if ($(e.target).attr("href") == "#statistics") {
       distanceGraph = new CanvasJS.Chart("distanceGraph", distance);
