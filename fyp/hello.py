@@ -385,7 +385,7 @@ def create_student_page():
                     inTeamsConcat = inTeamsConcat + j[0]
                     k.append(j[0])
                     counterj += 1
-            rows.append((i[0], i[1], inTeamsConcat))
+            rows.append((i[0], i[1], inTeamsConcat, i[2], i[3]))
             inTeams[i[1]] = k
 
         studentStatusType = session.get('studentStatusType')
@@ -544,8 +544,9 @@ def createStudent():
     #SQL statement
     sql = ''' INSERT INTO teamstudent (`teamId`, `studentId`) 
               VALUES (%s, %s) '''
-    sql2 = ''' INSERT INTO student (`studentId`, `studentName`) 
-               VALUES (%s, %s) '''
+    sql2 = ''' INSERT INTO student (`studentId`, `studentName`, `uploadedDTG`, `uploadedBy`) 
+               VALUES (%s, %s, %s, %s) '''
+    sql3 = ''' UPDATE student SET `uploadedDTG` = %s, `uploadedBy` = %s WHERE (`studentId` = %s) '''
 
     try:          
         cur = conn.cursor()
@@ -554,9 +555,10 @@ def createStudent():
         cur.execute("select studentId from student where studentId = %s", [str(request.form['studentId'])])
         tmp = cur.fetchall()
         if tmp:
+            cur.execute(sql3, (datetime.datetime.now(), session['username'], [str(request.form['studentId'])]))
             setStudentStatus(0, "The student that you are trying to add already exists. The student has been assigned to the team alongside the student's existing teams")
         else:
-            cur.execute(sql2, ([str(request.form['studentId'])], [str(request.form['studentName'])]))
+            cur.execute(sql2, ([str(request.form['studentId'])], [str(request.form['studentName'])], datetime.datetime.now(), session['username']))
             setStudentStatus(0, "The student has been successfully added and assigned to the team")
         conn.commit()
     except MySQLdb.IntegrityError as ie: # Student-Team pair is already found in database
@@ -568,7 +570,7 @@ def createStudent():
 @app.route('/editStudent/<studentId>/<studentName>', methods=['POST'])
 def editStudent(studentId, studentName):
     sql = '''SELECT teamId FROM teamStudent WHERE (`studentId` = %s)'''
-    sql2 = '''UPDATE student SET `studentName` = %s WHERE (`studentId` = %s);'''
+    sql2 = '''UPDATE student SET `studentName` = %s, `uploadedDTG` = %s, `uploadedBy` = %s WHERE (`studentId` = %s);'''
     sql3 = '''DELETE FROM teamstudent WHERE (`teamId` = %s) and (`studentId` = %s);'''
 
     cur = conn.cursor()
@@ -588,12 +590,13 @@ def editStudent(studentId, studentName):
         return redirect('students')
 
     if not (str(request.form['editStudentName']) == studentName):
-        cur.execute(sql2, ([str(request.form['editStudentName'])], studentId))
+        cur.execute(sql2, ([str(request.form['editStudentName'])], datetime.datetime.now(), session['username'], studentId))
     
     for t in teams:
         try:
             if request.form[t[0]] == 'on':
                 cur.execute(sql3, ([str(t[0])], studentId))
+                cur.execute(sql2, (studentName, datetime.datetime.now(), session['username'], studentId))
         except BadRequestKeyError:
             print('') # Do nothing
     conn.commit()

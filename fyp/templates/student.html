@@ -268,11 +268,15 @@
                                 <thead>
                                     <tr role="row">
                                         <th class="sorting_asc" tabindex="0" aria-controls="dataTables-example" rowspan="1"
-                                            colspan="1" aria-sort="ascending" style="width: 284px;">Student ID</th>
+                                            colspan="1" aria-sort="ascending" style="width: 20%;">Student ID</th>
                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
-                                            colspan="1" style="width: 340px;">Student Name</th>
+                                            colspan="1" style="width: 20%;">Student Name</th>
                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
-                                            colspan="1" style="width: 249px;">In Teams</th>
+                                            colspan="1" style="width: 20%;">In Teams</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                            colspan="1" style="width: 15%">Last Modified Date</th>
+                                        <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                            colspan="1">Modified by</th>
                                         <th class="sorting" tabindex="0" aria-controls="dataTables-example" rowspan="1"
                                             colspan="1" style="width: 190px;">Options</th>
                                     </tr>
@@ -288,6 +292,8 @@
                                         <td>{{item[0]}}</td>
                                         <td>{{item[1]}}</td>
                                         <td>{{item[2]}}</td>
+                                        <td>{{item[3]}}</td>
+                                        <td>{{item[4]}}</td>
                                         <td><a class="btn btn-primary" data-toggle="modal" data-target="#editUserDialogBox"
                                                 data-id="{{item[0]}}" data-student="{{item[1]}}" style="margin: 0px 10px 0px 0px;">Edit</a><a
                                                 class="btn btn-danger" data-toggle="modal" data-target="#deleteUserDialogBox"
