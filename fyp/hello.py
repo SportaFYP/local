@@ -273,14 +273,16 @@ def create_match_page():
         cur = conn.cursor()
         cur.execute('SELECT teamId FROM team')
         teamListResult = cur.fetchall()
-        cur1 = conn.cursor()
-        cur1.execute('SELECT * FROM teamstudent')
-        playerListResult = cur1.fetchall()
+        # cur1 = conn.cursor()
+        # cur1.execute('SELECT student.studentName, teamstudent.teamId FROM student INNER JOIN teamstudent ON student.studentID = teamstudent.studentID')
+        # playerListResult = cur1.fetchall()
         #print playerListResult
         cur2 = conn.cursor()
         cur2.execute('SELECT * FROM tags WHERE TagId IS NOT NULL')
         tagList = cur2.fetchall()
         # print tagList
+        cur.close()
+        cur2.close()
         return render_template('create-match.html', **locals())
     else:
         return redirect('/')
@@ -290,10 +292,11 @@ def create_match_select(team):
     cur2 = conn.cursor()
     teamName = team
     #print "teamname in create match: "+teamName
-    query = 'SELECT studentName FROM teamstudent WHERE teamId = %s'
+    query = 'SELECT student.studentName FROM student INNER JOIN teamstudent ON student.studentID = teamstudent.studentID WHERE teamstudent.teamId = %s'
     cur2.execute(query, [teamName])
     playerNames = cur2.fetchall()
     #print playerNames
+    cur2.close()
     return jsonify(playerNames)
 
 @app.route("/createStudent/uploadStuds", methods = ['GET', 'POST'])
@@ -316,6 +319,26 @@ def upload_students():
             return redirect(url_for('uploaded_csv',
                                             filename=filename))
 
+@app.route("/createStudent/uploadBallers", methods = ['GET', 'POST'])
+def upload_ballers():
+    if request.method == 'POST':
+        if 'ballList' not in request.files:
+            setStudentStatus(1, "No file selected. Please select a .csv file to upload.")
+            return redirect('/students')
+        file = request.files['ballList']
+        #if studFile.filename == '':
+        #    flash('No selected file')
+        #    return redirect('/students')
+        if not allowed_csv(file.filename):
+            setStudentStatus(1, "File selected is not a .csv file. Please select a .csv file to upload.")
+            return redirect('/students')
+        if file and allowed_csv(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(CSV_FOLDER, filename))
+            # flash('New student list has been uploaded')
+            return redirect(url_for('uploadedballer_csv',
+                                            filename=filename))
+
 
 
 def allowed_csv(filename):
@@ -326,7 +349,7 @@ def allowed_csv(filename):
 def uploaded_csv(filename):  
     CSV_LOCATION = CSV_FOLDER + filename
     sqlDrop = 'DROP TABLE IF EXISTS student'
-    sqlCreate = '''CREATE TABLE student (studentID varchar(20) NOT NULL PRIMARY KEY, studentName varchar(50) NOT NULL, class varchar(20) NOT NULL, uploadedBy varchar(50) NOT NULL, uploadDTG DATETIME NOT NULL)'''
+    sqlCreate = '''CREATE TABLE student (studentID varchar(20) NOT NULL PRIMARY KEY, studentName varchar(50) NOT NULL, uploadedDTG DATETIME NOT NULL, uploadedBy varchar(50) NOT NULL)'''
     cur = conn.cursor()
     cur.execute(sqlDrop)
     cur.close()
@@ -334,29 +357,74 @@ def uploaded_csv(filename):
     cur.execute(sqlCreate)
     cur.close()
     sqlDropTeam = 'DROP TABLE IF EXISTS teamstudent'
-    sqlCreateTeam = '''CREATE TABLE teamstudent (teamId varchar(20) NOT NULL, studentName varchar(50) NOT NULL, studentID varchar(20) NOT NULL, PRIMARY KEY (studentID, studentName, teamId))'''
+    sqlCreateTeam = '''CREATE TABLE teamstudent (teamId varchar(20) NOT NULL, studentID varchar(20) NOT NULL, PRIMARY KEY (studentID, teamId))'''
     cur = conn.cursor()
     cur.execute(sqlDropTeam)
     cur.close()
     cur = conn.cursor()
     cur.execute(sqlCreateTeam)
     cur.close()
+    sqlDropTeamsTable = 'DROP TABLE IF EXISTS team'
+    sqlCreateTeamsTable = '''CREATE TABLE team (teamId varchar(20) NOT NULL PRIMARY KEY, createdDTG DATETIME NOT NULL, createdBy varchar(50) NOT NULL)'''
+    cur = conn.cursor()
+    cur.execute(sqlDropTeamsTable)
+    cur.close()
+    cur = conn.cursor()
+    cur.execute(sqlCreateTeamsTable)
+    cur.close()
+    # sqlDropTeamTable = 'DROP TABLE IF EXISTS team'
     with open(CSV_LOCATION) as newStudList:
         updatedStuds = csv.reader(newStudList, delimiter=',')
         lineNum = 0
+        teamsInTable = ['Basketball']
         for row in updatedStuds:
-            if lineNum == 0:
-                print row
+            if lineNum <= 9:
+                # print row
                 lineNum += 1
             else:
-                sqlPushStudents = "INSERT INTO student(studentID, studentName, class, uploadedBY, uploadDTG) VALUES (%s, %s, %s, %s, %s)"
+                sqlPushStudents = "INSERT INTO student(studentID, studentName, uploadedDTG, uploadedBy) VALUES (%s, %s, %s, %s)"
                 cur1 = conn.cursor()
-                cur1.executemany(sqlPushStudents,[(row[0], row[1], row[2], session['username'], datetime.datetime.now())]) # studentID, studentName, class columns in csv file
-                sqlPushTeam = "INSERT INTO teamstudent(teamId, studentName, studentID) VALUES (%s, %s, %s)"
+                cur1.executemany(sqlPushStudents,[(row[5], row[6], datetime.datetime.now(), session['username'])]) # studentID, studentName columns in csv file
+                sqlPushTeam = "INSERT INTO teamstudent(teamId, studentID) VALUES (%s, %s)"
                 cur2 = conn.cursor()
-                cur2.executemany(sqlPushTeam,[(row[2], row[1], row[0])]) # class, studentName, studentID columns in csv file
+                cur2.executemany(sqlPushTeam,[(row[1], row[5])]) # class, studentID columns in csv file
                 conn.commit()
+                if row[1] not in teamsInTable:
+                    teamsInTable.append(row[1])
+                print(teamsInTable[0])
+        for teams in teamsInTable:
+            print(teams)
+            sqlPushTeamTable = "INSERT INTO team(teamId, createdDTG, createdBy) VALUES (%s, %s, %s)"
+            cur3 = conn.cursor()
+            cur3.executemany(sqlPushTeamTable,[(teams, datetime.datetime.now(), session['username'])])
+            conn.commit()
     setStudentStatus(0, "New student list has been uploaded")
+    cur1.close()
+    cur2.close()
+    cur3.close()
+    return redirect("/students")
+
+@app.route("/ballers/<filename>")
+def uploadedballer_csv(filename):
+    CSV_LOCATION = CSV_FOLDER + filename
+    sqlDeleteBB = "DELETE FROM teamstudent WHERE teamId = 'Basketball'"
+    cur1 = conn.cursor()
+    cur1.execute(sqlDeleteBB)
+    with open(CSV_LOCATION) as newBallerList:
+        updatedStuds = csv.reader(newBallerList, delimiter=',')
+        lineNum = 0
+        for row in updatedStuds:
+            if lineNum == 0:
+                # print row
+                lineNum += 1
+            else:
+                sqlPushTeam = "INSERT INTO teamstudent(teamId, studentID) VALUES (%s, %s)"
+                cur2 = conn.cursor()
+                cur2.executemany(sqlPushTeam,[(row[1], row[5])]) # class, studentID columns in csv file
+                conn.commit()
+    setStudentStatus(0, "New basketball team list has been uploaded")
+    cur1.close()
+    cur2.close()
     return redirect("/students")
  
 

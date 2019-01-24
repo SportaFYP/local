@@ -200,13 +200,29 @@
             <div class="col-lg-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        Upload student list
+                        Upload new students list
                     </div>
                     <div class="panel-body">
                         <div class="col-lg-6">
                             <form action="/createStudent/uploadStuds" method="POST" enctype="multipart/form-data">
                                 <label for="studList">Upload only CSV files</label>
                                 <input type="file" id="studList" name="studList" accept=".csv">
+                                <br>
+                                <input type="submit" value="Upload List" class="btn btn-primary btn-large btn-block"
+                                    style="width: 171px;">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        Upload new basketball team list
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-lg-6">
+                            <form action="/createStudent/uploadBallers" method="POST" enctype="multipart/form-data">
+                                <label for="ballList">Upload only CSV files</label>
+                                <input type="file" id="ballList" name="ballList" accept=".csv">
                                 <br>
                                 <input type="submit" value="Upload List" class="btn btn-primary btn-large btn-block"
                                     style="width: 171px;">
