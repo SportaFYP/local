@@ -81,14 +81,16 @@ function setup() {
     }
   }
 
-  for (var k = 0; k < particles.length; k++) {
-
-    row = "<td>" + particles[k].playerNumber + " - " + particles[k].name + "</td>"
-    $('.particleRow:nth-child(' + (Math.floor(k / 7) + 1) + ')').append(row)
-
-    if ((k % 6) == 0 && k != 0) {
-      $('#particleList').append('<tr class="overlayRow"></tr>')
+  for (var i = 0; i < 14; i++) {
+    for (var j = 0; j < tagDS.length; j++) {
+      if ((i + 1) == tagDS[j][6]) {
+        $('#player' + (i + 1)).append(tagDS[j][5])
+        break
+      }
     }
+  }
+
+  for (var k = 0; k < particles.length; k++) {
 
     if (particles[k].playerNumber >= 0 && particles[k].playerNumber < 8) {
       distanceDataPoints.push({ label: particles[k].playerNumber + " - " + particles[k].name, y: (particles[k].getTotalDistanceWalked() / 1000), color: "#0000ff" })

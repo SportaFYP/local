@@ -111,12 +111,8 @@
         }
 
         #video-controls {
-	        bottom: 0;
-	        left: 0;
-	        right: 0;
-	        padding: 5px;
-            height: 40px;
-            position: fixed;
+            padding: 5px;
+            display: flex;
 	        background-image: linear-gradient(bottom, rgb(3,113,168) 13%, rgb(0,136,204) 100%);
 	        background-image: -o-linear-gradient(bottom, rgb(3,113,168) 13%, rgb(0,136,204) 100%);
 	        background-image: -moz-linear-gradient(bottom, rgb(3,113,168) 13%, rgb(0,136,204) 100%);
@@ -169,6 +165,43 @@
             opacity: 0.3;
             shape-rendering: crispEdges;
         }
+
+        #team1-table, #team2-table {
+            color: #ffffff;
+            margin: 0;
+        }
+
+        #team1-table thead tr{
+            background: #000099;
+        }
+
+        #team1-table tbody tr:nth-of-type(even){
+            background: #0000ff;
+        }
+
+        #team1-table tbody tr:nth-of-type(odd){
+            background: #0000cc;
+        }
+
+        #team1-table tbody tr td{
+            width: 50%
+        }
+
+        #team2-table thead tr{
+            background: #331a00;
+        }
+
+        #team2-table tbody tr:nth-of-type(even){
+            background: #663300;
+        }
+
+        #team2-table tbody tr:nth-of-type(odd){
+            background: #4d2600;
+        }
+
+        #team2-table tbody tr td{
+            width: 50%
+        }
         </style>
 </head>
 
@@ -193,59 +226,151 @@
                             <video id="video">
                                 <source id="mp4_src" src="{{ url_for('static', filename = data1.video) }}" type="video/webm">
                             </video>
-                        </div>
-                        <!-- Video Controls -->
-
-                        <source id="results" src="results">
-                        <div id="sketch-holder" style="float: right; width: 50%;">
-                        </div>
-                        <div id="particle-table" class="table table-striped table-bordered table-hover dataTable no-footer dtr-inline"
-                            style="float: right; width: 50%; margin:0;">
-                            <table style="width: 100%; height: 100%;">
-                                <thead>
-                                    <tr role="row">
-                                        <th tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="7"
-                                            aria-sort="ascending" style="width: 100%;">Players:</th>
+                            <!-- Video Controls -->
+                            <div id="video-controls">
+                                <table style="width: 100%">
+                                    <tr>
+                                        <td style="width: 92%">
+                                            <table style="width: 100%">
+                                                <tr>
+                                                    <td>
+                                                        <table style="width: 100%;">
+                                                            <tr>
+                                                                <td style="width: 50px;"><button type="button" id="play-pause"><i
+                                                                            class="fa fa-play fa-fw"></i></button></td>
+                                                                <td style="width: 66%;"><input type="range" id="seek-bar"
+                                                                        value="0"></td>
+                                                                <td style="text-align: center; width: 55px;"><button
+                                                                        type="button" id="mute"><i class="fa fa-volume-up fa-fw"></i></button></td>
+                                                                <td style="width: 145px;"><input type="range" id="volume-bar"
+                                                                        min="0" max="1" step="0.1" value="1"></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <table style="width: 100%;">
+                                                            <tr>
+                                                                <td style="text-align: center; width: 95px; color: #ffffff">Tail
+                                                                    duration: </td>
+                                                                <td style="width: 82%;" colspan="2"><input type="range"
+                                                                        min="0.1" max="5.0" value="5.0" step="0.1"
+                                                                        style="float: left" id="tailDuration">
+                                                                </td>
+                                                                <td>
+                                                                    <input type="number" min="0.1" max="5.0" value="5.0"
+                                                                        step="0.1" style="width: 45px; float: right" id="tailDurationNum">
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td>
+                                            <button type="button" id="full-screen" style="width: 65px; height: 47px;">Full-Screen</button>
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody id="particleList">
-                                    <tr class="particleRow"></tr>
-                                </tbody>
-                            </table>
+                                </table>
+                            </div>
                         </div>
-                        <label for="tailDuration">Tail duration: </label>
-                        <input type="number" min="0.1" max="5.0" value="5.0" step="0.1" style="width: 45px; float: right"
-                            id="tailDurationNum">
-                        <input type="range" min="0.1" max="5.0" value="5.0" step="0.1" style="width: 10%; float: right; right: 10px; position: relative;"
-                            id="tailDuration"><br>
-                        <div id="overlay-table" class="table table-striped table-bordered table-hover dataTable no-footer dtr-inline"
-                            style="float: right; width: 50%; margin:0;">
-                            <table style="width: 100%; height: 100%;">
-                                <thead>
-                                    <tr role="row">
-                                        <th tabindex="0" aria-controls="dataTables-example" rowspan="1" colspan="5"
-                                            aria-sort="ascending" style="width: 100%;">Overlay:</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="overlayList">
-                                    <tr class="overlayRow"></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="video-controls">
-                            <table style="width: 100%; height: 100%;">
-                                <tr>
-                                    <td style="width: 50px;"><button type="button" id="play-pause"><i class="fa fa-play fa-fw"></i></button></td>
-                                    <td><input type="range" id="seek-bar" value="0"></td>
-                                    <td style="text-align: center; width: 55px;"><button type="button" id="mute"><i
-                                                class="fa fa-volume-up fa-fw"></i></button></td>
-                                    <td style="width: 145px;"><input type="range" id="volume-bar" min="0" max="1" step="0.1"
-                                            value="1"></td>
-                                    <td style="text-align: end; width: 90px;"><button type="button" id="full-screen">Full-Screen</button></td>
-                                </tr>
-                            </table>
 
-
+                        <div style="float: right; width: 50%">
+                            <source id="results" src="results">
+                            <div id="sketch-holder" style="width: 100%;">
+                            </div>
+                            <div>
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#players" aria-controls="players"
+                                            role="tab" data-toggle="tab">Players</a></li>
+                                    <li role="presentation"><a href="#overlay" aria-controls="overlay" role="tab"
+                                            data-toggle="tab">Overlay</a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane fade in active" id="players">
+                                        <table style="width: 100%; height: 100%;">
+                                            <tr>
+                                                <td>
+                                                    <table class="table table-striped table-bordered table-hover no-footer dtr-inline"
+                                                        id="team1-table" role="grid" aria-describedby="dataTables-example_info">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <th rowspan="1" colspan="2" aria-sort="ascending"
+                                                                    aria-label="Rendering engine: activate to sort column descending"
+                                                                    style="width: 284px;">Team 1</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td id="player1">1) </td>
+                                                                <td id="player5">5) </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td id="player2">2) </td>
+                                                                <td id="player6">6) </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td id="player3">3) </td>
+                                                                <td id="player7">7) </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td id="player4">4) </td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td>
+                                                    <table class="table table-striped table-bordered table-hover no-footer dtr-inline"
+                                                        id="team2-table" role="grid" aria-describedby="dataTables-example_info">
+                                                        <thead>
+                                                            <tr role="row">
+                                                                <th rowspan="1" colspan="2" aria-sort="ascending" style="width: 284px;">Team
+                                                                    2</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td id="player8">8) </td>
+                                                                <td id="player12">12) </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td id="player9">9) </td>
+                                                                <td id="player13">13) </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td id="player10">10) </td>
+                                                                <td id="player14">14) </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td id="player11">11) </td>
+                                                                <td></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="overlay">
+                                        <div id="overlay-table" class="table table-striped table-bordered table-hover dataTable no-footer dtr-inline"
+                                            style="margin:0;">
+                                            <table style="width: 100%; height: 100%;">
+                                                <thead>
+                                                    <tr role="row">
+                                                        <th tabindex="0" aria-controls="dataTables-example" rowspan="1"
+                                                            colspan="5" aria-sort="ascending" style="width: 100%;">Show overlay:</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="overlayList">
+                                                    <tr class="overlayRow"></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -188,11 +188,15 @@ def viewMatch(matchID):
         
         query1=("SELECT * FROM matches WHERE MatchID=%s")
         mycursor.execute(query1,MID)
-
         matchNotes = mycursor.fetchone()
-        print ("matchNotes")
-        print (matchNotes)
-        data = {'rowss': rowss, 'matchNotes': matchNotes[0], 'matchData': matchNotes, 'matchID': matchID}
+
+        query2=("SELECT * FROM matchinfo WHERE MatchID=%s")
+        mycursor.execute(query2,MID)
+        players = mycursor.fetchall()
+
+        print ("players")
+        print (players)
+        data = {'rowss': rowss, 'matchNotes': matchNotes[0], 'matchData': matchNotes, 'matchID': matchID, 'players': players}
 
         return render_template('match.html', data=data)
     else:

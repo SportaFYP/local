@@ -18,12 +18,27 @@ class Overlay {
     }
 
     isPlayerInOverlay(x, y, width, height) {
+
+        if (this.width > 0){
+            var xorig = this.xorig
+            var x1 = this.xorig + this.width;
+        } else {
+            var xorig = this.xorig + this.width;
+            var x1 = this.xorig;
+        }
+
+        if (this.height > 0){
+            var yorig = this.yorig
+            var y1 = this.yorig + this.height;
+        } else {
+            var yorig = this.yorig + this.height;
+            var y1 = this.yorig;
+        }
+
         var calX = x / width;
         var calY = y / height;
-        var x1 = this.xorig + this.width;
-        var y1 = this.yorig + this.height;
 
-        if (this.xorig < calX && calX < x1 && this.yorig < calY && calY < y1){
+        if (xorig < calX && calX < x1 && yorig < calY && calY < y1){
             return true
         } else {
             return false
