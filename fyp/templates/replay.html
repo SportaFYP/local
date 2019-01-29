@@ -147,11 +147,11 @@
         }
 
         #court {
-            /* position: fixed; */
-            left: 0px;
-            right: 0px;
-            top: 50px;
-            bottom: 0px;
+          position: relative;
+          left: 0px;
+          right: 0px;
+          top: 50px;
+          bottom: 0px;
         }
 
         .slider rect {
@@ -380,7 +380,7 @@
                     </select>
                     <div id="distanceGraph" style="width: 50%;"></div>
                     <div id="particleTimeGraph" style="width: 50%; float: right;"></div>
-                    <div id="court" style="position: relative"></div>
+                    <div id="court"></div>
                     <select style="position: relative">
                         <option value="">Choose Player</option>
                         {% for taglist in tagslist %}
@@ -457,6 +457,8 @@
         var ThreeLine1 = court_g.append('path');
         var CenterOuter1 = court_g.append('path');
         var CenterInner1 = court_g.append('path');
+
+        
 
         draw_court();
         Heat_Map();

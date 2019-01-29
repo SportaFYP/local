@@ -21,8 +21,8 @@ function Heat_Map(){
             // var target = (year.getFullYear()).toString()+'-'+(year.getFullYear()+1).toString().substring(2, 4)
 
             // temp_data = temp_data.filter(d=>d.key==target);
-            console.log(temp_data[1].values)
-            var shot = temp_data[1].values;
+            console.log(temp_data[0].values)
+            var shot = temp_data[3].values;
 
             shot = d3.contourDensity()
                      .x(function(d) { return shot_xScale(d.coordinates_x); })

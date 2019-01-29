@@ -531,7 +531,8 @@ def disply_data():
 def update_tag():
     POST_tagNum = str(request.form['tagnum'])
     POST_tagid = str(request.form['tagid'])
-    updatetag = (POST_tagid, POST_tagNum)
+    tagDecimal = int(POST_tagid, 16)
+    updatetag = (tagDecimal, POST_tagNum)
     tag = "UPDATE tags SET TagId =%s WHERE TagNumber =%s"
     mycursor = conn.cursor()
     mycursor.execute(tag, updatetag)
@@ -542,6 +543,7 @@ def update_tag():
         conn.commit()
     except Exception as e: 
         print(e)
+    mycursor.close()
     return tagpage()
 
 @app.route('/createMatch', methods=['POST'])
@@ -711,9 +713,7 @@ def createTeam():
         session['createTeamStatus'] = 0
     return redirect('teams')
 
-@app.route('/heat')
-def heatmap():
-    return render_template('heatmap.html', **locals())
+
 
 @app.route('/deleteTeam/<team>')
 def deleteTeam(team):
@@ -830,6 +830,42 @@ def saveVideo():
     #     print("error catch = ")
     #     print(e)
     return render_template('replay.html')
+
+@app.route('/heat')
+def heatmap():
+    cur = conn.cursor()
+    matches = ("SELECT DISTINCT matchID, matchname FROM matchinfo")
+    cur.execute(matches)
+    matchList = cur.fetchall()
+    match = []
+    for y in matchList:
+        if y[0] not in match:
+            match.append(y)
+    return render_template('heatmap.html', **locals())
+
+@app.route('/heat/<matchID>')
+def getTagId(matchID):
+    cur2 = conn.cursor()
+    matchNum = matchID
+    # print(matchNum)
+    sqlTags = ("SELECT tagID, studentName FROM matchinfo WHERE matchID = %s")
+    cur2.execute(sqlTags, [matchNum])
+    tags = cur2.fetchall()
+    # print(tags)
+    cur2.close()
+    return jsonify(tags)
+
+@app.route('/heats/<matchID>')
+def getRID(matchID):
+    cur3 = conn.cursor()
+    matchNum = matchID
+    sqlRID = ("SELECT RecordingID FROM recordings WHERE Match_ID = %s")
+    cur3.execute(sqlRID, [matchNum])
+    rids = cur3.fetchall()
+    print(rids)
+    cur3.close()
+    return jsonify(rids)
+
 
 @app.route("/replay")
 def viewreplay():
