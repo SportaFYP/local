@@ -46,7 +46,7 @@ topic = "tagsLive"
 user = "admin1"
 passwd="Sportapassword12"
 db="Sportadb"
-RID=0L
+RID=0
 matchID=0
 conn = MySQLdb.connect(host,
                   user,
@@ -596,7 +596,7 @@ def createMatch():
     for players in POST_allPlayers:
         if players[2] != "" and players[3] != "" and players[4] != "":
             insertPlayer.append(players)
-    print insertPlayer
+    print(insertPlayer)
 
     curPost = conn.cursor()
     curPost.executemany(postingQuery, insertPlayer)
@@ -773,7 +773,7 @@ def stopMQTT():
     client.loop_stop()
     global RID
     # if statement
-    if RID == 0L:
+    if RID == 0:
         print("stopped")
         return recordpage()
     # update endTime in the recording
@@ -954,13 +954,13 @@ def on_message(client, userdata, msg):
 #  print '"version":', result['version']
  version = result['version']
  print("{")
- print '"tagId":', result['tagId']
+ print('"tagId":', result['tagId'])
  tagId = result['tagId']
 
 #  print '"success":', result['success']
  success = result['success']
 
- print '"timestamp":', result['timestamp']
+ print('"timestamp":', result['timestamp'])
  timestamp = result['timestamp']
 
 #  print '"magnetic_x":', result['data']['tagData']['magnetic']['x']
@@ -972,10 +972,10 @@ def on_message(client, userdata, msg):
 #  print '"magnetic_z":', result['data']['tagData']['magnetic']['z']
  magnetic_z = result['data']['tagData']['magnetic']['z']
 
- print '"coordinates_x":', result['data']['coordinates']['x']
+ print('"coordinates_x":', result['data']['coordinates']['x'])
  coordinates_x = result['data']['coordinates']['x']
 
- print '"coordinates_y":', result['data']['coordinates']['y']
+ print('"coordinates_y":', result['data']['coordinates']['y'])
  coordinates_y = result['data']['coordinates']['y']
 
  print("},")
