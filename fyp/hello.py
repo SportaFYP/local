@@ -23,6 +23,7 @@ from flask import send_from_directory
 
 UPLOAD_FOLDER1 = 'static/videos'
 CSV_FOLDER = 'static/students/'
+POINTS_FOLDER = 'static/bbCourtHeat/'
 ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif', 'webm'])
 ALLOWED_EXTENSIONS1 = set(['csv'])
 
@@ -837,8 +838,8 @@ def viewreplay():
     print("RID videos = ")
     print(my_var)
     my_var1 = session.get('my_var1', None)
-    rid2 = my_var.decode('unicode-escape')
-    mid = my_var1.decode('unicode-escape')
+    rid2 = my_var
+    mid = my_var1
     hello =("SELECT saveFile FROM recordings WHERE RecordingID = %s")
     mycursor.execute(hello, [rid2])
     results = mycursor.fetchone()
@@ -864,7 +865,9 @@ def viewreplay():
     for x in coords:
         coordsData.append(x)
     # print(coordsData)
-    coordFile = open('coords.csv', 'wb')
+    # coordFile = open('coords.csv', 'w', newline='')
+    filename = 'coords.csv'
+    coordFile = open(os.path.join(POINTS_FOLDER, filename), 'w', newline='')
     with coordFile as csvFile:
         # coordFields = ['tagId', 'timestamp', 'coordinates_x', 'coordinates_y']
         writer = csv.writer(csvFile)
@@ -877,7 +880,7 @@ def viewreplay():
     my_var2 = session.get('my_var2', None)
     print("my_var2 = ")
     print(my_var2)
-    mid2 = my_var2.decode('unicode-escape')
+    mid2 = my_var2
     print(mid2)
     matchdetail=("SELECT * FROM matches WHERE MatchID=%s")
     mycursor.execute(matchdetail, [mid2])

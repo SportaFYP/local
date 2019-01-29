@@ -165,6 +165,9 @@
                         <li>
                             <a href="/tag"><i class="fa fa-edit fa-fw"></i> Tag</a>
                         </li>
+                        <li>
+                            <a href="/heat"><i class="fa fa-edit fa-fw"></i> Heatmap</a>
+                        </li>
                         <!-- /.nav-second-level -->
                     </ul>
                 </div>
@@ -489,11 +492,27 @@
                     let playerList = playerSelect;
                     console.log(playerList);
                     let selectedList = document.getElementById(playerList);
-                    for (let i = 0; i < playerNames.length; i++) {
-                        let opts = document.createElement('option');
-                        opts.text = opts.value = playerNames[i];
-                        selectedList.add(opts, 0);
+                    if (selectedList.options.length < 2) {
+                        for (let i = 0; i < playerNames.length; i++) {
+                            let opts = document.createElement('option');
+                            opts.text = opts.value = playerNames[i];
+                            selectedList.add(opts, 0);
+                        }
                     }
+                    else {
+                        for (let a = selectedList.options.length - 1; a >= 0; a--) {
+                            selectedList.remove(a);
+                        }
+                        let opt = document.createElement('option');
+                        opt.text = "Choose Player"
+                        selectedList.add(opt, 0)
+                        for (let i = 0; i < playerNames.length; i++) {
+                            let opts = document.createElement('option');
+                            opts.text = opts.value = playerNames[i];
+                            selectedList.add(opts, 0);
+                        }
+                    }
+                    
                 }
             });
         };
