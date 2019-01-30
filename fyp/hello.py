@@ -6,7 +6,6 @@ from hashlib import md5
 from sqlalchemy.orm import sessionmaker
 import simplejson as json
 
-import paho.mqtt.client as mqtt
 import ssl
 import json
 import ctypes  # An included library with Python install.
@@ -34,16 +33,6 @@ ALLOWED_EXTENSIONS1 = set(['csv'])
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER1
-
-
-
-  
-# MQTT variables############################################
-hostMQTT = "localhost"
-portMQTT = 1883
-# topic = "tagsLive" 
-client = mqtt.Client()
-# MQTT variables END#######################################
 
 # MySQL VRIABLES############################################
 host = "172.20.129.227"
@@ -739,63 +728,6 @@ def getFont(fontfile):
     return redirect('/static/fonts/' + fontfile)
 ###### Retrive font end ###############         
 
-###### MQTT start here ###############
-def startMQTT():  
-    my_var1 = session.get('my_var1', None)
-    mid1 = my_var1.decode('unicode-escape')
-    now = datetime.datetime.now()
-    sql = '''INSERT INTO recordings (Match_ID, startTime) VALUES(%s,%s)'''
-    recordingData = ([mid1], now)
-    cur = conn.cursor()
-    cur.execute(sql, recordingData)
-            
-
-    try:
-        conn.commit()
-        
-        global RID
-        RID = cur.lastrowid
-        print("currentRecordingID after commit: " + str(RID))
-    except Exception as e: 
-        print(e)
-    print("Start recording!avc")
-    client.on_connect = on_connect
-    client.on_message = on_message
-    client.on_subscribe = on_subscribe
-    #try and catch
-    client.connect(hostMQTT, port=portMQTT)
-    client.subscribe(topic)
-    print("before client!")
-    #works blocking, other, non-blocking, clients are available too.
-    client.loop_start()
-    print("after client!")
-    return "recordpage()"
-
-###### MQTT stop here ###############
-def stopMQTT():
-    print("Stop recording")
-    client.loop_stop()
-    global RID
-    # if statement
-    if RID == 0:
-        print("stopped")
-        return recordpage()
-    # update endTime in the recording
-    # 1) where is the RID stored? in the global variable called RID
-    # 2) Take that RID, and do an update statement: update endTime = now where RecordingID = RID that was store
-    now1 = datetime.datetime.now()
-    sql = '''UPDATE recordings SET endTime = %s WHERE RecordingID = %s'''
-    print("RID before stop=")
-    print (RID)
-    recordingData = (now1, RID)
-    cur = conn.cursor()
-    cur.execute(sql, recordingData)
-    conn.commit()
-    # clear RID and now1
-    now1=None
-    # RID = 0L
-    return recordpage()
-
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -811,7 +743,7 @@ def saveVideo():
         filename = request.get_data()
             
         if filename == "exited":
-            stopMQTT()
+            print()
         else:
             print("file name from ajax: "+ request.files['file'].filename)
             file = request.files['file']
@@ -972,86 +904,6 @@ def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER1,
                                filename)
 
-def on_subscribe(client, userdata, mid, granted_qos):
-    print("Subscribed to topic!")
- #   SQL connection code here
- #   how to connect database here
-
-
-
-#To connect to MQTT queue
-def on_connect(client, userdata, flags, rc):
-    client.subscribe(topic)
-    print(mqtt.connack_string(rc))
-
-
-
-# callback triggered by a new Pozyx data packet
-def on_message(client, userdata, msg):
- print("Positioning update:", msg.payload.decode())
- #return;
- 
- result = json.loads(msg.payload)  # result is now a dict
-#  print '"version":', result['version']
- version = result['version']
- print("{")
- print('"tagId":', result['tagId'])
- tagId = result['tagId']
-
-#  print '"success":', result['success']
- success = result['success']
-
- print('"timestamp":', result['timestamp'])
- timestamp = result['timestamp']
-
-#  print '"magnetic_x":', result['data']['tagData']['magnetic']['x']
- magnetic_x = result['data']['tagData']['magnetic']['x']
-
-#  print '"magnetic_y":', result['data']['tagData']['magnetic']['y']
- magnetic_y = result['data']['tagData']['magnetic']['y']
-
-#  print '"magnetic_z":', result['data']['tagData']['magnetic']['z']
- magnetic_z = result['data']['tagData']['magnetic']['z']
-
- print('"coordinates_x":', result['data']['coordinates']['x'])
- coordinates_x = result['data']['coordinates']['x']
-
- print('"coordinates_y":', result['data']['coordinates']['y'])
- coordinates_y = result['data']['coordinates']['y']
-
- print("},")
- 
-
-#  print '"coordinates_z":', result['data']['coordinates']['z']
- coordinates_z = result['data']['coordinates']['z']
-
-#  print '"acceleration_x":', result['data']['acceleration']['x']
- acceleration_x = result['data']['acceleration']['x']
-
-#  print '"acceleration_y":', result['data']['acceleration']['y']
- acceleration_y = result['data']['acceleration']['y']
-
-#  print '"acceleration_z":', result['data']['acceleration']['z']
- acceleration_z = result['data']['acceleration']['z']
-
-#  print '"yaw":', result['data']['orientation']['yaw']
- yaw = result['data']['orientation']['yaw']
-
-#  print '"roll":', result['data']['orientation']['roll']
- roll = result['data']['orientation']['roll']
-
-#  print '"pitch":', result['data']['orientation']['pitch']
- pitch = result['data']['orientation']['pitch']
- print("before point data creating")
-#  create the point in database
-
- print("before point data creating - RID:"+str(RID))
- point = (version, tagId, RID, success, timestamp, magnetic_x, magnetic_y, magnetic_z, coordinates_x, coordinates_y, coordinates_z, acceleration_x, acceleration_y, acceleration_z, yaw, roll, pitch)
- print("After point data creating")
- create_point(point)
-
- return
- 
 def create_point(point):
     """
     Create a new point
