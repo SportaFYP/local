@@ -69,6 +69,7 @@
     <script type="text/javascript" src="/static/bbCourtHeat/Slider.js"></script>
     <script type="text/javascript" src="/static/bbCourtHeat/Table.js"></script>
     <script type="text/javascript" src="/static/bbCourtHeat/Shot.js"></script>
+    
 
     <style>
         #loader {
@@ -206,6 +207,19 @@
 </head>
 
 <body>
+        <!-- <script type="text/javascript" language="javascript">
+            var versionUpdate = (new Date()).getTime();
+            var script = document.createElement("script");
+            script.type = "text/javascript";
+            script.src="/static/bbCourtHeat/HeatMap.js?v=" + versionUpdate;
+            var scripts = document.getElementsByTagName("script"); 
+            for (let n = 0; n < scripts.length; n++) {
+                if (scripts[n].src == "http://localhost:8000/static/bbCourtHeat/HeatMap.js") {
+                    document.head.replaceChild(script, scripts[n]);
+                }
+            }
+            Heat_Map();
+        </script> -->
     <div id="loader"></div>
     <div id="wrapper">
         <div>
@@ -462,6 +476,10 @@
 
         draw_court();
         Heat_Map();
+
+        function toggelPlayers(playername) {
+            
+        }
         // add_shot();
         // Slider();
         // window.addEventListener('resize', draw_court);

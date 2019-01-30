@@ -888,29 +888,7 @@ def viewreplay():
     print("result video =")
     print(video)
 
-    coord =("SELECT tagId,timestamp,coordinates_x,coordinates_y FROM projects WHERE RecordingID = %s")
-    mycursor.execute(coord, [rid2])
-    coords = mycursor.fetchall()
-    # print(coords[0])
-    tagslist = []
-    for y in coords:
-        if y[0] not in tagslist:
-            tagslist.append(y[0])
-    print(tagslist)
-    coordsData = [['tagId', 'timestamp', 'coordinates_x', 'coordinates_y']]
-    for x in coords:
-        coordsData.append(x)
-    # print(coordsData)
-    # coordFile = open('coords.csv', 'w', newline='')
-    filename = 'coords.csv'
-    coordFile = open(os.path.join(POINTS_FOLDER, filename), 'w', newline='')
-    with coordFile as csvFile:
-        # coordFields = ['tagId', 'timestamp', 'coordinates_x', 'coordinates_y']
-        writer = csv.writer(csvFile)
-        # writer.writeheader()
-        writer.writerows(coordsData)
     
-    csvFile.close()
 
 
     my_var2 = session.get('my_var2', None)
@@ -928,6 +906,27 @@ def viewreplay():
     matchdetails=("SELECT * FROM matchinfo WHERE MatchID=%s")
     mycursor.execute(matchdetails, [mid2])
     tagDetails = mycursor.fetchall()
+
+
+    coord =("SELECT tagId,timestamp,coordinates_x,coordinates_y FROM projects WHERE RecordingID = %s")
+    mycursor.execute(coord, [rid2])
+    coords = mycursor.fetchall()
+    tagslist = []
+    for y in coords:
+        if y[0] not in tagslist:
+            tagslist.append(y[0])
+    print(tagslist)
+    coordsData = [['tagId', 'timestamp', 'coordinates_x', 'coordinates_y']]
+    for x in coords:
+        coordsData.append(x)
+    filename = 'coords.csv'
+    coordFile = open(os.path.join(POINTS_FOLDER, filename), 'w', newline='')
+    with coordFile as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(coordsData)
+    
+    csvFile.close()
+
 
     overlaySql = ("SELECT overlayData FROM overlay where matchID = %s")
     mycursor.execute(overlaySql, [mid2])

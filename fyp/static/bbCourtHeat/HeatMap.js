@@ -12,7 +12,7 @@ function Heat_Map(){
                .nice();
 
 
-    d3.csv('\\static\\bbCourtHeat\\coords.csv', data => {
+    d3.csv('\\static\\bbCourtHeat\\coords.csv?_=' + Math.random(), data => {
             //filtering the unreasonable shot
             var data = data//.filter(d=>d.loc_y < 400)
             var temp_data = d3.nest()
@@ -21,9 +21,10 @@ function Heat_Map(){
             // var target = (year.getFullYear()).toString()+'-'+(year.getFullYear()+1).toString().substring(2, 4)
 
             // temp_data = temp_data.filter(d=>d.key==target);
+            console.log("temp_data[0].values: ")
             console.log(temp_data[0].values)
             var shot = temp_data[3].values;
-
+            var a;
             shot = d3.contourDensity()
                      .x(function(d) { return shot_xScale(d.coordinates_x); })
                      .y(function(d) { return shot_yScale(d.coordinates_y); })
