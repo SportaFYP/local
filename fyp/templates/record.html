@@ -113,12 +113,16 @@ var start = false;
           $('a#btn-start-recording').bind('click', function() {
               if(start ==false)
               { 
-                start = true;
-                console.log("started recording: "+ start)
                 $.getJSON('/start',
                 function(data) {
-              //do nothing
-            });
+                    if (data.success) {
+                        start = true;
+                        console.log("started recording: "+ start)
+                        recording();
+                    } else if (data.errorType == "NO_POZYX_CONNECTED") {
+                        alert("The master tag is not detected. Please check to see if the master tag is connected before trying again")
+                    }
+                });
               }
               else if (start ==true){
                 start = false;
@@ -126,7 +130,7 @@ var start = false;
                 console.log("stopped recording: "+ start)
                 $.getJSON('/stop',
                 function(data) {
-              //do nothing
+                    recording()
             });
               }
                 
@@ -166,7 +170,6 @@ var start = false;
             processData: false,
             contentType: false
             }).done(function(data) {
-            console.log(data);
             });
 
 
@@ -517,10 +520,6 @@ var start = false;
                 mediaContainerFormat.disabled = false;
                 console.log("hi! before goodbye la")
                 return "abc";
-            };
-
-            btnStartRecording.onclick = function(event) {
-                recording();
             };
 
             function recording(){

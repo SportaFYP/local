@@ -953,6 +953,9 @@ isRecording = False
 ###### Start recording here ###############
 @app.route("/start")
 def startRecording():
+    if get_first_pozyx_serial_port() is None:
+        return json.dumps({'success':False, 'errorType':'NO_POZYX_CONNECTED'}), 200, {'ContentType':'application/json'}
+
     my_var1 = session.get('my_var1', None)
     mid1 = my_var1
     now = datetime.datetime.now()
@@ -975,7 +978,7 @@ def startRecording():
     pozyxThread = PozyxThread()
     pozyxThread.start()
     
-    return "recordpage()"
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
 ###### Stop recording here ###############
 @app.route("/stop")
@@ -1002,7 +1005,7 @@ def stopRecording():
     # clear RID and now1
     now1 = None
     # RID = 0L
-    return recordpage()
+    return json.dumps({'success':True}), 200, {'ContentType':'application/json'} 
 
 class PozyxThread(Thread):
     def __init__(self):
