@@ -874,14 +874,16 @@ def viewreplay():
 @app.route('/overlay/<matchID>')
 def overlay_page(matchID):
     sql = ("SELECT overlayData FROM overlay where matchID = %s")
+    sql2 = ("SELECT courtsize FROM matches WHERE MatchID = %s")
 
     cur = conn.cursor()
     cur.execute(sql, [matchID])
     overlays = cur.fetchall()
+    cur.execute(sql2, [matchID])
+    isHalfCourt = cur.fetchall()
 
     overlays = str(overlays[0][0])
-
-    print(overlays)
+    isHalfCourt = str(isHalfCourt[0][0])
 
     return render_template('overlay.html', **locals())
 

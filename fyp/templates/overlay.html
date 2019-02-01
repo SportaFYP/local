@@ -19,9 +19,21 @@
         var canvasWidth, canvasHeight;
         var isDrawing = false;
 
+        var isHalfCourt = false;
+        if ("{{isHalfCourt}}" == "Half court") {
+            isHalfCourt = true;
+        }
+
         function setup() {
-            var canvas = createCanvas($('#bballcourt').width(), ($('#bballcourt').width() / 16 * 9));
-            bg = loadImage("/static/points/bbcourt.png");
+
+            if (isHalfCourt) {
+                var canvas = createCanvas(($('#bballcourt').width() / 2), ($('#bballcourt').width() / 16 * 9));
+                bg = loadImage("/static/points/bbcourt-half.png");
+            } else {
+                var canvas = createCanvas($('#bballcourt').width(), ($('#bballcourt').width() / 16 * 9));
+                bg = loadImage("/static/points/bbcourt.png");
+            }
+
             canvas.parent('bballcourt');
 
             for (var i = 0; i < overlayJSON.length; i++) {
@@ -206,8 +218,13 @@
     <!-- Resize the basketball canvas when the browser is resized -->
     <script>
         $(window).resize(function () {
-            $('#defaultCanvas0').width($('#bballcourt').width())
-            $('#defaultCanvas0').height($('#bballcourt').width() / 16 * 9)
+            if (isHalfCourt) {
+                $('#defaultCanvas0').width($('#bballcourt').width() / 2)
+                $('#defaultCanvas0').height($('#bballcourt').width() / 16 * 9)
+            } else {
+                $('#defaultCanvas0').width($('#bballcourt').width())
+                $('#defaultCanvas0').height($('#bballcourt').width() / 16 * 9)
+            }
         })
 
         $(window).on("load", function () {

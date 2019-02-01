@@ -22,7 +22,6 @@ function Particle(deviceID, name, playerNumber, teamId) {
 	this.update = function (lerpXY, currentMS) {
 		//randomised movement
 		this.lerpPoint = createVector(lerpXY.x, lerpXY.y);
-		console.log(this.playerNumber + ", " + this.lerpPoint)
 		//var v = createVector(this.lerpPoint.x,this.lerpPoint.y);
 		this.history.push(new TimeCoord(this.lerpPoint, currentMS));
 		if ((currentMS - this.history[0].currentMS) > 5000) {

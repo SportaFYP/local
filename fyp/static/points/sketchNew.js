@@ -24,8 +24,15 @@ var pozyxHeight = 6000;
 
 function setup() {
   // createCanvas(400, 400);
-  var canvas = createCanvas($('#sketch-holder').width(), ($('#sketch-holder').width() / 16 * 9));
-  bg = loadImage("static/points/bbcourt.png");
+
+  if (isHalfCourt) {
+    var canvas = createCanvas(($('#sketch-holder').width() / 2), ($('#sketch-holder').width() / 16 * 9));
+    bg = loadImage("/static/points/bbcourt-half.png");
+    pozyxWidth = pozyxWidth / 2
+  } else {
+    var canvas = createCanvas($('#sketch-holder').width(), ($('#sketch-holder').width() / 16 * 9));
+    bg = loadImage("/static/points/bbcourt.png");
+  }  
   canvas.parent('sketch-holder')
   prepareData();
   //creates tags
