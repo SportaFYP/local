@@ -19,8 +19,8 @@ var distanceDataPoints = [];
 var overlayTimeGraphs = [];
 var playerTimeInOverlayGraphs = [];
 var canvasWidth, canvasHeight;
-var pozyxWidth = 7770;
-var pozyxHeight = 6000;
+var pozyxWidth = 15540;
+var pozyxHeight = 5760;
 
 function setup() {
   // createCanvas(400, 400);
@@ -112,7 +112,7 @@ function setup() {
     for (var l = 0; l < overlays.length; l++) {
       counter = 0;
       for (var m = 0; m < totalMS; m++) {
-        if (overlays[l].isPlayerInOverlay(particles[k].interpolateFunctionX._f(m), particles[k].interpolateFunctionY._f(m), pozyxWidth, pozyxHeight)) {
+        if (overlays[l].isPlayerInOverlay(particles[k].interpolateFunctionX._f(m), (pozyxHeight - particles[k].interpolateFunctionY._f(m)), pozyxWidth, pozyxHeight)) {
           counter++;
         }
       }
@@ -273,6 +273,7 @@ function update() {
     // console.log("xPoint: "+ xPoint);
     var yPoint = particles[a].interpolateFunctionY._f(currentMS);
     //console.log("xPoint: "+ yPoint);
+    console.log("player number: " + particles[a].playerNumber + " xPoint: "+ xPoint + " yPoint: "+ yPoint);
     var lerpPoint = createVector(xPoint, yPoint);
     if (currentMS <= totalMS || startPlay == false) {
       if (!(xPoint == 0 && yPoint == 0)) {

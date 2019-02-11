@@ -935,14 +935,12 @@ tag_ids = [0x697d, 0x6946, 0x6973, 0x6969, 0x6960, 0x6e65]
 
 # necessary data for calibration
 anchors = [DeviceCoordinates(0x6932, 1, Coordinates(0, 0, 0)),
-            DeviceCoordinates(0x676d, 1, Coordinates(3850, 0, 0)),
             DeviceCoordinates(0x6e58, 1, Coordinates(7700, 0, 0)),
             DeviceCoordinates(0x6e10, 1, Coordinates(0, 5440, 0)),
-            DeviceCoordinates(0x6738, 1, Coordinates(3850, 5440, 0)),
             DeviceCoordinates(0x6e59, 1, Coordinates(7700, 5760, 0))]
 
 # positioning algorithm to use, other is PozyxConstants.POSITIONING_ALGORITHM_TRACKING
-algorithm = PozyxConstants.POSITIONING_ALGORITHM_UWB_ONLY
+algorithm = PozyxConstants.POSITIONING_ALGORITHM_TRACKING
 # positioning dimension. Others are PozyxConstants.DIMENSION_2D, PozyxConstants.DIMENSION_2_5D
 dimension = PozyxConstants.DIMENSION_3D
 # height of device, required in 2.5D positioning
@@ -1072,8 +1070,8 @@ class PozyxControl(object):
                 position, self.dimension, self.height, self.algorithm, remote_id=tag_id)
             if status == POZYX_SUCCESS:
                 self.printPublishPosition(position, tag_id)
-            else:
-                self.printPublishErrorCode("positioning", tag_id)
+            #else:
+                #self.printPublishErrorCode("positioning", tag_id)
 
     def printPublishPosition(self, position, network_id):
         """Prints the Pozyx's position and possibly sends it as a OSC packet"""
@@ -1081,10 +1079,10 @@ class PozyxControl(object):
             network_id = 0
         # s = "POS ID: {}, x(mm): {}, y(mm): {}, z(mm): {}".format("0x%0.4x" % network_id,
         #                                                         position.x, position.y, position.z)
-        if position.x is not 0:
-            self.x = position.x
-        if position.y is not 0:
-            self.y = position.y
+        #if position.x is not 0:
+        #    self.x = position.x
+        #if position.y is not 0:
+        #    self.y = position.y
         #point = (tagId, RID, timestamp, coordinates_x, coordinates_y)
         point = (network_id, self.RID, time.time(), position.x, position.y)
         print(point)
