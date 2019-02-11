@@ -547,13 +547,14 @@ def createMatch():
     POST_matchdate = str(request.form['matchdate'])
     POST_administrator = session['username']
     POST_matchnotes = str(request.form['matchnotes'])
+    POST_courtsize = str(request.form['courtsize'])
     
     # create match data# 
-    matchData = (POST_matchname, POST_matchdate, POST_administrator, POST_matchnotes)
+    matchData = (POST_matchname, POST_matchdate, POST_administrator, POST_matchnotes, POST_courtsize)
 
     #SQL statement
-    sql = ''' INSERT INTO matches(matchname, matchdate, administrator, matchnotes)
-              VALUES(%s,%s,%s,%s) '''
+    sql = ''' INSERT INTO matches(matchname, matchdate, administrator, matchnotes, courtsize)
+              VALUES(%s,%s,%s,%s,%s) '''
               
     cur = conn.cursor()
     cur.execute(sql, matchData)
