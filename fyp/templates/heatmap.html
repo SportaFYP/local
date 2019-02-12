@@ -172,7 +172,7 @@
   <div id="page-wrapper">
       <div class="col-lg-12">
           <br>
-          <select class="team" name="selMatch" id="selMatch" onchange="tagListSel(this.value, 'selTag', 'selRID')">
+          <!-- <select class="team" name="selMatch" id="selMatch" onchange="tagListSel(this.value, 'selTag', 'selRID')">
               <option value="">Choose Match</option>
                   {% for matches in match %}
                       <option value="{{matches[0]}}">{{matches[1]}}</option>
@@ -184,7 +184,10 @@
           <br><br>
           <select class="team" name="selTag" id="selTag">
               <option value="">Choose Player</option>
-          </select>
+          </select> -->
+          <div>
+              
+          </div>
           <div id='court'></div>
       </div>
   </div>
@@ -206,6 +209,8 @@
         <!-- Custom Theme JavaScript -->
         <script src="{{ url_for('static', filename = 'sb-admin-2.js') }}"></script>
     <script>
+        var selected = {{playS | tojson}}
+        console.log(selected)
         const margin = { left: 20, right: 20, top: 20, bottom: 20 };
         var chartDiv = document.getElementById('court');
         var court = d3.select(chartDiv).append('court').append('svg');
@@ -268,7 +273,7 @@
         var CenterInner1 = court_g.append('path');
 
         draw_court();
-        Heat_Map("Trial");
+        Heat_Map(selected);
         // add_shot();
         // Slider();
         // window.addEventListener('resize', draw_court);
