@@ -769,14 +769,20 @@ def saveVideo():
 
 @app.route('/heat')
 def heatmap():
-    cur = conn.cursor()
-    matches = ("SELECT DISTINCT matchID, matchname FROM matchinfo")
-    cur.execute(matches)
-    matchList = cur.fetchall()
-    match = []
-    for y in matchList:
-        if y[0] not in match:
-            match.append(y)
+    # cur = conn.cursor()
+    # matches = ("SELECT DISTINCT matchID, matchname FROM matchinfo")
+    # cur.execute(matches)
+    # matchList = cur.fetchall()
+    # match = []
+    # for y in matchList:
+    #     if y[0] not in match:
+    #         match.append(y)
+    mID = session.get('my_var1', None)
+    print("Match ID = ")
+    print(mID)
+    recordID = session.get('my_var', None)
+    print("Recording ID = ")
+    print(recordID)
     return render_template('heatmap.html', **locals())
 
 @app.route('/heat/<matchID>')
@@ -848,18 +854,33 @@ def viewreplay():
     mycursor.execute(coord, [rid2])
     coords = mycursor.fetchall()
     tagslist = []
+    playerlist =[]
     for y in coords:
         if y[0] not in tagslist:
             tagslist.append(y[0])
-    print(tagslist)
-    coordsData = [['tagId', 'timestamp', 'coordinates_x', 'coordinates_y']]
-    for x in coords:
-        coordsData.append(x)
+    
+    dataSet = [['courtsize', 'studentName', 'tagId', 'timestamp', 'coordinates_x', 'coordinates_y']]
+    sqlCoords = '''SELECT a.courtsize, b.studentName, d.tagId, d.timestamp, d.coordinates_x, d.coordinates_y FROM matches a INNER JOIN matchinfo b ON a.MatchID = b.matchID INNER JOIN recordings c ON b.matchID = c.Match_ID INNER JOIN projects d ON c.RecordingID = d.RecordingID WHERE c.RecordingID = %s AND a.MatchID = %s AND b.matchID = %s AND b.tagID = %s AND d.tagID = %s'''
+    
+    cur9 = conn.cursor()
+    for j in tagslist:
+        k = str(j)
+        matchData = ([rid2], [mid2], [mid2], k, k)
+        cur9.execute(sqlCoords, matchData)
+        coorData = cur9.fetchall()
+        for p in coorData:
+            dataSet.append(p)
+
+    for c in dataSet:
+        if c[1] != "studentName" and c[1] not in playerlist:
+            playerlist.append(c[1])
+    print(playerlist)
+    
     filename = 'coords.csv'
     coordFile = open(os.path.join(POINTS_FOLDER, filename), 'w', newline='')
     with coordFile as csvFile:
         writer = csv.writer(csvFile)
-        writer.writerows(coordsData)
+        writer.writerows(dataSet)
     
     csvFile.close()
 

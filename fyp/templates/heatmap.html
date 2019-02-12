@@ -160,9 +160,6 @@
                       <li>
                           <a href="/tag"><i class="fa fa-edit fa-fw"></i> Tag</a>
                       </li>
-                      <li>
-                          <a href="/heat"><i class="fa fa-edit fa-fw"></i> Heatmap</a>
-                      </li>
                       <!-- /.nav-second-level -->
                   </ul>
               </div>
@@ -234,9 +231,9 @@
         const court_yScale = d3.scaleLinear()
                                      .domain([-4,43]);
         const shot_xScale = d3.scaleLinear()
-                                     .domain([0, 5440]);
-        const shot_yScale = d3.scaleLinear()
                                      .domain([0, 7770]);
+        const shot_yScale = d3.scaleLinear()
+                                     .domain([0, 5440]);
 
         var color = d3.scaleSequential(d3.interpolateOrRd)
                       .domain([5e-6, 3e-2]); // Points per square pixel.
@@ -271,7 +268,7 @@
         var CenterInner1 = court_g.append('path');
 
         draw_court();
-        Heat_Map();
+        Heat_Map("Trial");
         // add_shot();
         // Slider();
         // window.addEventListener('resize', draw_court);

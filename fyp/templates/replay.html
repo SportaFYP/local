@@ -401,13 +401,16 @@
                     </select>
                     <div id="distanceGraph" style="width: 50%;"></div>
                     <div id="particleTimeGraph" style="width: 50%; float: right;"></div>
-                    <div id="court"></div>
-                    <select style="position: relative">
-                        <option value="">Choose Player</option>
-                        {% for taglist in tagslist %}
-                        <option value="{{taglist}}">{{taglist}}</option>
-                        {% endfor %}
-                    </select>
+                    <!-- <div id="court"></div> -->
+                    <form>
+                        <select style="position: relative">
+                            <option value="">Choose Player</option>
+                            {% for taglist in tagslist %}
+                            <option value="{{taglist}}">{{taglist}}</option>
+                            {% endfor %}
+                        </select>
+                        <input type=button id="trial" value="Select Player" onclick="testing()" style="position: relative">View Heatmap of Selected Player</button>
+                    </form>
                     <select id="selectOverlay" class="form-control" onchange="selectedOverlay()" style="position: relative; left: 50%; width: 50%;">
                     </select>
                     <div id="playerTimeInOverlayGraph" style="width: 50%; float: right;"></div>
@@ -417,6 +420,12 @@
         </div>
 
     </div>
+    
+    <script>
+        function testing(playerSel){
+            window.open("/heat", "toolbar=yes, scrollbars=yes,resizable=yes")
+        }
+    </script>
     <script>
         const margin = { left: 20, right: 20, top: 20, bottom: 20 };
         var chartDiv = document.getElementById('court');
