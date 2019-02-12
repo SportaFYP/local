@@ -424,19 +424,15 @@
     <script>
         function testing(){
             var e = document.getElementById("playSel");
-            var playerS = e.options[e.selectedIndex].value; 
-            window.open("/heat/" + playerS, "toolbar=yes, scrollbars=yes,resizable=yes");
-           // document.heatzSel.submit();
-            // $.ajax({
-            //     type: 'POST',
-            //     url: "/heatmap/" + getElementById(playSel).value,
-            //     data: { teamId: teamName },
-            //     contentType: 'application/json',
-            //     dataType: 'json',
-            //     success: function (response) {
+            var playerS = e.options[e.selectedIndex].value;
+            if (playerS == "") {
+                alert("Please select a player");
+            }
+            else {
+                window.open("/heat/" + playerS, "toolbar=yes, scrollbars=yes,resizable=yes");
+            } 
+            
 
-            //     }
-            // })
         }
     </script>
     <!-- <script>
