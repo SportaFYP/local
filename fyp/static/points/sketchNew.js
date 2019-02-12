@@ -233,8 +233,7 @@ function setup() {
       particleTimeGraph.render();
       playerTimeInOverlayGraph.render();
       $("#court").css("top", particleTimeGraph.height)
-      //$("#selectOverlay").css("top", particleTimeGraph.height)
-      //$("#playerTimeInOverlayGraph").css("top", selectOverlay.height)
+      $("#selectOverlay").css("top", particleTimeGraph.height)
     } else {
       distanceGraph.destroy();
       particleTimeGraph.destroy();

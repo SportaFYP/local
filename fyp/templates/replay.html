@@ -402,8 +402,8 @@
                     <div id="distanceGraph" style="width: 50%;"></div>
                     <div id="particleTimeGraph" style="width: 50%; float: right;"></div>
                     <!-- <div id="court"></div> -->
-                    <form>
-                        <select style="position: relative">
+                    <form style="position: relative; top: 430px">
+                        <select>
                             <option value="">Choose Player</option>
                             {% for taglist in tagslist %}
                             <option value="{{taglist}}">{{taglist}}</option>
@@ -413,7 +413,7 @@
                     </form>
                     <select id="selectOverlay" class="form-control" onchange="selectedOverlay()" style="position: relative; left: 50%; width: 50%;">
                     </select>
-                    <div id="playerTimeInOverlayGraph" style="width: 50%; float: right;"></div>
+                    <div id="playerTimeInOverlayGraph" style="position: relative; width: 50%; float: right; top: 400px"></div>
                 </div>
             </div>
 
