@@ -349,28 +349,18 @@ def uploaded_csv(filename):
     CSV_LOCATION = CSV_FOLDER + filename
     sqlDrop = 'DROP TABLE IF EXISTS student'
     sqlCreate = '''CREATE TABLE student (studentID varchar(20) NOT NULL PRIMARY KEY, studentName varchar(50) NOT NULL, uploadedDTG DATETIME NOT NULL, uploadedBy varchar(50) NOT NULL)'''
-    cur = conn.cursor()
-    cur.execute(sqlDrop)
-    cur.close()
-    cur = conn.cursor()
-    cur.execute(sqlCreate)
-    cur.close()
     sqlDropTeam = 'DROP TABLE IF EXISTS teamstudent'
     sqlCreateTeam = '''CREATE TABLE teamstudent (teamId varchar(20) NOT NULL, studentID varchar(20) NOT NULL, PRIMARY KEY (studentID, teamId))'''
-    cur = conn.cursor()
-    cur.execute(sqlDropTeam)
-    cur.close()
-    cur = conn.cursor()
-    cur.execute(sqlCreateTeam)
-    cur.close()
     sqlDropTeamsTable = 'DROP TABLE IF EXISTS team'
     sqlCreateTeamsTable = '''CREATE TABLE team (teamId varchar(20) NOT NULL PRIMARY KEY, createdDTG DATETIME NOT NULL, createdBy varchar(50) NOT NULL)'''
+
     cur = conn.cursor()
+    cur.execute(sqlDrop)
+    cur.execute(sqlCreate)
+    cur.execute(sqlDropTeam)
+    cur.execute(sqlCreateTeam)
     cur.execute(sqlDropTeamsTable)
-    cur.close()
-    cur = conn.cursor()
     cur.execute(sqlCreateTeamsTable)
-    cur.close()
     # sqlDropTeamTable = 'DROP TABLE IF EXISTS team'
     with open(CSV_LOCATION) as newStudList:
         updatedStuds = csv.reader(newStudList, delimiter=',')
@@ -382,11 +372,9 @@ def uploaded_csv(filename):
                 lineNum += 1
             else:
                 sqlPushStudents = "INSERT INTO student(studentID, studentName, uploadedDTG, uploadedBy) VALUES (%s, %s, %s, %s)"
-                cur1 = conn.cursor()
-                cur1.executemany(sqlPushStudents,[(row[5], row[6], datetime.datetime.now(), session['username'])]) # studentID, studentName columns in csv file
+                cur.executemany(sqlPushStudents,[(row[5], row[6], datetime.datetime.now(), session['username'])]) # studentID, studentName columns in csv file
                 sqlPushTeam = "INSERT INTO teamstudent(teamId, studentID) VALUES (%s, %s)"
-                cur2 = conn.cursor()
-                cur2.executemany(sqlPushTeam,[(row[1], row[5])]) # class, studentID columns in csv file
+                cur.executemany(sqlPushTeam,[(row[1], row[5])]) # class, studentID columns in csv file
                 conn.commit()
                 if row[1] not in teamsInTable:
                     teamsInTable.append(row[1])
@@ -394,21 +382,18 @@ def uploaded_csv(filename):
         for teams in teamsInTable:
             print(teams)
             sqlPushTeamTable = "INSERT INTO team(teamId, createdDTG, createdBy) VALUES (%s, %s, %s)"
-            cur3 = conn.cursor()
-            cur3.executemany(sqlPushTeamTable,[(teams, datetime.datetime.now(), session['username'])])
+            cur.executemany(sqlPushTeamTable,[(teams, datetime.datetime.now(), session['username'])])
             conn.commit()
     setStudentStatus(0, "New student list has been uploaded")
-    cur1.close()
-    cur2.close()
-    cur3.close()
+    cur.close()
     return redirect("/students")
 
 @app.route("/ballers/<filename>")
 def uploadedballer_csv(filename):
     CSV_LOCATION = CSV_FOLDER + filename
     sqlDeleteBB = "DELETE FROM teamstudent WHERE teamId = 'Basketball'"
-    cur1 = conn.cursor()
-    cur1.execute(sqlDeleteBB)
+    cur = conn.cursor()
+    cur.execute(sqlDeleteBB)
     with open(CSV_LOCATION) as newBallerList:
         updatedStuds = csv.reader(newBallerList, delimiter=',')
         lineNum = 0
@@ -418,12 +403,10 @@ def uploadedballer_csv(filename):
                 lineNum += 1
             else:
                 sqlPushTeam = "INSERT INTO teamstudent(teamId, studentID) VALUES (%s, %s)"
-                cur2 = conn.cursor()
-                cur2.executemany(sqlPushTeam,[(row[1], row[5])]) # class, studentID columns in csv file
+                cur.executemany(sqlPushTeam,[(row[1], row[5])]) # class, studentID columns in csv file
                 conn.commit()
     setStudentStatus(0, "New basketball team list has been uploaded")
-    cur1.close()
-    cur2.close()
+    cur.close()
     return redirect("/students")
  
 
@@ -567,7 +550,7 @@ def createMatch():
     cur1 = conn.cursor()
     cur1.execute('SELECT MatchID FROM matches ORDER BY MatchID DESC LIMIT 1')
     tempNum = str(cur1.fetchall())
-    matchid = int(tempNum[2] + tempNum[3])
+    matchid = int(tempNum[2])
     #print matchid
     POST_player1 = (matchid, POST_matchname, str(request.form['team1']), str(request.form['play1']), 1, str(request.form['tagNum1']))
     POST_player2 = (matchid, POST_matchname, str(request.form['team2']), str(request.form['play2']), 2, str(request.form['tagNum2']))
@@ -693,7 +676,7 @@ def deleteStudent(studentId):
 @app.route('/createTeam', methods=['POST'])
 def createTeam():
     #SQL statement
-    sql = ''' INSERT INTO team (`teamid`, `createdDate`, `createdBy`) 
+    sql = ''' INSERT INTO team (`teamid`, `createdDTG`, `createdBy`) 
               VALUES (%s, %s, %s) '''
 
     try:          
@@ -950,14 +933,31 @@ def create_point(point):
 
 ################################################ BEGIN POZYX CODE ################################################
 
-# IDs of the tags to position, add None to position the local tag as well.
-tag_ids = [0x697d, 0x6946, 0x6973, 0x6969, 0x6960, 0x6e65]
+# Set this to true if you are running the app in the CVSS basketball court, if not, set it to false
+runInCVSS = False
 
-# necessary data for calibration
-anchors = [DeviceCoordinates(0x6932, 1, Coordinates(0, 0, 0)),
-            DeviceCoordinates(0x6e58, 1, Coordinates(7700, 0, 0)),
-            DeviceCoordinates(0x6e10, 1, Coordinates(0, 5440, 0)),
-            DeviceCoordinates(0x6e59, 1, Coordinates(7700, 5760, 0))]
+if runInCVSS:
+    # IDs of the CVSS tags to position.
+    tag_ids = [0x6744, 0x6747, 0x6719, 0x6745, 0x6764, 0x671c, 0x671e]
+
+    # necessary CVSS anchor data for calibration
+    anchors = [DeviceCoordinates(0x676d, 1, Coordinates(0, 0, 1850)),
+                DeviceCoordinates(0x6738, 1, Coordinates(0, 17460, 1850)),
+                DeviceCoordinates(0x6725, 1, Coordinates(12903, 0, 1850)),
+                DeviceCoordinates(0x6730, 1, Coordinates(12903, 17460, 1850))
+                ##Provision for the last 2 anchors
+                #DeviceCoordinates(0x0000, 1, Coordinates(x, y, z)),
+                #DeviceCoordinates(0x0000, 1, Coordinates(x, y, z)),
+    ]
+else:
+    # IDs of the NYP tags to position.
+    tag_ids = [0x697d, 0x6946, 0x6973, 0x6969, 0x6960, 0x6e65]
+
+    # necessary NYP anchor data for calibration
+    anchors = [DeviceCoordinates(0x6932, 1, Coordinates(0, 0, 0)),
+                DeviceCoordinates(0x6e58, 1, Coordinates(7700, 0, 0)),
+                DeviceCoordinates(0x6e10, 1, Coordinates(0, 5440, 0)),
+                DeviceCoordinates(0x6e59, 1, Coordinates(7700, 5760, 0))]
 
 # positioning algorithm to use, other is PozyxConstants.POSITIONING_ALGORITHM_TRACKING
 algorithm = PozyxConstants.POSITIONING_ALGORITHM_TRACKING

@@ -18,7 +18,6 @@
     <meta name="author" content="Muaz Khan">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <!-- <link rel="stylesheet" href="https://cdn.webrtc-experiment.com/style.css"> -->
     <link href="{{ url_for('static', filename = 'style1.css') }}" rel="stylesheet">
 
     <style>
@@ -104,7 +103,6 @@
         }
     </style>
 
-<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
 <script src="{{ url_for('static', filename = 'jquery.min.js') }}" rel="javascript"></script>
 <script type=text/javascript>
 var counter = 0;
@@ -113,20 +111,22 @@ var start = false;
           $('a#btn-start-recording').bind('click', function() {
               if(start ==false)
               { 
+                // Check to see of the master tag is connected before starting the record
                 $.getJSON('/start',
                 function(data) {
                     if (data.success) {
+                        // Master tag is connected, start the recording
                         start = true;
                         console.log("started recording: "+ start)
                         recording();
                     } else if (data.errorType == "NO_POZYX_CONNECTED") {
+                        // Master tag is not connected
                         alert("The master tag is not detected. Please check to see if the master tag is connected before trying again")
                     }
                 });
               }
               else if (start ==true){
                 start = false;
-                //cons start = false;
                 console.log("stopped recording: "+ start)
                 $.getJSON('/stop',
                 function(data) {
@@ -138,12 +138,6 @@ var start = false;
             return false;
           });
         });
-       
-            // window.onbeforeunload = function(){
-            // // alert('bye');
-            // console.log("before exit lA");
-            // return "abc";
-            // };
 
             window.onunload = function(){
                // saveVideo("abc");
@@ -171,39 +165,12 @@ var start = false;
             contentType: false
             }).done(function(data) {
             });
-
-
-      //ajax function--> take file.name, and pass to the method /saveVideo
-    //   
-    //     counter++;
-    //     console.log("before calling save video: "+ fileName)
-    //     document.getElementById("recordMessage").innerHTML = "You have successfully created " + counter + " recordings in this session.";
-
-    //     $.ajax({
-    //     type: "POST",
-    //     url: "/saveVideo",
-    //     data: fileName,
-    //     success: function (data) {
-    //         alert(JSON.stringify(data));
-    //     }
-    // });
     }
 
 
     //check on exit if start = false, do nothing, else prevent closing - alert say must click stop button
 
 </script>
-    
-    <!-- <script type = "text/javascript" 
-    src = "{{ url_for('static', filename = 'sketch.js') }}" ></script>
-    
-     
-    <script type = "text/javascript" 
-    src = "{{ url_for('static', filename = 'point.js') }}" ></script>
-    
-    <script type = "text/javascript" 
-    src = "{{ url_for('static', filename = 'p5.min.js') }}" ></script>
-     -->
     <link href="{{ url_for('static', filename = 'dataTables.bootstrap.css') }}" rel="stylesheet">
 
     <!-- DataTables Responsive CSS -->
@@ -212,10 +179,6 @@ var start = false;
     <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script> -->
     <script src="{{ url_for('static', filename = 'p5.js') }}" rel="javascript"> </script>
     
-    
-    
-  
-
     <!-- <script src="https://cdn.webrtc-experiment.com/RecordRTC.js"></script> -->
     <script src="{{ url_for('static', filename = 'RecordRTC.js') }}" rel="javascript"></script>
 
@@ -396,29 +359,9 @@ var start = false;
             </h2>
 
             <div style="text-align: center; display: none;">
-                    <!-- <div style="text-align: center;"> -->
                 <button id="save-to-disk">Save To Disk</button>
-                <!-- <button id="upload-to-php">Upload to PHP</button>
-                <button id="open-new-tab">Open New Tab</button> -->
-
-                <!-- <div style="margin-top: 10px;">
-                    <span id="signinButton" class="pre-sign-in">
-                      <span
-                        class="g-signin"
-                        data-callback="signinCallback"
-                        data-clientid="41556190767-115ifahd55lk4ln5pop4jus55cr4l7oh.apps.googleusercontent.com"
-                        data-cookiepolicy="single_host_origin"
-                        data-scope="https://www.googleapis.com/auth/youtube.upload https://www.googleapis.com/auth/youtube">
-                      </span>
-                    </span>
-
-                    <button id="upload-to-youtube" style="vertical-align:top;">Upload to YouTube</button>
-                </div> -->
             </div>
-              <!-- <p><a id="btn-start-recording">Start Recording</a> -->
                 <a href=# id=btn-start-recording><button class='btn btn-default'>Start Recording</button></a>
-                <!-- <a onclick="confirmRecord()" class="button2" id="btn-start-recording">Start Recording</a> -->
-                <!-- <a href="/stop" class="button1">Stop Recording</a></p> -->
             <div style="margin-top: 10px;" id="recording-player">
 
             </div>
@@ -2209,8 +2152,6 @@ var start = false;
  
     </footer>
 
-
-    <!-- <script src="https://cdn.webrtc-experiment.com/getScreenId.js"></script> -->
     <script>
         var chromeMediaSource = 'screen';
         window.addEventListener('message', function(message) {

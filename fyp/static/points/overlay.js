@@ -11,12 +11,13 @@ class Overlay {
         this.playerTimeInOverlay = []
     }
 
+    // Draw overlay in replay and overlay page
     draw(width, height) {
         fill(this.color);
         rect((this.xorig * width), (this.yorig * height), (this.width * width), (this.height * height));
-        //console.log((this.xorig * width) + " " + (this.yorig * height) + " " + (this.width * width) + " " + (this.height * height));
     }
 
+    // Parameters: Player's x and y coordinates and width and height of the canvas in replay.html
     isPlayerInOverlay(x, y, width, height) {
 
         if (this.width > 0){
@@ -45,6 +46,7 @@ class Overlay {
         }
     }
 
+    // For the statistics page
     addPlayerIntoOverlayArray(particle, timeInOverlay, color) {
         var obj = { label: particle.playerNumber + " - " + particle.name, y: (timeInOverlay / 1000), color: color }
 

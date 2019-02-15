@@ -1,7 +1,6 @@
 // Where is the circle
 var x, y;
 var pVector = [];
-//var pVector2=[];
 var particles = [];
 var historyPoints = [];
 var count = 0;
@@ -19,11 +18,20 @@ var distanceDataPoints = [];
 var overlayTimeGraphs = [];
 var playerTimeInOverlayGraphs = [];
 var canvasWidth, canvasHeight;
-var pozyxWidth = 15540;
-var pozyxHeight = 5760;
 
+/* Remember to uncomment one or the other 
+   All values are in mm                  */
+
+//For use in CVSS
+//var pozyxWidth = 25806;
+//var pozyxHeight = 17460;
+
+// For testing (values set for in the room, modify if necessary)
+var pozyxWidth = 7770;
+var pozyxHeight = 6000;
+
+/******************************************/
 function setup() {
-  // createCanvas(400, 400);
 
   if (isHalfCourt) {
     var canvas = createCanvas(($('#sketch-holder').width() / 2), ($('#sketch-holder').width() / 16 * 9));
@@ -46,13 +54,7 @@ function setup() {
     p1.interpolateFunctionY.interp1d([], []);
     particles.push(p1);
   }
-  // var p1 = new Particle(28261);
-  // p1.interpolateFunctionX.interp1d([], []);
-  // p1.interpolateFunctionY.interp1d([], []);
-  // particles.push(p1);
 
-
-  //particles.push(p2);
   console.log(percentageTime);
   //set up
   for (var i = 0; i < pVector.length; i++) {
@@ -290,10 +292,7 @@ function update() {
 }
 
 function draw() {
-  // background(bg);
   background(bg);
-  //if(startPlay)
-  //{
 
   for (var i = 0; i < overlays.length; i++) {
     if (overlays[i].isVisible) {
@@ -302,13 +301,9 @@ function draw() {
   }
 
   update();
-  //}
 }
 
 function prepareData() {
-  //tagId,timestamp,coordinates_x,coordinates_y
-  // var p1 = new Particle(1);
-  // var p2 = new Particle(2);
   var startTime = pointsDS[0][1];
   for (var i = 0; i < pointsDS.length; i++) {
 

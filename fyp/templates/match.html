@@ -49,9 +49,6 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <script type="text/javascript" src="{{ url_for('static', filename = 'sketch.js') }}"></script>
-
-
     <script type="text/javascript" src="{{ url_for('static', filename = 'point.js') }}"></script>
 
     <script type="text/javascript" src="{{ url_for('static', filename = 'p5.min.js') }}"></script>
@@ -478,12 +475,6 @@
     <script>
         $(document).ready(function () {
             $('#dataTables-example').DataTable({
-                responsive: true
-            });
-            $('#team1-table').DataTable({
-                responsive: true
-            });
-            $('#team2-table').DataTable({
                 responsive: true
             });
         });
